@@ -1,0 +1,7 @@
+#! /bin/csh
+set i = 100
+while ( $i > 0 )
+	echo $i
+	@ i = $i - 1
+	setenv GREP_COLOR $i ; grep 4 def
+end

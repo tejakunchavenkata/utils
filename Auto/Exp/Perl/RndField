@@ -1,0 +1,58 @@
+#! /usr/bin/perl -w
+#------------------------------------------------
+# Author:    kvkrishna
+# Created:   Tue May 17 19:58:32 IST 2011
+# File Name: RndField
+# 
+# 
+# 
+# 
+#------------------------------------------------
+sub RndField {
+        $Field = $_[0] ;
+        $Mask  = 0xFFFFFFFF ;
+        $Mask  = 0xFFFFFFFC if defined $_[1] and $_[1] == 2 ;
+        $Mask  = 0xFFFFFFFE if defined $_[1] and $_[1] == 1 ;
+        $Mask  = 0xFFFFFFFF if defined $_[1] and $_[1] == 0 ;
+        $Mask  = 0xFFFFFFFF if not defined $_[1] ;
+        return sprintf "0x%08X", ((int rand ($Max{limm}+ 1)                      ) & $Mask )         if $Field eq "limm"  ;
+        return sprintf "0x%08X", ((int rand ($Max{s25} + 1) - (($Max{s25} + 1)/2)) & $Mask )         if $Field eq "s25"   ;
+        return sprintf "0x%08X", ((int rand ($Max{s21} + 1) - (($Max{s21} + 1)/2)) & $Mask )         if $Field eq "s21"   ;
+        return sprintf "0x%08X", ((int rand ($Max{s13} + 1) - (($Max{s13} + 1)/2)) & $Mask )         if $Field eq "s13"   ;
+        return sprintf "0x%08X", ((int rand ($Max{s12} + 1) - (($Max{s12} + 1)/2)) & $Mask )         if $Field eq "s12"   ;
+        return sprintf "0x%08X", ((int rand ($Max{s11} + 1) - (($Max{s11} + 1)/2)) & $Mask )         if $Field eq "s11"   ;
+        return sprintf "0x%08X", ((int rand ($Max{s10} + 1) - (($Max{s10} + 1)/2)) & $Mask )         if $Field eq "s10"   ;
+        return sprintf "0x%08X", ((int rand ($Max{s9}  + 1) - (($Max{s9}  + 1)/2)) & $Mask )         if $Field eq "s9"    ;
+        return sprintf "0x%08X", ((int rand ($Max{s8}  + 1) - (($Max{s8}  + 1)/2)) & $Mask )         if $Field eq "s8"    ;
+        return sprintf "0x%08X", ((int rand ($Max{s7}  + 1) - (($Max{s7}  + 1)/2)) & $Mask )         if $Field eq "s7"    ;
+        return sprintf "0x%08X", ((int rand ($Max{s3}  + 1) - (($Max{s3}  + 1)/2)) & $Mask )         if $Field eq "s3"    ;
+        return sprintf "0x%03X", ((int rand ($Max{u10} + 1)                      ) & $Mask )         if $Field eq "u10"   ;
+        return sprintf "0x%02X", ((int rand ($Max{u8}  + 1)                      ) & $Mask )         if $Field eq "u8"    ;
+        return sprintf "0x%02X", ((int rand ($Max{u7}  + 1)                      ) & $Mask )         if $Field eq "u7"    ;
+        return sprintf "0x%02X", ((int rand ($Max{u6}  + 1)                      ) & $Mask )         if $Field eq "u6"    ;
+        return sprintf "0x%02X", ((int rand ($Max{u5}  + 1)                      ) & $Mask )         if $Field eq "u5"    ;
+        return sprintf "0x%01X", ((int rand ($Max{u3}  + 1)                      ) & $Mask )         if $Field eq "u3"    ;
+        die "Undefined Field $Field Encountered..." ;
+}
+#--------------------------------------------------------------------------------------------------- Main
+$Max{limm}= ( (2 ** 32) - 1 ) ;
+$Max{s25} = ( (2 ** 25) - 1 ) ;
+$Max{s21} = ( (2 ** 21) - 1 ) ;
+$Max{s13} = ( (2 ** 13) - 1 ) ;
+$Max{s12} = ( (2 ** 12) - 1 ) ;
+$Max{s11} = ( (2 ** 11) - 1 ) ;
+$Max{s10} = ( (2 ** 10) - 1 ) ;
+$Max{s9}  = ( (2 ** 9 ) - 1 ) ;
+$Max{s8}  = ( (2 ** 8 ) - 1 ) ;
+$Max{s7}  = ( (2 ** 7 ) - 1 ) ;
+$Max{s3}  = ( (2 ** 3 ) - 1 ) ;
+$Max{u10} = ( (2 ** 10) - 1 ) ;
+$Max{u8}  = ( (2 ** 8 ) - 1 ) ;
+$Max{u7}  = ( (2 ** 7 ) - 1 ) ;
+$Max{u6}  = ( (2 ** 6 ) - 1 ) ;
+$Max{u5}  = ( (2 ** 5 ) - 1 ) ;
+$Max{u3}  = ( (2 ** 3 ) - 1 ) ;
+
+@Field = ("limm", "s25", "s21", "s13", "s12", "s11", "s10", "s9", "s8", "s7", "s3", "u10", "u8", "u7", "u6", "u5", "u3") ;
+$TRGT = @Field ;
+$Val = RndField($Field[$TRGT], 2) and printf "%3d. %8s: %-10s %-10d %032b\n", $TRGT, $Field[$TRGT], $Val, hex $Val, hex $Val while ($TRGT-- > 0) ;

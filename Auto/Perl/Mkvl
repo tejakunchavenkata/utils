@@ -1,0 +1,146 @@
+#! /usr/bin/perl -w
+sub INPUTS;
+sub MAIN_MODULE;
+sub TEST_BENCH;
+#........................................................................................................................
+die ("Vj:\t*****MODULE NAME REQUIRED*****") if (!defined $ARGV[0]);
+die ("Vj:\t*****FILE EXISTS*****") if (-e "$ARGV[0].v" || -e "tb_$ARGV[0].v");
+INPUTS;
+MAIN_MODULE;
+TEST_BENCH;
+system "gvim $ARGV[0].v tb_$ARGV[0].v -O ; clear; ls";
+#........................................................................................................................
+sub INPUTS
+{
+	system "clear";
+	IP_NO:	print "Enter number of INPUTS: ";
+	$ip_no = <STDIN>;
+	do {print "Its isn't numeric!!!!\n"; goto IP_NO} if (!($ip_no =~ /^\d+$/));
+	while ($ip_no > 0)
+	{
+		$ip_no--;
+		TAKEiN:	print "\n\tEnter name of PORT_$ip_no: ";
+		$name = <STDIN>;
+		do {print "Invalied name!!!!\n"; goto TAKEiN} if (!($name =~ /^[a-zA-Z_]/) || !($name =~ /^\w+$/));
+		chomp $name;
+		do {print "Port name EXISTS\n"; $ip_no++; next} if exists $ip{$name};
+		TAKEiS:	print "\tEnter size of PORT\t$name: ";
+		$ip{$name} = <STDIN>;
+		do {print "Size isn't numeric!!!!\n"; goto TAKEiS} if (!($ip{$name} =~ /^\d+$/));
+		$ip{$name}--;
+	}
+	system "clear";
+	OP_NO:	print "Enter number of OUTPUTS: ";
+	$op_no = <STDIN>;
+	do {print "Its isn't numeric!!!!\n"; goto OP_NO} if (!($op_no =~ /^\d+$/));
+	while ($op_no > 0)
+	{
+		$op_no--;
+		TAKEoN:	print "\n\tEnter name of PORT_$op_no: ";
+		$name = <STDIN>;
+		do {print "Invalied name!!!!\n"; goto TAKEoN} if (!($name =~ /^[a-zA-Z_]/) || !($name =~ /^\w+$/));
+		chomp $name;
+		do {print "Port name EXISTS\n"; $op_no++; next} if (exists $op{$name} || exists $ip{$name});
+		TAKEoS:	print "\tEnter size of PORT\t$name: ";
+		$op{$name} = <STDIN>;
+		do {print "Size isn't numeric!!!!\n"; goto TAKEoS} if (!($op{$name} =~ /^\d+$/));
+		$op{$name}--;
+	}
+}
+#........................................................................................................................
+sub MAIN_MODULE
+{
+	open (FHMM, ">$ARGV[0].v") || die ("Vj:\tCan't open file for MainModule\nSYSTEM:\t$!");
+	@ip_names = keys %ip;
+	@op_names = keys %op;
+	$" = ", ";
+	print FHMM "module $ARGV[0] (clk, rst, @ip_names, @op_names);\n";
+	$" = " ";
+	print FHMM "//\t***INPUTS***\n";
+	print FHMM "input clk, rst;\n";
+	while (($k, $v) = each %ip)
+	{
+		if ($v)
+		{
+			print FHMM "input [$v:0] $k;\n";
+		}
+		else
+		{
+			print FHMM "input $k;\n";
+		}
+	}
+	print FHMM "//\t***OUTPUTS***\n";
+	while (($k, $v) = each %op)
+	{
+		if ($v)
+		{
+			print FHMM "output reg [$v:0] $k;\n";
+		}
+		else
+		{
+			print FHMM "output reg $k;\n";
+		}
+	}
+	print FHMM "//\t***CODE***\n";
+	print FHMM "always @ (posedge clk)\n";
+	print FHMM "begin\n";
+	print FHMM "\tif (rst)\n\tbegin\n\t\n\tend\n";
+	print FHMM "\telse\n\tbegin\n\t\n\tend\n";
+	print FHMM "end\nendmodule";
+	close FHMM;
+}
+#........................................................................................................................
+sub TEST_BENCH
+{
+	open (FHTB, ">tb_$ARGV[0].v") || die ("Vj:\tCan't open file for TestBench\nSYSTEM:\t$!");
+	print FHTB "`define NEG @ (negedge clk)\n";
+	print FHTB "`define POS @ (posedge clk)\n";
+	print FHTB "`define PERIOD_BY_2 5\n";
+	print FHTB "\nmodule tb_$ARGV[0] ;\n";
+	print FHTB "//\t***INPUTS***\n";
+	print FHTB "reg clk, rst;\n";
+	while (($k, $v) = each %ip)
+	{
+		if ($v)
+		{
+			print FHTB "reg [$v:0] $k;\n";
+		}
+		else
+		{
+			print FHTB "reg $k;\n";
+		}
+	}
+	print FHTB "//\t***OUTPUTS***\n";
+	while (($k, $v) = each %op)
+	{
+		if ($v)
+		{
+			print FHTB "wire [$v:0] $k;\n";
+		}
+		else
+		{
+			print FHTB "wire $k;\n";
+		}
+	}
+	print FHTB "\n$ARGV[0] U0 (.clk(clk), .rst(rst)";
+	print FHTB ", .$_($_)" foreach @ip_names;
+	print FHTB ", .$_($_)" foreach @op_names;
+	print FHTB ");\n";
+	print FHTB "\nalways #`PERIOD_BY_2 clk = ~clk;\n";
+	print FHTB "initial\nbegin\n";
+	print FHTB "\t\$recordfile(\"$ARGV[0].trn\");\n";
+	print FHTB "\t\$recordvars();\n";
+	print FHTB "\t\tclk = 1'd0;\n";
+	print FHTB "\t\trst = 1'd1;\n";
+	print FHTB "\t`NEG\trst = 1'd0;\n";
+	print FHTB "\t#500 \$finish;\n";
+	print FHTB "end\n";
+	print FHTB "\ninitial\nbegin\n\t`POS";
+	foreach (keys (%ip))
+	{
+		print FHTB "\t$_ = 'd0;";
+	}
+	print FHTB "\nend\n";
+	print FHTB "\nendmodule";
+	close FHTB;
+}

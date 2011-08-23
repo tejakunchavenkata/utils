@@ -1,0 +1,85 @@
+#! /bin/tcsh -f
+if ( $# < 2 ) then
+        echo "Improper args list\nType Open [--help|-h] for usage"
+        exit 8
+endif
+set     echo_style = both
+#########################################################################################
+set	ppt	= "openoffice.org3"
+set	xls	= "openoffice.org3"
+set	doc	= "openoffice.org3"
+set	cmd	= "gvim"
+set	pdf	= "acroread"
+set     htm     = "firefox"
+#########################################################################################	Searches for matching files
+switch ($1)
+case "--ppt":
+	set result = `find -L . -iwholename "*$2*.odp" -print -o -iwholename "*$2*.pptx" -print -o -iwholename "*$2*.ppt" -print | replace ' ' '<>'`
+	breaksw
+case "--xls":
+	set result = `find -L . -iwholename "*$2*.ods" -print -o -iwholename "*$2*.xlsx" -print -o -iwholename "*$2*.xls" -print | replace ' ' '<>'`
+	breaksw
+case "--doc":
+	set result = `find -L . -iwholename "*$2*.doc" -print -o -iwholename "*$2*.docx" -print | replace ' ' '<>'`
+	breaksw
+case "--cmd":
+	set result = `which $2`
+        if ($status) then
+                echo $result
+                exit 1
+        endif
+	breaksw
+case "--pdf"
+	set result = `find -L . -iwholename "*$2*.pdf"  | replace ' ' '<>'`
+	breaksw
+case "--htm"
+	set result = `find -L . -iwholename "*$2*.htm*" | replace ' ' '<>'`
+	breaksw
+default:
+	echo "\tArg_1:"
+	echo "\t\t--ppt:\t$ppt\n\t\t\tOpens Arg_2.odp Arg_2.ppt Arg_2.pptx      files in and under current directory\n"
+	echo "\t\t--xls:\t$ppt\n\t\t\tOpens Arg_2.ods Arg_2.xls Arg_2.xlsx      files in and under current directory\n"
+	echo "\t\t--doc:\t$ppt\n\t\t\tOpens Arg_2.doc                           files in and under current directory\n"
+	echo "\t\t--pdf:\t$pdf\n\t\t\tOpens Arg_2.pdf                           files in and under current directory\n"
+	echo "\t\t--htm:\t$htm\n\t\t\tOpens Arg_2.htm*                          files in and under current directory\n"
+	echo "\t\t--cmd:\t$cmd\n\t\t\tOpens the source code file of the command given as second option"
+	echo "\t\t\tsearches in the path given in source file\n"
+	echo "\t\t--help:\tDisplays this test and exits\n"
+	echo "\n\tArg_2:\tfilename..."
+        echo "\n\tNOTE: when Arg_1 is --cmd, Arg_2 should exactly match the command name."
+	exit 0
+	breaksw
+endsw
+#########################################################################################	Select the file to open
+if ($#result == 0) then
+	echo "No such file exists"
+	exit 1
+else if ($#result == 1) then
+	set ch = 1
+else
+        echo $result | tr ' ' '\n' | nl
+	echo -n "Select the file to open: "
+	set ch = $<
+endif
+#########################################################################################	Open the file
+set file = `echo $result[$ch] | replace '<>' ' '`
+switch ($1)
+case "--ppt":
+	$ppt "$file" &
+	breaksw
+case "--xls":
+	$xls "$file" &
+	breaksw
+case "--doc":
+	$doc "$file" &
+	breaksw
+case "--cmd":
+	$cmd "$file"
+	breaksw
+case '--pdf':
+	$pdf "$file" &
+	breaksw
+case '--htm':
+	$htm "$file" &
+	breaksw
+endsw

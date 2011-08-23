@@ -1,0 +1,38 @@
+#! /bin/csh -f
+
+
+
+
+
+    set Folder = $argv[1]
+    set Max_Files_in_Folder = $argv[2]
+    ###################################################################################################################################
+    if ($Folder =~ "*/") then
+      set Folder = $Folder:h
+    endif
+    if (! -ed $Folder) then
+      echo "\n\tERROR: Folder doesnot exist"
+      exit 8
+    endif
+    if ($Max_Files_in_Folder < 1) then
+      echo "\n\tERROR: MaxFiles per folder can't be less than 1"
+      exit 8
+    endif
+    ###################################################################################################################################
+    ls -1 $Folder >! "$Folder"_all.txt
+    set No_Files = `wc -l "$Folder"_all.txt`
+    @ No_Files = $No_Files[1]
+    @ No_Sub_Folders = $No_Files / $Max_Files_in_Folder + 1
+    ###################################################################################################################################
+    while ($No_Sub_Folders > 0)
+      head -n $Max_Files_in_Folder "$Folder"_all.txt >! "$Folder"_to_mov.txt
+      mkdir -p sub_"$No_Sub_Folders"."$Folder"
+        foreach m (`cat "$Folder"_to_mov.txt`)
+          mv $Folder/$m sub_"$No_Sub_Folders"."$Folder"
+        end
+      tac "$Folder"_all.txt | head -n -$Max_Files_in_Folder | tac >! .temp_"$Folder"_all.txt
+      mv .temp_"$Folder"_all.txt "$Folder"_all.txt
+      @ No_Sub_Folders = $No_Sub_Folders - 1
+    end
+    ###################################################################################################################################
+    rm -f "$Folder"_all.txt "$Folder"_to_mov.txt

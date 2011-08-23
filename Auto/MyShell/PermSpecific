@@ -1,0 +1,43 @@
+#! /bin/csh
+#################################################################################################
+set	list_640 =	`find /home/$user/ -name "*.odp" -name "*.ppt"`
+#################################################################################################
+set	list_740 =	(									\
+				~/Auto/MyShell/*						\
+			)
+#################################################################################################
+set	list_750 =	(									\
+				~/Auto/Shell/*							\
+				~/Auto/Perl/*							\
+			)
+
+#################################################################################################
+foreach n ($list_640)
+	chmod -c 640 $n			#	Changing permissions for files
+end
+foreach n ($list_640:gh)
+	while ($n != "/home")
+		chmod -c 740 $n		#	Changing permissions of path
+		set n = $n:h
+	end
+end
+#################################################################################################
+foreach n ($list_740)
+	chmod -c 740 $n			#	Changing permissions for files
+end
+foreach n ($list_740:gh)
+	while ($n != "/home")
+		chmod -c 740 $n		#	Changing permissions of path
+		set n = $n:h
+	end
+end
+#################################################################################################
+foreach n ($list_750)
+	chmod -c 750 $n			#	Changing permissions for files
+end
+foreach n ($list_750:gh)
+	while ($n != "/home")
+		chmod -c 750 $n		#	Changing permissions of path
+		set n = $n:h
+	end
+end

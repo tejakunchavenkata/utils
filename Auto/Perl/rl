@@ -1,0 +1,17 @@
+#! /usr/bin/perl -w
+#------------------------------------------------
+# Author:    kvkrishna
+# Created:   Wed May 25 15:51:41 IST 2011
+# File Name: rl
+# USAGE: 
+# 
+# 
+# Randomize lines
+#------------------------------------------------
+open FH, "<$ARGV[0]" or die "File opening failed due to $!";
+push @Lines, $_ while (<FH>);
+for ($i = @Lines; --$i; ) {
+        my $j = int rand ($i+1);
+        @Lines[$i,$j] = @Lines[$j,$i] if ($i != $j);
+}
+print foreach @Lines;

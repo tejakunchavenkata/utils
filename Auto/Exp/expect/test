@@ -1,0 +1,26 @@
+#! /usr/bin/expect
+#------------------------------------------------
+# Author:    kvkrishna
+# Created:   Tue Jul  5 16:10:18 IST 2011
+# File Name: test
+# 
+# 
+# 
+# 
+#------------------------------------------------
+spawn su amasood
+expect "Password:"
+send "XXXXXXXXXXX\r"
+expect "0 $ "
+sleep 2
+send "whoami\r"
+interact
+
+spawn su gkavya
+expect "Password:"
+send "XXXXXXX\r"
+send "source ~kvkrishna/.cshrc\r"
+expect "0 $ "
+sleep 2
+send "whoami\r"
+interact

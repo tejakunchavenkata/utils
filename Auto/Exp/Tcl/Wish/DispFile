@@ -1,0 +1,11 @@
+#! /usr/bin/wish
+#------------------------------------------------
+# Author:    kvkrishna
+# Created:   Thu May  5 17:08:23 IST 2011
+# File Name: DispFile
+# 
+# 
+# 
+# 
+#------------------------------------------------
+button --textfile "data.in"

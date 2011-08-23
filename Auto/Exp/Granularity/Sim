@@ -1,0 +1,49 @@
+#! /usr/bin/perl -w
+#------------------------------------------------
+# Author:    kasula
+# Created:   Sat Jul  9 03:13:30 PDT 2011
+# File Name: Sim
+# 
+# 
+# 
+# 
+#------------------------------------------------
+sub sum {
+        $Tot = 0;
+        foreach (@_) {$Tot+=$_;}
+        return $Tot;
+}
+#####
+mkdir "GoldSims";
+mkdir "SimsVar";
+$Trgt = $ARGV[0];
+die "Simulation Results Exist...\n" if (-e "GoldSims/Gold$Trgt.sim");
+mkdir ".Trgt$Trgt";
+for ($Run=int($Trgt/2), %Log=(), %Gol=(); $Run>0; $Run--) {
+        open FHRun, ">.Trgt$Trgt/Run$Run.sim" or die "Opening file: .Trgt$Trgt/Run$Run.sim failed due to $!";
+        for ($Trials=0, %Hits=(); (scalar keys %Hits) < $Trgt; ) {
+                $Hits{int rand $Trgt}++;
+                $Trials++;
+                printf FHRun "%8d %8d\n", scalar keys %Hits, $Trials;
+        }
+        close FHRun;
+        $Log{$Run} = $Trials;
+        $Gol{$Trials}++;
+}
+#####
+@Sorted = sort {$a <=> $b} values %Log;
+$Average = sum (@Sorted)/ @Sorted;
+print "MinHits: $Sorted[0]\nMaxHits: $Sorted[-1]\nAvgHits: $Average\n";
+open FHVar, ">SimsVar/Trgt$Trgt.var" or die "Opening var file failed";
+foreach $k (keys %Gol) {printf FHVar "$k $Gol{$k}\n";}
+#####
+$Error = $Sorted[-1];
+foreach $k (keys %Log) {
+        if (abs ($Log{$k}-$Average) < $Error){
+                $Error = abs ($Log{$k}-$Average);
+                $Pick = $k;
+        }
+}
+printf "Least error found: $Error\n";
+system ("cp .Trgt$Trgt/Run$Pick.sim GoldSims/Gold$Trgt.sim");
+system ("rm -rf .Trgt$Trgt");

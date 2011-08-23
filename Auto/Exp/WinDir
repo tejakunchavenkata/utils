@@ -1,0 +1,51 @@
+#! /bin/tcsh
+#------------------------------------------------
+# Author:    kvkrishna
+# Created:   Wed Jul 20 17:48:16 IST 2011
+# File Name: WinDir
+# 
+# 
+# 
+# 
+#------------------------------------------------
+set ExpndView = "FALSE"
+#------------- Arg processing
+while ($#argv)
+        switch ( $argv[1] )
+        case "--expanded_view":
+        case "-e":
+                set ExpndView = "TRUE"
+                breaksw
+        case "--compact_view":
+        case "-c":
+                set ExpndView = "FALSE"
+                breaksw
+        default:
+                echo "Ignoring Unknown Option $argv[1]"
+                breaksw
+        endsw
+        shift
+end
+#------------- Program
+echo "Host: $HOST"
+echo "PWD: $PWD\n"
+set AllFileTypes = `stat -L -c "%F" * | sort -u | sed 's/ /_/g'`
+foreach FileType ($AllFileTypes)
+        set OrgFileType = `echo $FileType | sed -e 's/_/ /g' -e 's#/#\\/#g'`
+        set CurFileList = `stat -L -c "%n/%F" * | gawk -F / "/$OrgFileType/"'{print $1}'`
+        set OrgFileType = `echo $OrgFileType | sed 's#\\/#/#g'`
+        tput bold ; echo "$OrgFileType ($#CurFileList)" ; tput sgr0
+        if ( ($ExpndView =~ "TRUE") && ("$OrgFileType" =~ 'regular file') ) then
+                set SubAllFileTypes = `file -L -b -F / $CurFileList | sort -u | sed 's/ /_/g'`
+                foreach SubFileType ($SubAllFileTypes)
+                        set SubOrgFileType = `echo $SubFileType | sed -e 's/_/ /g' -e 's#/#\\/#g'`
+                        set SubCurFileList = `file -L -F / $CurFileList | gawk -F / "/$SubOrgFileType/"'{print $1}'`
+                        set SubOrgFileType = `echo $SubOrgFileType | sed 's#\\/#/#g'`
+                        tput bold ; echo "\n\t$SubOrgFileType ($#SubCurFileList)"  ; tput sgr0
+                        ls -d $SubCurFileList
+                end
+        else
+                ls -d $CurFileList
+        endif
+        echo
+end

@@ -1,0 +1,16 @@
+#! /usr/bin/perl -w
+#------------------------------------------------
+# Author:    kasula
+# Created:   Sat Jul  9 08:25:43 PDT 2011
+# File Name: Hn
+# 
+# 
+# 
+# 
+#------------------------------------------------
+open FH, ">Hn.log" or die "Opening output file failed..." ;
+for ($i = 1, $CumFract=0; $i <= int $ARGV[0]; $i++) {
+        $CurFract = 1 / $i;
+        $CumFract += $CurFract;
+        printf FH "%27.17f %20.17f %20.17f\n", $i*$CumFract, $CumFract, $CurFract;
+}

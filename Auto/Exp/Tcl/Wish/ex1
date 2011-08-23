@@ -1,0 +1,35 @@
+#!/usr/bin/wish
+set apachectl "/bin/cat data.in"
+proc screen {} {
+        frame .top -borderwidth 10
+        pack .top -fill x
+        radiobutton .top.start -text "start" -variable mode -value start
+        radiobutton .top.stop -text "stop" -variable mode -value stop
+        radiobutton .top.restart -text "restart" -variable mode -value restart
+        button .top.submit -text execute -command init
+        pack .top.start .top.stop .top.restart .top.submit -side left -padx 0p -pady 0 -anchor n
+        frame .bottom
+        pack .bottom -fill x
+        text .bottom.main -relief sunken -bd 2 -yscrollcommand ".bottom.scroll set"
+        scrollbar .bottom.scroll -command ".bottom.main yview"
+        pack .bottom.main -side left -fill y
+        pack .bottom.scroll -side right -fill y
+}
+proc init { } {
+        global mode action
+        switch $mode {
+                stop {set action "stop"}
+                restart {set action "restart"}
+                default {set action "start"}
+}
+put_text
+}
+proc put_text {} {
+        global action apachectl
+        set f [ open "| $apachectl $action" r]
+        while {[gets $f x] >= 0} {
+                .bottom.main insert 1.0 "$x\n"
+}
+catch {close $f}
+}
+screen

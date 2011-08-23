@@ -1,0 +1,14 @@
+#! /usr/bin/perl
+#------------------------------------------------
+# Author:    kvkrishna
+# Created:   Mon May 16 14:56:05 IST 2011
+# File Name: GREP
+# 
+# 
+# 
+# 
+#------------------------------------------------
+open FH, "<$ARGV[0]" or die ;
+while (<FH>) {
+        print if /1.*\n.*2/;
+}

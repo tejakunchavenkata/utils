@@ -1,0 +1,18 @@
+#! /usr/bin/perl
+#------------------------------------------------
+# Author:    kvkrishna
+# Created:   Thu May 12 10:29:37 IST 2011
+# File Name: SubArgs
+# 
+# 
+# 
+# 
+#------------------------------------------------
+sub MyDisp {
+        ($first, @next, $last) = @_ ;
+        print "$first\n" if defined $first ;
+        print "@next \n" if defined @next  ;
+        print "$last \n" if defined $last  ;
+}
+
+MyDisp @ARGV ;

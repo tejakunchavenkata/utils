@@ -1,0 +1,29 @@
+#! /usr/bin/perl -w
+#------------------------------------------------
+# Author:    kvkrishna
+# Created:   Fri Aug  5 11:55:34 IST 2011
+# File Name: ScrSvr2
+# USAGE: 
+# 
+# 
+# 
+#------------------------------------------------
+chomp ( $Lines  = `tput lines`) ;
+chomp ( $Cols   = `tput cols` ) ;
+system "clear ; tput civis";
+$X = int rand $Lines;
+$Y = int rand $Cols ;
+$i = 1 - 2 * int rand 2;
+$j = 1 - 2 * int rand 2;
+$DO = 500;
+while ($DO--) {
+        system "tput cup $X $Y"; printf "o";
+        system "usleep 10000 ; tput cup $X $Y"; printf " ";
+        $i = -1 if ($X >= $Lines - 1);
+        $i = +1 if ($X <= 0);
+        $j = -1 if ($Y >= $Cols - 1);
+        $j = +1 if ($Y <= 0);
+        $X += $i;
+        $Y += $j;
+}
+system "tput cnorm";

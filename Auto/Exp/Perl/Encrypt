@@ -1,0 +1,21 @@
+#! /usr/bin/perl -w
+#------------------------------------------------
+# Author:    kasula
+# Created:   Tue Jul 19 04:36:33 PDT 2011
+# File Name: Encrypt
+# 
+# 
+# 
+# 
+#------------------------------------------------
+$PASSWD = $ARGV[0];
+shift ;
+foreach $File (@ARGV) {
+        open IFH, "<$File"     or die "Opening $File     failed due to $!" ;
+        open OFH, ">$File.ecr" or die "Opening $File.ecr failed due to $!" ;
+        while (<IFH>) {
+                printf OFH "%s\n", $_ xor $PASSWD ;
+        }
+        close IFH;
+        close OFH;
+}

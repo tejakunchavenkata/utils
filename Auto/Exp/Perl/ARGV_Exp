@@ -6,3 +6,13 @@ while ($NO <= $#ARGV)
         print "$NO : $ARGV[$NO]\n" ;
         $NO++ ;
 }
+$0 =~ s#(.*/).*#$1#g ;
+print "$0\n" ;
+
+print "@ARGV\n" ;
+$NO = @ARGV ;
+print "$NO\n" ;
+
+
+
+print "$ARGV\n" ;

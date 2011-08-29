@@ -1,7 +1,0 @@
-#! /bin/csh
-foreach n ($argv)
-        cd $n
-        find . -perm -400  -exec chmod -v og=r  '{}' \;
-        find . -perm -500  -exec chmod -v og=rx '{}' \;
-        cd -
-end

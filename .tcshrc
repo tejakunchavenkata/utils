@@ -1,0 +1,51 @@
+#
+set     autolist
+set     notify
+set     rmstar
+set     noclobber
+set     ignoreeof
+set     histdup         = erase
+set     echo_style      = both
+set     correct         = cmd
+set     prompt          = '%? $ '
+setenv  EDITOR          gvim
+alias   ls              'ls -FhxX --color=tty '
+alias   ll              'ls -l '
+alias   la              'ls -a '
+alias   cl              'clear ; echo "Host: $HOST" ; echo -n "PWD: "; pwd '
+alias   cls             'clear ; echo "Host: $HOST" ; echo -n "PWD: "; pwd ; echo "Contents:" ; ls '
+alias   cll             'clear ; echo "Host: $HOST" ; echo -n "PWD: "; pwd ; echo "Contents:" ; ll '
+alias   sc              "source ~/.cshrc.$USER"
+alias   c               "$EDITOR ~/.cshrc.$USER"
+alias   cd              'cd \!* ; cls'
+alias   mkcd            'mkdir \!* ; cd \!*'
+alias   man             'man -a'
+alias   g               'gvim '
+alias   s               'source '
+alias   goodcat         'head -v -n -0'
+alias   chkvnc          'ps -aef | grep vnc | grep `echo -n $user`'
+alias   tnet            'xhost + ; telnet -a '
+alias   ux              'chmod +rx '
+alias   grep            'grep --color'
+alias   excpp           'g++ \!*.cpp -o \!*.out ; \!*.out'
+alias   Count           'unset CountVar ; set CountVar = (`echo \!*`) ; echo $#CountVar '
+alias   Countz          'unset CountVar ; set CountVar = (`echo \!*`) ; zenity --title "Count" --info --text "\!* -> `echo $#CountVar`"'
+alias   JobsC           'jobs >&! .running.jobs.found ; wc -l .running.jobs.found ; rm -f .running.jobs.found'
+alias   MATH            'set \!:1 = `echo "\!:3-$" | bc -l`'
+alias   fdt             'date +%m%d%H%M%S'
+unalias cp mv rm
+source  /remote/sge/default/snps/common/settings.csh
+if (-ef ~/.alias) source  ~/.alias
+
+##########################################################################################################
+if ($path[1] != "./") set path = (      ./                                                              \
+                                        $path                                                           \
+                                        ~kasula/Auto/MyPerl                                             \
+                                        ~kasula/Auto/MyShell                                            \
+                                        ~kasula/Auto/Perl                                               \
+                                        ~kasula/Auto/Shell                                              \
+                                        ~kasula/login                                                   \
+                                        ~kasula/Proj                                                    \
+                                )
+##########################################################################################################
+setenv  LS_COLORS       "$LS_COLORS""*.pdf=35\;01:""*.odp=34\;01:""*.doc=34\;01:""*.ods=34\;01:""*.docx=34\;01:""*.ppt=34\;01:""*.e=33:""*.sv=33:""*.v=33:"

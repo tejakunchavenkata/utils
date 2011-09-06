@@ -1,0 +1,69 @@
+#! /bin/tcsh -f
+#------------------------------------------------
+# Author:    kasula
+# Created:   Tue Sep  6 03:28:08 PDT 2011
+# File Name: Account
+# USAGE: 
+# 
+# 
+# 
+#------------------------------------------------Default Values
+set Date = `date +%F`
+set File = "~/Accounts/".`date +%Y_%b`;
+set Types = ('Pay_IN' 'Pay_OUT' 'SelfTransfers' 'ThirdPartyTransfers');
+#------------------------------------------------Reading Args...
+while ( $#argv > 0 )
+        set Option = `echo $1 | tr 'A-Z' 'a-z'`
+        shift
+        switch ($Option)
+        case '-date':
+                set Date = `date -d $argv[1] +%F`
+                shift
+                breaksw
+        case '-amount':
+                @ Amount = $argv[1]
+                shift
+                breaksw
+        case '-type':
+                set Type = $Types[$argv[1]]
+                shift
+                breaksw
+        case '-comment':
+                set Comment = $argv[1]
+                shift
+                breaksw
+        case '-from':
+                set From = $argv[1]
+                shift
+                breaksw
+        case '-to':
+                set To = $argv[1]
+                shift
+                breaksw
+        case '-h':
+                grep -m 1 -A 3 USAGE $0
+                exit
+                breaksw
+        default:
+                echo "Invalid Option found...\nTry '-h' to know valid options\n"
+                exit
+                breaksw
+        endsw
+end
+#------------------------------------------------Validating data...
+#if ( $Date   eq ""         ) { die "\n"; }
+#if ( $Amount eq "_"        ) { die "Please specify a valid Amount\n"; }
+#if ( $Comment eq "_"        ) { die "Please specify a Comment\n"; }
+#if ( not exists $TN{$Type} ) { print "Please specify one of the Type...\n"; printf "\t%s %s\n", $_, $TN{$_} for (sort keys %TN); exit; }
+##------------------------------------------------Pre Process...
+##if (-e -f ~/)
+#------------------------------------------------Show what is recorded...
+zenity --height=270 --width=270 \
+        --list --title "Recorded..." --text "To file : $File..." \
+                --column "Field" --column "Value" \
+                        Date $Date \
+                        Amount $Amount \
+                        Type $Type \
+                        Comment $Comment \
+                        From $From \
+                        To $To \

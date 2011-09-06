@@ -10,9 +10,13 @@
 #------------------------------------------------
 @ Trgt = $argv[1]
 @ i = 1
+@ IntTime = `date +%s`
 while ($i <= $Trgt)
         set Percentage = `echo "$i / $Trgt * 100" | bc -l`
-        echo "$Percentage\n# $Percentage"
+        @ CurTime = `date +%s`
+        @ TimeElp = $CurTime - $IntTime
+        set TimeRem = `echo "($Trgt - $i) * $TimeElp / $i" | bc`
+        echo "$Percentage\n# $TimeRem sec to finish"
         sleep 1
         @ i = $i + 1 
 end

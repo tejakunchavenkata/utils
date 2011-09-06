@@ -18,7 +18,7 @@ alias   cll             'clear ; echo "Host: $HOST" ; echo -n "PWD: "; pwd ; ech
 alias   sc              "source ~/.cshrc.$USER"
 alias   c               "$EDITOR ~/.cshrc.$USER"
 alias   cd              'cd \!* ; cls'
-alias   mkcd            'mkdir \!* ; cd \!*'
+alias   mkcd            'mkdir -p \!* ; cd \!*'
 alias   man             'man -a'
 alias   g               'gvim '
 alias   s               'source '

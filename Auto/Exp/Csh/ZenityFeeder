@@ -1,0 +1,18 @@
+#! /bin/tcsh -f
+#------------------------------------------------
+# Author:    kasula
+# Created:   Tue Sep  6 02:13:58 PDT 2011
+# File Name: ZenityFeeder
+# USAGE: 
+# 
+# 
+# 
+#------------------------------------------------
+@ Trgt = $argv[1]
+@ i = 1
+while ($i <= $Trgt)
+        set Percentage = `echo "$i / $Trgt * 100" | bc -l`
+        echo "$Percentage\n# $Percentage"
+        sleep 1
+        @ i = $i + 1 
+end

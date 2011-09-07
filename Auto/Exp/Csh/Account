@@ -8,31 +8,36 @@
 # 
 # 
 #------------------------------------------------Default Values
-set InstallDir = "/remote/us01home15/kasula/.MyAccounts"
+set InstDir = "/remote/us01home15/kasula/.MyAccounts"
 set Date = `date +%F`
 set Types = ('Pay_IN' 'Pay_OUT' 'Transfers(Self)' 'Transfers(3rd-Party)');
 #------------------------------------------------1st Arg...
 if ( $#argv ) then
-	goto GetARGV1
+        goto HasARGV1
+        set ARGV1 = $argv[1]
 else
-	goto ARGV1
+	goto GetARGV1
 endif
 #------------------------------------------------1st Arg Process...
 GetARGV1:
-
-        switch ( $argv[1] )
-        case "-setup":
-                set NewInstallDir = `zenity --entry --title "InstallDir" --text "Enter an Installation Directory.."`
-                mkdir -p $NewInstallDir/Books $NewInstallDir/Sources $NewInstallDir/Accounts
-                touch $NewInstallDir/.accounts.csv $NewInstallDir/.sources.csv $NewInstallDir/.3rd-party.csv
-		touch $NewInstallDir/Books/`date +%Y`_Book.csv $NewInstallDir/Books/`date +%Y%m`_Book.csv
-		echo '"Date","Type Of Transaction","Comments","From","To","Amount"'
-                sed -i 's#^set InstallDir.*#set InstallDir = "'$NewInstallDir'"#g' $0
-                exit 0
-                breaksw
-	endsw
-	shift
-endif
+set ARGV1 = `zenity --list --title "Mode" --text "What do you wish to do..." --column '' "Setup" "Add" "Delete" "Record"`
+HasARGV1:
+set ARGV1 = `echo $ARGV1 | tr 'A-Z' 'a-z'`
+switch ( $ARGV1 )
+case "setup":
+        set NewDir = `zenity --entry --title "InstDir" --text "Enter an Installation Directory.."`
+        if (-e $NewDir) then
+                echo "ERROR: Installation directory already exists..."
+                exit 8
+        endif
+        mkdir -p $NewDir/Books $NewDir/Sources $NewDir/Accounts
+        echo '"Title","Balance"'                                  | tee $NewDir/.accounts.csv | tee $NewDir/.sources.csv > $NewDir/.3rd-party.csv
+	echo '"Date","Trsc Type","Comments","From","To","Amount"' | tee $NewDir/Books/`date +%Y`_Book.csv > $NewDir/Books/`date +%Y%m`_Book.csv
+        sed -i 's#^set InstDir.*#set InstDir = "'$NewDir'"#g' $0
+        exit 0
+        breaksw
+endsw
+exit
 #------------------------------------------------Reading Args...
 while ( $#argv > 0 )
         set Option = `echo $1 | tr 'A-Z' 'a-z'`
@@ -76,8 +81,8 @@ end
 if ( ! $?Amount  ) @   Amount  = `zenity --entry --title "Amount"  --text "Please enter an AMOUNT..."`
 if ( ! $?Comment ) set Comment = `zenity --entry --title "Comment" --text "Please COMMENT on transaction..."`
 if ( ! $?Type    ) set Type    = `zenity --list  --title "Types"   --text "Please select one of the TYPES" --column "Types" $Types`
-switch ( $Type )
-case "$Types[1]":
+#switch ( $Type )
+#case "$Types[1]":
 set From = From
 set To = To
 #------------------------------------------------Pre Process...

@@ -10,7 +10,7 @@
 #------------------------------------------------Default Values
 set Date = `date +%F`
 set File = "~/Accounts/".`date +%Y_%b`;
-set Types = ('Pay_IN' 'Pay_OUT' 'SelfTransfers' 'ThirdPartyTransfers');
+set Types = ('Pay_IN' 'Pay_OUT' 'Transfers(Self)' 'Transfers(3rd-Party)');
 #------------------------------------------------Reading Args...
 while ( $#argv > 0 )
         set Option = `echo $1 | tr 'A-Z' 'a-z'`
@@ -29,7 +29,7 @@ while ( $#argv > 0 )
                 shift
                 breaksw
         case '-comment':
-                set Comment = $argv[1]
+                set Comment = "$argv[1]"
                 shift
                 breaksw
         case '-from':
@@ -51,19 +51,19 @@ while ( $#argv > 0 )
         endsw
 end
 #------------------------------------------------Validating data...
-#if ( $Date   eq ""         ) { die "\n"; }
-#if ( $Amount eq "_"        ) { die "Please specify a valid Amount\n"; }
-#if ( $Comment eq "_"        ) { die "Please specify a Comment\n"; }
-#if ( not exists $TN{$Type} ) { print "Please specify one of the Type...\n"; printf "\t%s %s\n", $_, $TN{$_} for (sort keys %TN); exit; }
-##------------------------------------------------Pre Process...
-##if (-e -f ~/)
-#------------------------------------------------Show what is recorded...
-zenity --height=270 --width=270 \
-        --list --title "Recorded..." --text "To file : $File..." \
-                --column "Field" --column "Value" \
-                        Date $Date \
-                        Amount $Amount \
-                        Type $Type \
-                        Comment $Comment \
-                        From $From \
-                        To $To \
+if ( ! $?Amount  ) @   Amount  = `zenity --entry --title "Amount"  --text "Please enter an AMOUNT..."`
+if ( ! $?Comment ) set Comment = `zenity --entry --title "Comment" --text "Please COMMENT on transaction..."`
+if ( ! $?Type    ) set Type    = `zenity --list  --title "Types"   --text "Please select one of the TYPES" --column "Types" $Types`
+#switch ( $Type )
+#case "$Types[1]":
+set From = From
+set To = To
+#------------------------------------------------Pre Process...
+#if (-e -f ~/)
+#------------------------------------------------Confirm what is being recorded...
+zenity --question --title "Confirm" --text "Date\t\t$Date\nAmount\t$Amount\nType\t\t$Type\nComment\t$Comment\nFrom\t\t$From\nTo\t\t$To" >&! /dev/null
+if ( $? ) then
+        echo "Cancelled"
+else
+        echo "Recorded"
+endif

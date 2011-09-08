@@ -8,37 +8,42 @@
 # 
 # 
 #------------------------------------------------Default Values
-set InstDir = "/remote/us01home15/kasula/.MyAccounts"
+set MyDir = "~/.MyAccounts"
 set Date = `date +%F`
 set Types = ('Pay_IN' 'Pay_OUT' 'Transfers(Self)' 'Transfers(3rd-Party)');
 #------------------------------------------------1st Arg...
 if ( $#argv ) then
-        goto HasARGV1
         set ARGV1 = $argv[1]
+        goto HasARGV1
 else
 	goto GetARGV1
 endif
-#------------------------------------------------1st Arg Process...
 GetARGV1:
-set ARGV1 = `zenity --list --title "Mode" --text "What do you wish to do..." --column '' "Setup" "Add" "Delete" "Record"`
+set ARGV1 = '-'`zenity --list --title "Mode" --text "What do you wish to do..." --column '' "Setup" "Add" "Delete" "Record"`
+#------------------------------------------------1st Arg Process...
 HasARGV1:
 set ARGV1 = `echo $ARGV1 | tr 'A-Z' 'a-z'`
 switch ( $ARGV1 )
-case "setup":
-        set NewDir = `zenity --entry --title "InstDir" --text "Enter an Installation Directory.."`
-        if (-e $NewDir) then
-                echo "ERROR: Installation directory already exists..."
-                exit 8
-        endif
-        mkdir -p $NewDir/Books $NewDir/Sources $NewDir/Accounts
-        echo '"Title","Balance"'                                  | tee $NewDir/.accounts.csv | tee $NewDir/.sources.csv > $NewDir/.3rd-party.csv
-	echo '"Date","Trsc Type","Comments","From","To","Amount"' | tee $NewDir/Books/`date +%Y`_Book.csv > $NewDir/Books/`date +%Y%m`_Book.csv
-        sed -i 's#^set InstDir.*#set InstDir = "'$NewDir'"#g' $0
-        exit 0
-        breaksw
+case "-setup":
+	if ( ! -e $MyDir ) then
+		mkdir -p $MyDir/Books $MyDir/Sources $MyDir/Accounts
+		echo '"Title","Balance"'                                 | tee $MyDir/accounts.csv | tee $MyDir/sources.csv > $MyDir/3rd-party.csv
+		echo '"Date","Trsc Type","Comment","From","To","Amount"' | tee $MyDir/Books/`date +%Y`_Book.csv > $MyDir/Books/`date +%Y%m`_Book.csv
+		find $MyDir -type f -name '*.csv' -exec md5sum '{}' \;  >! $MyDir/.checksum.log
+	else
+		echo "WARNING : Directory already exists"
+	endif
+	exit 0
+	breaksw
 endsw
-exit
+#------------------------------------------------checksum...
+md5sum -c $MyDir/.checksum.log | sed '/OK/d'
+if ( $? ) then
+	echo "CheckSUM failed due to modification in above files"
+	exit 9
+endif
 #------------------------------------------------Reading Args...
+Record:
 while ( $#argv > 0 )
         set Option = `echo $1 | tr 'A-Z' 'a-z'`
         shift

@@ -15,8 +15,8 @@ alias   la              'ls -a '
 alias   cl              'clear ; echo "Host: $HOST" ; echo -n "PWD: "; pwd '
 alias   cls             'clear ; echo "Host: $HOST" ; echo -n "PWD: "; pwd ; echo "Contents:" ; ls '
 alias   cll             'clear ; echo "Host: $HOST" ; echo -n "PWD: "; pwd ; echo "Contents:" ; ll '
-alias   sc              "source ~/.cshrc.$USER"
-alias   c               "$EDITOR ~/.cshrc.$USER"
+alias   sc              "source ~/.home/.tcshrc"
+alias   c               "$EDITOR ~/.home/.tcshrc"
 alias   cd              'cd \!* ; cls'
 alias   mkcd            'mkdir -p \!* ; cd \!*'
 alias   man             'man -a'
@@ -34,18 +34,17 @@ alias   JobsC           'jobs >&! .running.jobs.found ; wc -l .running.jobs.foun
 alias   MATH            'set \!:1 = `echo "\!:3-$" | bc -l`'
 alias   fdt             'date +%m%d%H%M%S'
 unalias cp mv rm
-source  /remote/sge/default/snps/common/settings.csh
-if (-ef ~/.alias) source  ~/.alias
 
 ##########################################################################################################
 if ($path[1] != "./") set path = (      ./                                                              \
                                         $path                                                           \
-                                        ~kasula/Auto/MyPerl                                             \
-                                        ~kasula/Auto/MyShell                                            \
-                                        ~kasula/Auto/Perl                                               \
-                                        ~kasula/Auto/Shell                                              \
-                                        ~kasula/login                                                   \
-                                        ~kasula/Proj                                                    \
+                                        ~/Auto/MyPerl                                                   \
+                                        ~/Auto/MyShell                                                  \
+                                        ~/Auto/Perl                                                     \
+                                        ~/Auto/Shell                                                    \
+                                        ~/Auto/Fun                                                      \
+                                        ~/login                                                         \
+                                        ~/Proj                                                          \
                                 )
 ##########################################################################################################
 setenv  LS_COLORS       "$LS_COLORS""*.pdf=35\;01:""*.odp=34\;01:""*.doc=34\;01:""*.ods=34\;01:""*.docx=34\;01:""*.ppt=34\;01:""*.e=33:""*.sv=33:""*.v=33:"

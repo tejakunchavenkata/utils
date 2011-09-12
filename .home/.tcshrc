@@ -34,7 +34,6 @@ alias   JobsC           'jobs >&! .running.jobs.found ; wc -l .running.jobs.foun
 alias   MATH            'set \!:1 = `echo "\!:3-$" | bc -l`'
 alias   fdt             'date +%m%d%H%M%S'
 unalias cp mv rm
-
 ##########################################################################################################
 if ($path[1] != "./") set path = (      ./                                                              \
                                         $path                                                           \
@@ -47,5 +46,8 @@ if ($path[1] != "./") set path = (      ./                                      
                                         ~/Proj                                                          \
                                 )
 ##########################################################################################################
-setenv  LS_COLORS
-setenv  LS_COLORS       "$LS_COLORS""*.pdf=35\;01:""*.odp=34\;01:""*.doc=34\;01:""*.ods=34\;01:""*.docx=34\;01:""*.ppt=34\;01:""*.e=33:""*.sv=33:""*.v=33:"
+if ($?LS_COLORS) then
+        setenv  LS_COLORS       "$LS_COLORS""*.pdf=35\;01:""*.odp=34\;01:""*.doc=34\;01:""*.ods=34\;01:""*.docx=34\;01:""*.ppt=34\;01:""*.e=33:""*.sv=33:""*.v=33:"
+else
+        setenv  LS_COLORS       "*.pdf=35\;01:""*.odp=34\;01:""*.doc=34\;01:""*.ods=34\;01:""*.docx=34\;01:""*.ppt=34\;01:""*.e=33:""*.sv=33:""*.v=33:"
+endif

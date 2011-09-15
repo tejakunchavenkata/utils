@@ -33,6 +33,7 @@ alias   Countz          'unset CountVar ; set CountVar = (`echo \!*`) ; zenity -
 alias   JobsC           'jobs >&! .running.jobs.found ; wc -l .running.jobs.found ; rm -f .running.jobs.found'
 alias   MATH            'set \!:1 = `echo "\!:3-$" | bc -l`'
 alias   fdt             'date +%m%d%H%M%S'
+alias   RandSTR         "head /dev/urandom | uuencode -m - | sed -n 2p | sed 's#[^a-zA-Z0-9_]##g' | cut -b 1-32"
 unalias cp mv rm
 ##########################################################################################################
 if ($path[1] != "./") set path = (      ./                                                              \

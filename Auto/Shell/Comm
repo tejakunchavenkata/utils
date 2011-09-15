@@ -14,22 +14,22 @@ if ($#argv != 3) then
         exit 8
 endif
 
-sort $argv[1] -o .tmp.argv1
-sort $argv[3] -o .tmp.argv3
+sort $argv[1] -o $argv[1].comm.tmp
+sort $argv[3] -o $argv[3].comm.tmp
 
 switch ($argv[2])
 case "minus":
-        comm -23 .tmp.argv1 .tmp.argv3
+        comm -23 $argv[1].comm.tmp $argv[3].comm.tmp
         breaksw
 case "and":
-        comm -12 .tmp.argv1 .tmp.argv3
+        comm -12 $argv[1].comm.tmp $argv[3].comm.tmp
         breaksw
 case "or":
-        sort .tmp.argv1 .tmp.argv3
+        sort $argv[1].comm.tmp $argv[3].comm.tmp
         breaksw
 default:
         echo "Usage: file1  <minus|and|or> file2"
         exit 8
         breaksw
 endsw
-rm -f .tmp.argv?
+rm -f $argv[1].comm.tmp $argv[3].comm.tmp

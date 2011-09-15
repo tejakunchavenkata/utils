@@ -10,10 +10,9 @@
 #------------------------------------------------
 if (1 == scalar @ARGV)
 {
-        $VAL = int(rand($ARGV[0])) ;
+        printf "%d\n", (int(rand($ARGV[0]))) ;
 }
 else
 {
-        $VAL = $ARGV[0] + int(rand($ARGV[1]-$ARGV[0]+1)) ;
+        printf "%d\n", ($ARGV[0] + int(rand($ARGV[1]-$ARGV[0]+1))) ;
 }
-print "$VAL\n" ;

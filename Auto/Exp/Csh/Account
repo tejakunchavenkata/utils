@@ -7,10 +7,22 @@
 # 
 # 
 # 
+#------------------------------------------------Help
+if ( "$argv" =~ *-h*) then
+        grep -m 1 -A 3 USAGE $0
+        exit
+endif
 #------------------------------------------------Default Values
-set MyDir = "~/.MyAccounts"
-set Date = `date +%F`
-set Types = ('Pay_IN' 'Pay_OUT' 'Transfers(Self)' 'Transfers(3rd-Party)');
+set MyDir  = "~/.MyAccounts"
+set Date   = `date +%F`
+set Opt    = ("Setup" "Add-Account" "Add-Person" "Add-Source" "Remove-Account" "Remove-Source" "Record")
+set TOT    = ('Pay_IN' 'Pay_OUT' 'Transfers(Self)' 'Transfers(3rd-Party)')
+which sha512sum >& /dev/null
+if ( $? ) then
+        set ChkSum = md5sum
+else
+        set ChkSum = sha512sum
+endif
 #------------------------------------------------1st Arg...
 if ( $#argv ) then
         set ARGV1 = $argv[1]
@@ -20,29 +32,29 @@ else
 	goto GetARGV1
 endif
 GetARGV1:
-set ARGV1 = '--'`zenity --list --title "Mode" --text "What do you wish to do..." --column '' "Setup" "Add-Account" "Add-Person" "Delete-Account" "Record"`
+set ARGV1 = '-'`zenity --list --title "Mode" --text "Select an option..." --column '' "$Opt"`
 #------------------------------------------------1st Arg Process...
 HasARGV1:
 set ARGV1 = `echo $ARGV1 | tr 'A-Z' 'a-z'`
 switch ( $ARGV1 )
-case "--setup":
+case "-setup":
         goto Setup
 	breaksw
-case "--add-account":
+case "-add-account":
         goto AddAccount
         breaksw
-case "--add-person":
+case "-add-person":
         goto AddPerson
         breaksw
-case "--delete-account":
-        goto DeleteAccount
+case "-remove-account":
+        goto RemoveAccount
         breaksw
-case "--record":
+case "-record":
         goto Record
         breaksw
 default:
         echo "# Invalid First option"
-        goto GetARGV1
+        exit 1
         breaksw
 endsw
 #------------------------------------------------Setup...
@@ -51,26 +63,33 @@ if ( ! -e $MyDir ) then
         mkdir -p $MyDir/Books $MyDir/SrcBooks $MyDir/AccBooks
         echo '"Title","Balance"'                                        | tee $MyDir/accounts.csv | tee $MyDir/sources.csv > $MyDir/3rd-party.csv
         echo '"Date","Transaction Type","Comment","From","To","Amount"' | tee $MyDir/Books/`date +%Y`_Book.csv > $MyDir/Books/`date +%Y%m`_Book.csv
-        find $MyDir -type f -name '*.csv' -exec sha512sum '{}' \;       >! $MyDir/.checksum.log
+        find $MyDir -type f -name '*.csv' -exec $ChkSum '{}' \;         >! $MyDir/.checksum.log
+        exit 0
 else
         echo "# ERROR : Directory already exists"
         exit 1
 endif
 #------------------------------------------------checksum...
-sha512sum -c $MyDir/.checksum.log | sed -n '/OK/!p'
+$ChkSum -c $MyDir/.checksum.log | sed '/OK/d'
 if ( $? ) then
         echo "CheckSUM failed due to modification in above files"
         exit 9
 endif
-#------------------------------------------------(AddAccount) Reading ARGS - CMD line...
+#------------------------------------------------(AddAccount) Reading ARGS...
 AddAccount:
-if ( $#argv ) then
-        set Account = $argv[1]
-else
-        set Account = `zenity --entry --title "Add-Account" --text "Please enter Title of Account..."`
-endif
+set Account = (`zenity --entry --title "Add-Account" --text "Please enter the Account(s)...\n(Seperated by space)" | tr ' ' '\n' | sort -u`)
+zenity --question --title "Confirm" --text "Adding Accounts...\n(Press Cancel to ReEnter the list)\n`echo $Account | sed 's/ /\\n/g'`" >& /dev/null
+if ( $? ) goto AddAccount
 
+exit 0
+#------------------------------------------------(AddPerson) Reading ARGS...
 AddPerson:
+set Person = `zenity --entry --title "Add-Person" --text "Please enter Name of the Person..."`
+exit 0
+#------------------------------------------------(RemoveAccount) Reading ARGS...
+RemoveAccount:
+set Account = `zenity --entry --title "Remove-Account" --text "Please enter Name of the Account..."`
+exit 0
 #------------------------------------------------(Record) Reading ARGS - CMD line...
 Record:
 while ( $#argv > 0 )
@@ -86,7 +105,7 @@ while ( $#argv > 0 )
                 shift
                 breaksw
         case '-type':
-                set Type = $Types[$argv[1]]
+                set Type = $TOT[$argv[1]]
                 shift
                 breaksw
         case '-comment':
@@ -101,10 +120,6 @@ while ( $#argv > 0 )
                 set To = $argv[1]
                 shift
                 breaksw
-        case '-h':
-                grep -m 1 -A 3 USAGE $0
-                exit
-                breaksw
         default:
                 echo "Invalid Option found...\nTry '-h' to know valid options\n"
                 exit
@@ -114,9 +129,9 @@ end
 #------------------------------------------------(Record) Reading - ARGS GUI...
 if ( ! $?Amount  ) @   Amount  = `zenity --entry --title "Amount"  --text "Please enter an AMOUNT..."`
 if ( ! $?Comment ) set Comment = `zenity --entry --title "Comment" --text "Please COMMENT on transaction..."`
-if ( ! $?Type    ) set Type    = `zenity --list  --title "Types"   --text "Please select one of the TYPES" --column "Types" $Types`
+if ( ! $?Type    ) set Type    = `zenity --list  --title "Types"   --text "Please select one of the TYPES" --column "Types" $TOT`
 #switch ( $Type )
-#case "$Types[1]":
+#case "$TOT[1]":
 set From = From
 set To = To
 #------------------------------------------------Pre Process...

@@ -9,16 +9,16 @@ set     echo_style      = both
 set     correct         = cmd
 set     prompt          = '%? $ '
 setenv  EDITOR          gvim
-setenv  LC_ALL          c                                       # sort command control
+#setenv  LC_ALL          c                                       # sort command control
 alias   ls              'ls -FhxX --color=tty '
 alias   ll              'ls -l '
 alias   la              'ls -a '
 alias   cl              'clear ; echo "Host: $HOST" ; echo -n "PWD: "; pwd '
 alias   cls             'clear ; echo "Host: $HOST" ; echo -n "PWD: "; pwd ; echo "Contents:" ; ls '
+alias   cwdcmd          'clear ; echo "Host: $HOST" ; echo -n "PWD: "; pwd ; echo "Contents:" ; ls '
 alias   cll             'clear ; echo "Host: $HOST" ; echo -n "PWD: "; pwd ; echo "Contents:" ; ll '
 alias   sc              "source ~/.home/.tcshrc"
 alias   c               "$EDITOR ~/.home/.tcshrc"
-alias   cd              'cd \!* ; cls'
 alias   mkcd            'mkdir -p \!* ; cd \!*'
 alias   man             'man -a'
 alias   g               'gvim '

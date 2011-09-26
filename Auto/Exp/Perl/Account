@@ -1,0 +1,140 @@
+#! /usr/bin/perl -w
+#------------------------------------------------
+# Author:    kasula
+# Created:   Mon Sep 12 22:29:37 PDT 2011
+# File Name: Account
+# USAGE: 
+# 
+# 
+# 
+#------------------------------------------------Subs
+
+#------------------------------------------------Help
+if ( "@ARGV" ~ /-h/) { grep -m 1 -A 3 USAGE $0 ; exit ; }
+#------------------------------------------------Default Values
+$MyDir  = "~/.MyAccounts";
+$Date   = `date +%F`;
+@Opt    = ("Setup","Add-Account","Add-Person","Add-Source","Remove-Account","Remove-Source","Record");
+@TOT    = ('Pay_IN','Pay_OUT','Transfers(Self)','Transfers(3rd-Party)');
+$ChkSum = md5sum
+#------------------------------------------------1st Arg...
+FreezeTask ;
+$Task ;
+if ( $#argv ) then
+        set ARGV1 = $argv[1]
+        shift
+        goto HasARGV1
+else
+	goto GetARGV1
+endif
+GetARGV1:
+set ARGV1 = '-'`zenity --list --title "Mode" --text "Select an option..." --column '' "$Opt"`
+#------------------------------------------------1st Arg Process...
+HasARGV1:
+set ARGV1 = `echo $ARGV1 | tr 'A-Z' 'a-z'`
+switch ( $ARGV1 )
+case "-setup":
+        goto Setup
+	breaksw
+case "-add-account":
+        goto AddAccount
+        breaksw
+case "-add-person":
+        goto AddPerson
+        breaksw
+case "-remove-account":
+        goto RemoveAccount
+        breaksw
+case "-record":
+        goto Record
+        breaksw
+default:
+        echo "# Invalid First option"
+        exit 1
+        breaksw
+endsw
+#------------------------------------------------Setup...
+Setup:
+if ( ! -e $MyDir ) then
+        mkdir -p $MyDir/Books $MyDir/SrcBooks $MyDir/AccBooks
+        echo '"Title","Balance"'                                        | tee $MyDir/accounts.csv | tee $MyDir/sources.csv > $MyDir/3rd-party.csv
+        echo '"Date","Transaction Type","Comment","From","To","Amount"' | tee $MyDir/Books/`date +%Y`_Book.csv > $MyDir/Books/`date +%Y%m`_Book.csv
+        find $MyDir -type f -name '*.csv' -exec $ChkSum '{}' \;         >! $MyDir/.checksum.log
+        exit 0
+else
+        echo "# ERROR : Directory already exists"
+        exit 1
+endif
+#------------------------------------------------checksum...
+$ChkSum -c $MyDir/.checksum.log | sed '/OK/d'
+if ( $? ) then
+        echo "CheckSUM failed due to modification in above files"
+        exit 9
+endif
+#------------------------------------------------(AddAccount) Reading ARGS...
+AddAccount:
+set Account = (`zenity --entry --title "Add-Account" --text "Please enter the Account(s)...\n(Seperated by space)" | tr ' ' '\n' | sort -u`)
+zenity --question --title "Confirm" --text "Adding Accounts...\n(Press Cancel to ReEnter the list)\n`echo $Account | sed 's/ /\\n/g'`" >& /dev/null
+if ( $? ) goto AddAccount
+
+exit 0
+#------------------------------------------------(AddPerson) Reading ARGS...
+AddPerson:
+set Person = `zenity --entry --title "Add-Person" --text "Please enter Name of the Person..."`
+exit 0
+#------------------------------------------------(RemoveAccount) Reading ARGS...
+RemoveAccount:
+set Account = `zenity --entry --title "Remove-Account" --text "Please enter Name of the Account..."`
+exit 0
+#------------------------------------------------(Record) Reading ARGS - CMD line...
+Record:
+while ( $#argv > 0 )
+        set Option = `echo $1 | tr 'A-Z' 'a-z'`
+        shift
+        switch ($Option)
+        case '-date':
+                set Date = `date -d $argv[1] +%F`
+                shift
+                breaksw
+        case '-amount':
+                @ Amount = $argv[1]
+                shift
+                breaksw
+        case '-type':
+                set Type = $TOT[$argv[1]]
+                shift
+                breaksw
+        case '-comment':
+                set Comment = "$argv[1]"
+                shift
+                breaksw
+        case '-from':
+                set From = $argv[1]
+                shift
+                breaksw
+        case '-to':
+                set To = $argv[1]
+                shift
+                breaksw
+        default:
+                echo "Invalid Option found...\nTry '-h' to know valid options\n"
+                exit
+                breaksw
+        endsw
+end
+#------------------------------------------------(Record) Reading - ARGS GUI...
+if ( ! $?Amount  ) @   Amount  = `zenity --entry --title "Amount"  --text "Please enter an AMOUNT..."`
+if ( ! $?Comment ) set Comment = `zenity --entry --title "Comment" --text "Please COMMENT on transaction..."`
+if ( ! $?Type    ) set Type    = `zenity --list  --title "Types"   --text "Please select one of the TYPES" --column "Types" $TOT`
+#switch ( $Type )
+#case "$TOT[1]":
+set From = From
+set To = To
+#------------------------------------------------Pre Process...
+#------------------------------------------------Confirm what is being recorded...
+zenity --question --title "Confirm" --text "Date\t\t$Date\nAmount\t$Amount\nType\t\t$Type\nComment\t$Comment\nFrom\t\t$From\nTo\t\t$To" >&! /dev/null
+if ( $? ) then
+        echo "Cancelled"
+else
+        echo "Recorded"
+endif

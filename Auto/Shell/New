@@ -33,7 +33,7 @@ echo "# Author:    $USER"                                                       
 echo "# Created:   `date`"                                                              >> $NewFile
 echo "# File Name: $NewFile:t"                                                          >> $NewFile
 echo "# USAGE: "                                                                        >> $NewFile
-echo "# "                                                                               >> $NewFile
+echo "#       $NewFile:t "                                                              >> $NewFile
 echo "# "                                                                               >> $NewFile
 echo "# "                                                                               >> $NewFile
 echo "#------------------------------------------------"                                >> $NewFile

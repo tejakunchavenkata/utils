@@ -8,7 +8,7 @@
 # 
 # 
 #------------------------------------------------
-open IFH, "$ARGV[0]" or die "Opening $ARGV[0] failed\n";
+open IFH, "<$ARGV[0]" or die "Opening $ARGV[0] failed\n";
 @Lines = <IFH>;
 close IFH;
 
@@ -17,4 +17,7 @@ for ($i = @Lines; --$i; ) {
         next if $i == $j;
         @Lines[$i,$j] = @Lines[$j,$i];
 }
-print @Lines;
+
+open OFH, ">$ARGV[0]" or die "Opening $ARGV[0] failed\n";
+print OFH @Lines;
+close OFH;

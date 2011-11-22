@@ -37,7 +37,7 @@ close IFH;
 
 print "-,";
 while (($kCol,$vCol) = each %Col) { print "$kCol,"; }
-print ",Tot,\n";
+print "Tot,\n";
 
 while (($kRow,$vRow) = each %Row) {
         print "$kRow,";
@@ -45,8 +45,10 @@ while (($kRow,$vRow) = each %Row) {
                 if ( exists $Cnt{$kRow.$Delimiter.$kCol} ) { printf "%d,", $Cnt{$kRow.$Delimiter.$kCol}; }
                 else { printf "0,"; }
         }
-        print ",$vRow,\n";
+        print "$vRow,\n";
 }
 
-print "\nTot,";
-while (($kCol,$vCol) = each %Col) { print "$vCol,"; }
+$GTot = 0;
+print "Tot,";
+while (($kCol,$vCol) = each %Col) { print "$vCol,"; $GTot += $vCol; }
+print "$GTot,\n";

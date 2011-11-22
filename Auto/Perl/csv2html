@@ -8,21 +8,20 @@
 # 
 # 
 #------------------------------------------------
-if ( $#ARGV != 1 ){
-        die "Usage: perl csv2html <in.csv> <out.html>\n" ;
-}
+if ( $#ARGV != 1 ) { die "Usage: perl csv2html <in.csv> <out.html>\n"; }
 open(IN,"$ARGV[0]") or die "Can’t open $ARGV[0]\n";
 chomp($ARGV[1]);
-open(H,">$ARGV[1]") || die "Can’t write to $ARGV[1]; check permissions\n";
-print H ("\<table border=1 width=50\%\>\n");
+open(H,">$ARGV[1]") or die "Can’t write to $ARGV[1]; check permissions\n";
+
+print H ("<table><tbody>\n");
 while(<IN>){
-        chomp($_);
+        chomp ;
+        next if (/^\s*$/);
         @fields = split(/\,/,$_);
-        print H "  \<tr align=center valign=left\>\n";
-        @htmlfields = map("\<td\> $_ \</td\>\n", @fields);
-        print H @htmlfields;
-        print H ("  \<\/tr\>\n");
+        @htmlfields = map("\<td\> $_ \</td\>", @fields);
+        print H "  <tr>\n@htmlfields </tr>\n";
 }
-print H ("</table>\n\n");
+print H ("</tbody></table>\n\n");
+
 close(IN);
 close(H);

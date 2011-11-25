@@ -28,7 +28,7 @@ case "and":
         comm -12 $tmpFile1 $tmpFile3
         breaksw
 case "or":
-        sort $tmpFile1 $tmpFile3
+        sort -u $tmpFile1 $tmpFile3
         breaksw
 default:
         echo "Usage: file1  <minus|and|or> file2"

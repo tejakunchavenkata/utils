@@ -8,4 +8,24 @@
 # 
 # 
 #------------------------------------------------
+use Getopt::Long ;
 
+($DD, $MM, $YYYY) = (localtime) [3,4,5];
+$YYYY += 1900;
+$MM += 1;
+
+$Date = sprintf "%04d-%02d-%02d", $YYYY, $MM, $DD;
+$DataDir = "/home/$ENV{USER}/.AccBooks";
+
+$Res = GetOptions (
+        "dir:s" => \$DataDir,
+        "date:s" => \$Date, 
+        'reason|comment=s' => \$Reason,
+        "from=s" => \$From,
+        "to=s" => \$To,
+        "amount=i" => \$Amount,
+);
+die "ERROR : GetOptions failed\n" if ($Res != 1);
+
+mkdir $DataDir ;
+print "$DataDir, $Date, $Reason, $From, $To, $Amount\n";

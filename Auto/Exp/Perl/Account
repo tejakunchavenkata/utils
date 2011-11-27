@@ -14,18 +14,51 @@ use Getopt::Long ;
 $YYYY += 1900;
 $MM += 1;
 
-$Date = sprintf "%04d-%02d-%02d", $YYYY, $MM, $DD;
-$DataDir = "/home/$ENV{USER}/.AccBooks";
+$Date   = sprintf "%04d-%02d-%02d", $YYYY, $MM, $DD;
+$DataDir= "/home/$ENV{USER}/.AccBooks";
+$From   = "Wallet";
+$To     = "Spent";
 
 $Res = GetOptions (
-        "dir:s" => \$DataDir,
-        "date:s" => \$Date, 
+        "dir=s" => \$DataDir,
+        "date=s" => \$Date, 
         'reason|comment=s' => \$Reason,
         "from=s" => \$From,
         "to=s" => \$To,
         "amount=i" => \$Amount,
 );
-die "ERROR : GetOptions failed\n" if ($Res != 1);
-
+die "Please check if all variables are defined properly\n" if ($Res != 1 || !$DataDir || !$Date || !$Reason || !$From || !$To || !$Amount);
 mkdir $DataDir ;
+$From = lc $From;
+$To   = lc $To;
+
+foreach $WorkBook ( "$DataDir/$From.csv", "$DataDir/$To.csv" ) {
+        if (! -e $WorkBook) {
+                print "Creating an empty WorkBook : $WorkBook\n";
+                open  FH, ">$WorkBook" or die "Creating WorkBook : $WorkBook failed\n";
+                print FH "Date,Reason,Debit,Credit,Balance\n";
+                print "Wish to add Opening Balance...? : ";
+                chomp ($Bal = <STDIN>);
+                print FH "$Date,OpeningBalance,-,-,$Bal\n";
+                close FH;
+        }
+}
+open  FH, "<$DataDir/$From.csv" or die "Opening WorkBook : $From failed\n";
+$LastLine = $_ while <FH>;
+$Bal = (split /,/, $LastLine)[4];
+close FH;
+
+open  FH, ">>$DataDir/$From.csv" or die "Opening WorkBook : $From failed\n";
+printf FH "$Date,$Reason,$Amount,-,%d\n", $Bal-$Amount;
+close FH;
+
+open  FH, "<$DataDir/$To.csv"   or die "Opening WorkBook : $To failed\n";
+$LastLine = $_ while <FH>;
+$Bal = (split /,/, $LastLine)[4];
+close FH;
+
+open  FH, ">>$DataDir/$To.csv"   or die "Opening WorkBook : $To failed\n";
+printf FH "$Date,$Reason,-,$Amount,%d\n", $Bal+$Amount;
+close FH;
+
 print "$DataDir, $Date, $Reason, $From, $To, $Amount\n";

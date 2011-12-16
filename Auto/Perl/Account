@@ -29,9 +29,9 @@ $Res = GetOptions (
 );
 die "Please check if all variables are defined properly\n" if ($Res != 1 || !$DataDir || !$Date || !$Reason || !$From || !$To || !$Amount);
 mkdir $DataDir ;
-$From = lc $From;
-$To   = lc $To;
 
+$From = lc $From;
+$To = lc $To;
 foreach $WorkBook ( "$DataDir/$From.csv", "$DataDir/$To.csv" ) {
         if (! -e $WorkBook) {
                 print "Creating an empty WorkBook : $WorkBook\n";
@@ -43,22 +43,16 @@ foreach $WorkBook ( "$DataDir/$From.csv", "$DataDir/$To.csv" ) {
                 close FH;
         }
 }
-open  FH, "<$DataDir/$From.csv" or die "Opening WorkBook : $From failed\n";
+open  FH, "+<$DataDir/$From.csv" or die "Opening WorkBook : $From failed\n";
 $LastLine = $_ while <FH>;
 $Bal = (split /,/, $LastLine)[4];
-close FH;
-
-open  FH, ">>$DataDir/$From.csv" or die "Opening WorkBook : $From failed\n";
 printf FH "$Date,$Reason,$Amount,-,%d\n", $Bal-$Amount;
 close FH;
 
-open  FH, "<$DataDir/$To.csv"   or die "Opening WorkBook : $To failed\n";
+open  FH, "+<$DataDir/$To.csv"   or die "Opening WorkBook : $To failed\n";
 $LastLine = $_ while <FH>;
 $Bal = (split /,/, $LastLine)[4];
-close FH;
-
-open  FH, ">>$DataDir/$To.csv"   or die "Opening WorkBook : $To failed\n";
 printf FH "$Date,$Reason,-,$Amount,%d\n", $Bal+$Amount;
 close FH;
 
-print "$DataDir, $Date, $Reason, $From, $To, $Amount\n";
+printf "Modified WorkBooks :\n\t$DataDir/$From.csv\n\t$DataDir/$To.csv\n";

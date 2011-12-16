@@ -1,0 +1,10 @@
+Date,Reason,Debit,Credit,Balance
+2011-11-28,OpeningBalance,-,-,1197
+2011-11-28,ATM-WithDraw,500,-,697
+2011-11-30,Salary-NOV,-,14600,15297
+2011-12-02,WithDrawn-forVipan,2900,-,12397
+2011-12-06,Dad,6500,-,5897
+2011-12-08,ChinniRecharge,10,-,5887
+2011-12-09,WithDrawnING,500,-,5387
+2011-12-12,MovieAMTfromING,250,-,5137
+2011-12-12,WithDrawn,200,-,4937

@@ -65,3 +65,9 @@ Date,Reason,Debit,Credit,Balance
 2011-12-21,BreakFast,15,-,175
 2011-12-22,BreakFast,20,-,155
 2011-12-23,BreakFast,10,-,145
+2011-12-24,BreakFast,15,-,130
+2011-12-24,WothDrawn,-,500,630
+2011-12-24,Garnier-Nani,135,-,495
+2011-12-24,Dinner,30,-,465
+2011-12-25,Dinner,60,-,405
+2011-12-25,Lend,100,-,305

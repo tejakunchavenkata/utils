@@ -13,3 +13,6 @@ Date,Reason,Debit,Credit,Balance
 2011-12-24,WothDrawn,500,-,3686
 2011-12-26,Return,-,500,4186
 2011-12-26,PP-Return-Adj,100,-,4086
+2011-12-27,BDAY-Party,1500,-,2586
+2011-12-27,LendToVipan,500,-,2086
+2011-12-27,BDAY-PartyADJ,-,500,2586

@@ -1,3 +1,4 @@
 Date,Reason,Debit,Credit,Balance
 2011-12-27,OpeningBalance,-,-,0
 2011-12-27,LendToVipan,-,500,500
+2011-12-29,TempLendVipan,-,1500,2000

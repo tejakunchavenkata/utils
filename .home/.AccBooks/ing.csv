@@ -17,3 +17,6 @@ Date,Reason,Debit,Credit,Balance
 2011-12-27,LendToVipan,500,-,2086
 2011-12-27,BDAY-PartyADJ,-,500,2586
 2011-12-29,TempLendVipan,1500,-,1086
+2011-12-31,VipanLendReturn,-,1500,2586
+2011-12-31,Salary,-,14600,17186
+2012-01-04,WoodLand,3040,-,14146

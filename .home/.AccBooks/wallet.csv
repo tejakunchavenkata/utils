@@ -78,3 +78,10 @@ Date,Reason,Debit,Credit,Balance
 2011-12-28,BreakFast,20,-,30
 2011-12-29,BreakFast,10,-,20
 2011-12-30,BreakFast,20,-,0
+2011-12-31,VipanLendReturn,-,500,500
+2011-12-31,BreakFast,20,-,480
+2011-12-31,DamuLendReturn,-,100,580
+2011-12-31,NewYearParty,100,-,480
+2012-01-01,Dinner,40,-,440
+2012-01-04,Curries,85,-,355
+2012-01-04,Breakfast,20,-,335

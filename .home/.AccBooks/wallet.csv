@@ -85,3 +85,7 @@ Date,Reason,Debit,Credit,Balance
 2012-01-01,Dinner,40,-,440
 2012-01-04,Curries,85,-,355
 2012-01-04,Breakfast,20,-,335
+2012-01-06,RoomRentAndMisc,-,2500,2835
+2012-01-06,Dinner,40,-,2795
+2012-01-06,Snaks,30,-,2765
+2012-01-06,BreakFast,20,-,2745

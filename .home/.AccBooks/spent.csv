@@ -103,3 +103,7 @@ Date,Reason,Debit,Credit,Balance
 2012-01-17,BreakFast,-,20,25571
 2012-01-18,Snaks,-,10,25581
 2012-01-18,Curries,-,30,25611
+2012-01-19,BreakFast,-,10,25621
+2012-01-19,JourneyHome,-,40,25661
+2012-01-20,JourneyReturn,-,10,25671
+2012-01-20,Lunch,-,30,25701

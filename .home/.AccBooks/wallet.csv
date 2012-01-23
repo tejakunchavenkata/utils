@@ -117,3 +117,9 @@ Date,Reason,Debit,Credit,Balance
 2012-01-19,JourneyHome,40,-,350
 2012-01-20,JourneyReturn,10,-,340
 2012-01-20,Lunch,30,-,310
+2012-01-21,Dinner,10,-,300
+2012-01-21,Lunch,10,-,290
+2012-01-22,WithDrawn,-,800,1090
+2012-01-22,Journey,50,-,1040
+2012-01-22,Snaks,50,-,990
+2012-01-22,Dinner,150,-,840

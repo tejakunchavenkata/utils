@@ -123,3 +123,8 @@ Date,Reason,Debit,Credit,Balance
 2012-01-22,Journey,50,-,1040
 2012-01-22,Snaks,50,-,990
 2012-01-22,Dinner,150,-,840
+2012-01-23,BreakFast,10,-,830
+2012-01-24,BreakFast,20,-,810
+2012-01-24,Snaks,20,-,790
+2012-01-24,Curries,50,-,740
+2012-01-24,WithDrawnPassport,-,1000,1740

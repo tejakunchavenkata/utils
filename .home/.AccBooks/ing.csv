@@ -29,3 +29,8 @@ Date,Reason,Debit,Credit,Balance
 2012-01-12,ChinniRecharge,50,-,4736
 2012-01-22,WithDrawn,800,-,3936
 2012-01-24,WithDrawnPassport,1000,-,2936
+2012-02-01,Salary,-,14600,17536
+2012-02-03,ChitPayJAN,6500,-,11036
+2012-02-03,AnilLend,2000,-,9036
+2012-02-04,Recharge,55,-,8981
+2012-02-04,SyncBankAccount,87,-,8894

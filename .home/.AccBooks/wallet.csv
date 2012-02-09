@@ -141,3 +141,12 @@ Date,Reason,Debit,Credit,Balance
 2012-02-02,Snacks,25,-,1470
 2012-02-02,Dinner,50,-,1420
 2012-02-05,Lunch+Juice,70,-,1350
+2012-02-06,BreakFast,20,-,1330
+2012-02-07,BreakFast,20,-,1310
+2012-02-08,BreakFast,20,-,1290
+2012-02-06,ReturnKanil,-,2000,3290
+2012-02-06,Rent,1600,-,1690
+2012-02-07,PAssport,1000,-,690
+2012-02-06,Dinner,20,-,670
+2012-02-09,BreakFast,20,-,650
+2012-02-09,VipanAmtToDamViaING,500,-,150

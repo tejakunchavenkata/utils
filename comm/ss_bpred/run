@@ -9,6 +9,6 @@
 # 
 #------------------------------------------------
 set prgm = $argv[1]
-../bin/sslittle-na-sstrix-gcc $prgm -o $prgm:r.out
+../bin/sslittle-na-sstrix-gcc $prgm -o $prgm:r.out -c -g -Wa,-a,-ad > & ! $prgm:r.lst
 ../bin/sslittle-na-sstrix-objdump --disassemble-all $prgm:r.out > & ! $prgm:r.dump
 ../simplesim-3.0/sim-bpred -bpred taken $prgm:r.out > & ! $prgm:r.log

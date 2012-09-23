@@ -4,7 +4,44 @@
 #include "phraseargs.cpp"
 #include "longlist.cpp"
 
-void display (vector <string> paths, opts o, string prefix);
+void dispDirs (string prefix, string dirName, opts o);
+
+vector <string> getDirContents (string dir, bool lAll) {
+  struct dirent **namelist;
+  int n = scandir (dir.c_str(), &namelist, 0, alphasort);
+
+  if (n < 0) {
+    cout << "scandir call failed on: " << dir << "\n" ;
+    perror("scandir");
+    exit (EXIT_FAILURE);
+  } else {
+    vector <string> subPaths;
+    while (n--) {
+      if (lAll || *(namelist[n]->d_name) != '.')
+        subPaths.push_back (namelist[n]->d_name);
+      free(namelist[n]);
+    }
+    free(namelist);
+    reverse (subPaths.begin(), subPaths.end());
+    return subPaths;
+  }
+}
+
+list <lsPacket> getLsPackets (string prefix, vector <string> paths) {
+  list <lsPacket> packets;
+  lsPacket obj;
+
+  for (unsigned int i=0; i<paths.size(); i++) {
+    if (lstat ((prefix + paths[i]).c_str(), &(obj.info)) == -1) {
+      cout << "Error on: " << prefix + paths[i] << "\n";
+      perror("stat");
+      exit(EXIT_FAILURE);
+    }
+    obj.name = paths[i];
+    packets.push_back(obj);
+  }
+  return packets;
+}
 
 void dispFiles (list <lsPacket> items, opts o) {
   switch (o.sortType) {
@@ -18,52 +55,41 @@ void dispFiles (list <lsPacket> items, opts o) {
     dispLongList (items);
   else
     for (list <lsPacket>::iterator it = items.begin(); it != items.end(); ++it) cout << it->name << " ";
+
+  cout << "\n";
 }
 
-void dispDirs (list <lsPacket> items, opts o) {
-  for (list <lsPacket>::iterator it = items.begin(); it != items.end(); ++it) {
-    cout << "\n" << it->name << ":\n";
+void dispDirs (string prefix, string dirName, opts o) {
+  //cout << "dispDirs:-\n\tprefix: " << prefix << "\n";
+  list <lsPacket> contents = getLsPackets (prefix + dirName + '/', getDirContents (prefix + dirName, o.listAll));
 
-    struct dirent **namelist;
-    int n;
+  if (! o.longList) cout << "\n";
+  cout << prefix + dirName << ":\n";
+  dispFiles (contents, o);
 
-    n = scandir(it->name.c_str(), &namelist, 0, alphasort);
-    if (n < 0)
-      perror("scandir");
-    else {
-      vector <string> subPaths;
-      while (n--) {
-        if (not (! o.listAll && *(namelist[n]->d_name) == '.'))
-          subPaths.push_back (namelist[n]->d_name);
-        free(namelist[n]);
+  if (o.recursive) {
+    for (list <lsPacket>::iterator it = contents.begin(); it != contents.end(); ++it)
+      if (S_IFDIR == (S_IFMT & (it->info.st_mode))) {
+        string newPrefix = prefix + dirName + '/';
+        //cout << "\nDEBUG recursing dispDirs: recursing in... -> " << prefix << " - " << it->name << "\n";
+        dispDirs (newPrefix, it->name, o);
       }
-      free(namelist);
-      o.dirEntry = true;
-      display (subPaths, o, it->name + '/');
-    }
   }
 }
 
-void display (vector <string> paths, opts o, string prefix) {
-  list <lsPacket> files, dirs;
-  lsPacket obj;
+void display (vector <string> paths, opts o) {
+  list <lsPacket> all, files, dirs;
 
-  for (unsigned int i=0; i<paths.size(); i++) {
-    if (lstat ((prefix + paths[i]).c_str(), &(obj.info)) == -1) {
-      perror("stat");
-      exit(EXIT_FAILURE);
-    }
-    obj.name = paths[i];
-    //dispLsPacket (obj);
-
-    switch (obj.info.st_mode & S_IFMT) {
-      case S_IFDIR:    dirs.push_back(obj);        break;
-      case S_IFREG:  //files.push_back(obj);       break;
-      case S_IFIFO:  //slinks.push_back(obj)       break;
-      case S_IFSOCK: //slinks.push_back(obj)       break;
-      case S_IFBLK:  //slinks.push_back(obj)       break;
-      case S_IFCHR:  //slinks.push_back(obj)       break;
-      case S_IFLNK:    files.push_back(obj);       break;
+  all = getLsPackets ("", paths);
+  for (list <lsPacket>::iterator it = all.begin(); it != all.end(); ++it) {
+    switch (it->info.st_mode & S_IFMT) {
+      case S_IFDIR:    dirs.push_back(*it);        break;
+      case S_IFREG: 
+      case S_IFIFO: 
+      case S_IFSOCK:
+      case S_IFBLK: 
+      case S_IFCHR: 
+      case S_IFLNK:    files.push_back(*it);       break;
       default:         cerr << "unknown?\n";       break;
     }
   }
@@ -73,13 +99,12 @@ void display (vector <string> paths, opts o, string prefix) {
       files.push_back(*it);
   }
 
-  if (files.size()) {
+  if (files.size())
     dispFiles (files, o);
-    cout << "\n";
-  }
-  
+
   if (! o.dirEntry && dirs.size()) {
-    dispDirs (dirs, o);
+    for (list <lsPacket>::iterator it=dirs.begin(); it != dirs.end(); ++it)
+      dispDirs ("", it->name, o);
   }
 }
 
@@ -94,7 +119,6 @@ int main (int argc, char* argv[]) {
   if (opt.dirEntry) opt.recursive = false;
   if (paths.size() == 0) paths.push_back(".");
 
-  display (paths, opt, "");
-
+  display (paths, opt);
   return (0);
 }

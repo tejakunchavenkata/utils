@@ -63,8 +63,12 @@ void dispDirs (string prefix, string dirName, opts o) {
   //cout << "dispDirs:-\n\tprefix: " << prefix << "\n";
   list <lsPacket> contents = getLsPackets (prefix + dirName + '/', getDirContents (prefix + dirName, o.listAll));
 
+  unsigned total = 0;
+  for (list <lsPacket>::iterator it = contents.begin(); it != contents.end(); ++it) total += it->info.st_blocks;
+
   if (! o.longList) cout << "\n";
-  cout << prefix + dirName << ":\n";
+  cout << prefix + dirName << ":\ntotal " << (total>>1) << "\n";
+
   dispFiles (contents, o);
 
   if (o.recursive) {

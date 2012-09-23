@@ -67,7 +67,8 @@ void dispDirs (string prefix, string dirName, opts o) {
   for (list <lsPacket>::iterator it = contents.begin(); it != contents.end(); ++it) total += it->info.st_blocks;
 
   if (! o.longList) cout << "\n";
-  cout << prefix + dirName << ":\ntotal " << (total>>1) << "\n";
+  cout << prefix + dirName << ":\n";
+  if (o.longList) cout << "total " << (total>>1) << "\n";
 
   dispFiles (contents, o);
 

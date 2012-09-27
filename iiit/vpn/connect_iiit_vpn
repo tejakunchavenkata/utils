@@ -1,0 +1,14 @@
+#! /usr/bin/tcsh 
+#------------------------------------------------
+# Author:    vj
+# Created:   Mon Sep 24 21:32:21 IST 2012
+# File Name: connect_iiit_vpn
+# USAGE: 
+#       connect_iiit_vpn 
+# 
+# 
+#------------------------------------------------
+cd /etc/openvpn
+/home/vj/iiit/vpn/login &
+sleep 4
+sed -i '1inameserver 192.168.36.222' /etc/resolv.conf

@@ -16,19 +16,19 @@ foreach src ( src/*.c )
         mkdir -pv reports/$src:r:t
         set prgm = reports/$src:r:t/$src:t
         cp -vf $src $prgm
-        ../bin/sslittle-na-sstrix-gcc $prgm -o $prgm:r.out
-        ../bin/sslittle-na-sstrix-gcc $prgm -c -g -Wa,-a,-ad > & $prgm:r.lst
-        ../bin/sslittle-na-sstrix-objdump --disassemble-all $prgm:r.out > & $prgm:r.dump
+        $SIMPLE_SCALAR_HOME/bin/sslittle-na-sstrix-gcc $prgm -o $prgm:r.out
+        $SIMPLE_SCALAR_HOME/bin/sslittle-na-sstrix-gcc $prgm -c -g -Wa,-a,-ad > & $prgm:r.lst
+        $SIMPLE_SCALAR_HOME/bin/sslittle-na-sstrix-objdump --disassemble-all $prgm:r.out > & $prgm:r.dump
         rm -f $prgm:r:t.o
         foreach opt ( 'taken' 'nottaken' )
           echo $opt
-          ../simplesim-3.0/sim-bpred -bpred $opt $prgm:r.out > & reports/$src:r:t/$opt.log
+          $SIMPLE_SCALAR_HOME/simplesim-3.0/sim-bpred -bpred $opt $prgm:r.out > & reports/$src:r:t/$opt.log
           set logOrder = ( $logOrder reports/$src:r:t/$opt.log )
         end
 
         foreach bimodSize ( 2 4 8 16 32 64 128 256 512 1024 2048 4096 )
           echo bimod $bimodSize
-          ../simplesim-3.0/sim-bpred -bpred bimod -bpred:bimod $bimodSize $prgm:r.out > & reports/$src:r:t/bimod_$bimodSize.log
+          $SIMPLE_SCALAR_HOME/simplesim-3.0/sim-bpred -bpred bimod -bpred:bimod $bimodSize $prgm:r.out > & reports/$src:r:t/bimod_$bimodSize.log
           set logOrder = ( $logOrder reports/$src:r:t/bimod_$bimodSize.log )
         end
 
@@ -38,7 +38,7 @@ foreach src ( src/*.c )
               # noOfCounters
               @ M = `perl -le "print 2 ** ( $N + $W )"`
               echo 2lev $N $M $W $X
-              ../simplesim-3.0/sim-bpred -bpred 2lev -bpred:2lev $N $M $W $X $prgm:r.out > & reports/$src:r:t/2lev_${N}_${M}_${W}_${X}.log
+              $SIMPLE_SCALAR_HOME/simplesim-3.0/sim-bpred -bpred 2lev -bpred:2lev $N $M $W $X $prgm:r.out > & reports/$src:r:t/2lev_${N}_${M}_${W}_${X}.log
               set logOrder = ( $logOrder reports/$src:r:t/2lev_${N}_${M}_${W}_${X}.log )
             end
           end

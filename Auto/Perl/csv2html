@@ -1,27 +1,17 @@
-#! /usr/bin/perl -w
+#! /usr/bin/perl -wl
 #------------------------------------------------
 # Author:    kasula
 # Created:   Mon Nov  7 03:12:52 PST 2011
 # File Name: csv2html
 # USAGE: 
-#       csv2html <file.csv> <file.html>
+#       csv2html <file.csv>
 # 
 # 
 #------------------------------------------------
-if ( $#ARGV != 1 ) { die "Usage: perl csv2html <in.csv> <out.html>\n"; }
-open(IN,"$ARGV[0]") or die "Can’t open $ARGV[0]\n";
-chomp($ARGV[1]);
-open(H,">$ARGV[1]") or die "Can’t write to $ARGV[1]; check permissions\n";
-
-print H ("<table><tbody>\n");
-while(<IN>){
-        chomp ;
-        next if (/^\s*$/);
-        @fields = split(/\,/,$_);
-        @htmlfields = map("\<td\> $_ \</td\>", @fields);
-        print H "  <tr>\n@htmlfields </tr>\n";
+print "<table><tbody>";
+while ( <> ) {
+  chomp;
+  next if (/^\s*$/);
+  printf "<tr>\n%s\n</tr>\n", join "\n", map { "\<td\> $_ \</td\>" } split /,/;
 }
-print H ("</tbody></table>\n\n");
-
-close(IN);
-close(H);
+print "</tbody></table>";

@@ -1,0 +1,32 @@
+#! /usr/bin/perl -w
+#------------------------------------------------
+# Author:    kasula
+# Created:   Sun Apr  8 22:36:01 PDT 2012
+# File Name: Permute
+# USAGE: 
+#       Permute 
+# 
+# 
+#------------------------------------------------ Permute
+
+sub Permute {
+	@_ = split //, $_[0];
+	
+	die if ( scalar @_ < 1 );
+	return $_[0] if ( scalar @_ == 1 );
+
+	my @PreEle = ();
+	my $CurEle;
+	my $Size = scalar @_;
+	my @Permutations = ();
+	
+	for (my $i = 0; $i < $Size; $i++) {
+		$CurEle = shift @_;
+		push ( @Permutations, map { $CurEle.$_ } &Permute(join '', @PreEle, @_) );
+		push ( @PreEle, $CurEle );
+	}
+	return @Permutations;
+}		
+#------------------------------------------------ Main
+
+printf "%s\n", join "\n", &Permute( $ARGV[0] );

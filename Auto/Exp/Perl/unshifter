@@ -1,0 +1,20 @@
+#! /usr/bin/perl -w
+#------------------------------------------------
+# Author:    kasula
+# Created:   Mon Feb  6 09:24:39 PST 2012
+# File Name: unshifter
+# USAGE: 
+#       unshifter 
+# 
+# 
+#------------------------------------------------
+@Arr = qw(a b c d e f g h);
+print "@Arr\n";
+push ( @Arr, 3, 4 );
+print "@Arr\n";
+pop ( @Arr );
+print "@Arr\n";
+shift ( @Arr );
+print "@Arr\n";
+unshift ( @Arr, 3, 4, 5 );
+print "@Arr\n";

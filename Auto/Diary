@@ -1,0 +1,21 @@
+@ Jan:	Basic PiGen working
+
+@ Feb: 	IPEXACT Checker
+		Coverage on 700 - 2 Basic blds 98%+
+
+@ Mar:	Encryption Checker
+		Support for AS221 done
+
+@ Apr:	Prjt3 Begins
+		Coverage on 700 blds - 90% * 90+ blds
+
+@ May:	Tasks 5-8 (Configurable DMP, JTAG Verification, Increased ICCM & DCCM sizes, Default value of PeriferalBaseAddr Reg)
+
+@ Jun:  PiGen Stars & Tests & Features: ICCMN Mem Model
+
+@ Jul:  ISA Coverage EM
+
+@ Aug:  ISA Coverage EM
+    MMU Support
+
+@ Sep:  

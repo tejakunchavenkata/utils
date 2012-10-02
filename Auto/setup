@@ -1,4 +1,4 @@
-sudo apt-get -yu install tcsh subversion vim-gnome g++ exuberant-ctags cscope make gawk flex bison vlc terminator
+sudo apt-get -yu install tcsh subversion vim-gnome g++ exuberant-ctags cscope make gawk flex bison vlc openvpn setup
 
 sudo add-apt-repository -y ppa:ubuntu-wine/ppa
 sudo apt-get -yu update

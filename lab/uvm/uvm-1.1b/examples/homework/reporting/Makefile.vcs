@@ -19,16 +19,16 @@
 ## -------------------------------------------------------------
 ## 
 
-UVM_HOME	= ../../..
+UVM_HOME	= ../../../..
 
-include ../../Makefile.vcs
+include ../../../Makefile.vcs
 
 
 all: comp run
 
 comp:
 	$(VCS) +incdir+. \
-		hello_world.sv
+		test.sv
 
 run:
 	$(SIMV)

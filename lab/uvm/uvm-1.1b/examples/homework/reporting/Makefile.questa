@@ -19,15 +19,16 @@
 ## -------------------------------------------------------------
 ## 
 
-UVM_HOME	= ../../..
+UVM_HOME	= ../../../..
 
-include ../../Makefile.questa
+include ../../../Makefile.questa
+
 
 all: run
 
 comp: vlib
 	$(VLOG) +incdir+. \
-		hello_world.sv
+		test.sv
 
 run: comp
 	$(VSIM)

@@ -20,13 +20,13 @@
 ## -------------------------------------------------------------
 ## 
 
-UVM_HOME	= ../../..
+UVM_HOME	= ../../../..
 
-include ../../Makefile.ius
+include ../../../Makefile.ius
 
 
 all: run
 
 run:
-	$(IUS) -incdir . hello_world.sv
+	$(IUS) -incdir . test.sv
 	$(CHECK)

@@ -19,9 +19,9 @@
 ## -------------------------------------------------------------
 ## 
 
-UVM_HOME	= ../../../..
+UVM_HOME	= ../../..
 
-include ../../../Makefile.vcs
+include ../../Makefile.vcs
 
 
 all: comp run

@@ -2,6 +2,7 @@
 #define DEVICES_TIMER_H
 
 #include <round.h>
+#include <list.h>
 #include <stdint.h>
 
 /* Number of timer interrupts per second. */
@@ -29,5 +30,5 @@ struct timer_sleeper_thread {
   struct thread * thrd;
   int64_t wakeupTime;
   struct list_elem elem;
-}
+};
 #endif /* devices/timer.h */

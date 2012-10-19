@@ -98,13 +98,16 @@ timer_sleep (int64_t ticks)
 {
   int64_t start = timer_ticks ();
   struct timer_sleeper_thread * cur_timer_sleeper_thrd = malloc (sizeof (struct timer_sleeper_thread));
+  enum intr_level old_level;
 
   ASSERT (intr_get_level () == INTR_ON);
   cur_timer_sleeper_thrd -> thrd = thread_current ();
   cur_timer_sleeper_thrd -> wakeupTime = timer_ticks () + ticks;
 
+  old_level = intr_disable ();
   list_insert_ordered (&timer_sleepers_list, &cur_timer_sleeper_thrd -> elem, &timer_sleepers_list_less, NULL);
   thread_block ();
+  intr_set_level (old_level);  
 }
 
 /* Sleeper compare function */
@@ -195,6 +198,7 @@ timer_interrupt (struct intr_frame *args UNUSED)
 
 static void wakeup_timer_sleepers () {
   struct timer_sleeper_thread * sleeper;
+  ASSERT (intr_context ());
   while ( ! list_empty (&timer_sleepers_list) &&
                   (list_entry (list_front (&timer_sleepers_list), struct timer_sleeper_thread, elem)) -> wakeupTime <= timer_ticks () ) {
     sleeper = list_entry (list_pop_front (&timer_sleepers_list), struct timer_sleeper_thread, elem);

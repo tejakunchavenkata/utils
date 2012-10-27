@@ -1,0 +1,2 @@
+setenv PINTOS_HOME <----------->
+set path = ( $PINTOS_HOME/src/utils $path )

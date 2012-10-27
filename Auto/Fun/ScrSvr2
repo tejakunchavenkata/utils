@@ -15,10 +15,9 @@ $X = int rand $Lines;
 $Y = int rand $Cols ;
 $i = 1 - 2 * int rand 2;
 $j = 1 - 2 * int rand 2;
-$DO = 500;
+$DO = 50000;
 while ($DO--) {
-        system "tput cup $X $Y"; printf "o";
-        system "usleep 10000 ; tput cup $X $Y"; printf " ";
+        system "tput cup $X $Y; echo -n o; sleep 0.01 ; tput cup $X $Y; echo -n ' '";
         $i = -1 if ($X >= $Lines - 1);
         $i = +1 if ($X <= 0);
         $j = -1 if ($Y >= $Cols - 1);

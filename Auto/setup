@@ -1,6 +1,9 @@
-sudo apt-get -yu install tcsh subversion vim-gnome g++ exuberant-ctags cscope make gawk flex bison vlc openvpn youtube-dl expect
+sudo apt-get -yu install tcsh subversion vim-gnome g++ exuberant-ctags cscope make gawk flex bison vlc openvpn youtube-dl expect evince-gtk
 
 sudo apt-get -yu install verilog gtkwave
-sudo add-apt-repository -y ppa:ubuntu-wine/ppa
+
+sudo apt-get -yu install openjdk-7-jre-headless openjdk-7-jdk
+
+#sudo add-apt-repository -y ppa:ubuntu-wine/ppa
 sudo apt-get -yu update
 sudo apt-get -yu install wine

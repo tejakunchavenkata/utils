@@ -16,11 +16,11 @@ assign miss = ~(status_ram[line][`VALID] && (tag_ram[line] === tag));
 
 task flush_line ();
         do begin
-                @ (posedge clk);
+                //@ (posedge clk);
                 if (mem_ifh.cache_cb.ready) begin
                         mem_ifh.cache_cb.addr <= core_ifh.cache_cb.addr[`SYS_BUS_WIDTH - 1:`LOG2_BLOCK_SIZE];
                         mem_ifh.cache_cb.data_out <= data_ram[line];
-                        if (data_ram[line] === 'hx) $display ($time, " Err occured at LINE: ", line);
+                        if (data_ram[line] === 'hx) $display ($time, " Err occured at LINE: ", line, " Status: ", status_ram[line]);
                         mem_ifh.cache_cb.write <= '1;
                         mem_ifh.cache_cb.req_valid <= '1;
                         break;

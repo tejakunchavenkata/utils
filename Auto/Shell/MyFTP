@@ -3,8 +3,8 @@ set echo_style = both
 ################################# please do not indent this code...
 switch ( $1 )
 case "-put" :
-ftp us01-ftp-int.synopsys.com << EOF_CMDS
-  cd /outgoing
+ftp ftp-na.synopsys.com << EOF_CMDS
+  cd /pub/incoming
   hash
   bin
   put $2
@@ -14,8 +14,8 @@ EOF_CMDS
 breaksw
 
 case "-get":
-ftp us01-ftp-int.synopsys.com << EOF_CMDS
-  cd /incoming
+ftp ftp-na.synopsys.com << EOF_CMDS
+  cd /pub/outgoing
   hash
   bin
   get $2

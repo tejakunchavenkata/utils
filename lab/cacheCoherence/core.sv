@@ -34,6 +34,7 @@ begin
                         end
 
                         // Assert request
+                        @ (posedge clk);
                         cache_if.core_cb.req_valid <= '1;
                         @ (posedge clk);
 

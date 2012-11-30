@@ -16,14 +16,12 @@ assign miss = ~(status_ram[line][`VALID] && (tag_ram[line] === tag));
 
 task flush_line ();
         do begin
-                //@ (posedge clk);
+                //$display ($time, " Flushing line: ", line);
                 if (mem_ifh.cache_cb.ready) begin
                         mem_ifh.cache_cb.addr <= core_ifh.cache_cb.addr[`SYS_BUS_WIDTH - 1:`LOG2_BLOCK_SIZE];
                         mem_ifh.cache_cb.data_out <= data_ram[line];
-                        if (data_ram[line] === 'hx) $display ($time, " Err occured at LINE: ", line, " Status: ", status_ram[line]);
-        $display ($time, " DEBUG2: ", line);
+                        //if (data_ram[line] === 'hx) $display ($time, " Err occured at LINE: ", line, " Status: ", status_ram[line]);
                         mem_ifh.cache_cb.write <= '1;
-        $display ($time, " DEBUG2: ", line);
                         mem_ifh.cache_cb.req_valid <= '1;
                         break;
                 end
@@ -43,7 +41,7 @@ task flush_line ();
 endtask
 
 task load_line ();
-        $display ($time, " DEBUG: ", line);
+        //$display ($time, " Loading line: ", line);
         if (status_ram[line][`VALID] && status_ram[line][`MODIFIED]) flush_line ();
 
         do begin
@@ -62,6 +60,7 @@ task load_line ();
                 @ (posedge clk);
                 if (mem_ifh.cache_cb.ready) begin
                         data_ram[line] = mem_ifh.cache_cb.data_in;
+                        tag_ram[line] <= tag;
                         break;
                 end
         end
@@ -92,9 +91,11 @@ always @ (posedge clk) begin
                 if (miss) load_line ();
 
                 if (core_ifh.cache_cb.write) begin
+                        //$display ("Write to line: ", line);
                         data_ram[line][core_ifh.cache_cb.addr[`LOG2_BLOCK_SIZE - 1:0]] <= core_ifh.cache_cb.data_out;
                         status_ram[line][`MODIFIED] <= '1;
                 end else begin
+                        //$display ("Read to line: ", line);
                         core_ifh.cache_cb.data_in <= data_ram[line][core_ifh.cache_cb.addr[`LOG2_BLOCK_SIZE - 1:0]];
                 end
                 core_ifh.cache_cb.ready <= '1;

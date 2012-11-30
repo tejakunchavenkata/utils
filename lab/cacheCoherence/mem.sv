@@ -23,13 +23,17 @@ begin
                 if (cache_ifh.mem_cb.req_valid) begin
                         cache_ifh.mem_cb.ready <= '0;
 
-                        delay = unsigned'(1 + $random & 7);
+                        delay = unsigned'($random & 7);
+                        @ (posedge clk);
                         wait (delay == 0);
 
                         if (cache_ifh.mem_cb.write) begin
                                 memory [cache_ifh.mem_cb.addr] = cache_ifh.mem_cb.data_out;
                         end else begin
-                                memory [cache_ifh.mem_cb.addr] = {$random,$random,$random,$random,$random,$random};
+                                for (int i = 0; i < `BLOCK_SIZE; i++)
+                                begin
+                                        memory [cache_ifh.mem_cb.addr][i] = $random;
+                                end
                                 cache_ifh.mem_cb.data_in <= memory [cache_ifh.mem_cb.addr];
                         end
 

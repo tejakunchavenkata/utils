@@ -1,10 +1,10 @@
+`include "cache_defines.sv"
 interface core_cache_if (input clk);
-        logic [31:0] addr;
+        logic [`SYS_BUS_WIDTH - 1:0] addr;
         wire [7:0] data_in;
         wire [7:0] data_out;
         logic ready;
         logic req_valid;
-        //logic rsp_valid;
         logic write;
         logic flush_all;
 
@@ -19,5 +19,18 @@ interface core_cache_if (input clk);
         endclocking
 
         modport core_p (clocking core_cb);
-        modport cache_p (clocking cache_cb);        
+        modport cache_p (clocking cache_cb);
+
+       /*
+        modport core_p (
+                input ready, data_in,
+                output addr, req_valid, write, flush_all, data_out
+        );
+
+        modport cache_p (
+                output ready, data_in,
+                input addr, req_valid, write, flush_all, data_out
+        );
+        */
+
 endinterface

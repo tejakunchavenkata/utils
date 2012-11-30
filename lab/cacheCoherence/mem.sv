@@ -7,20 +7,29 @@ int delay;
 
 always @ (posedge clk)
 begin
+        if (delay)
+        begin
+                delay--;
+        end
+end
+
+always @ (posedge clk)
+begin
         if (rst) begin
                 cache_ifh.mem_cb.ready <= '1;
                 cache_ifh.mem_cb.data_in <= '0;
+                delay = 0;
         end else begin
                 if (cache_ifh.mem_cb.req_valid) begin
                         cache_ifh.mem_cb.ready <= '0;
 
-                        delay = unsigned'(1 + $random & 15);
-                        repeat (delay) @ (posedge clk);
+                        delay = unsigned'(1 + $random & 7);
+                        wait (delay == 0);
 
                         if (cache_ifh.mem_cb.write) begin
                                 memory [cache_ifh.mem_cb.addr] = cache_ifh.mem_cb.data_out;
                         end else begin
-                                memory [cache_ifh.mem_cb.addr] = $random;
+                                memory [cache_ifh.mem_cb.addr] = {$random,$random,$random,$random,$random,$random};
                                 cache_ifh.mem_cb.data_in <= memory [cache_ifh.mem_cb.addr];
                         end
 

@@ -21,7 +21,9 @@ task flush_line ();
                         mem_ifh.cache_cb.addr <= core_ifh.cache_cb.addr[`SYS_BUS_WIDTH - 1:`LOG2_BLOCK_SIZE];
                         mem_ifh.cache_cb.data_out <= data_ram[line];
                         if (data_ram[line] === 'hx) $display ($time, " Err occured at LINE: ", line, " Status: ", status_ram[line]);
+        $display ($time, " DEBUG2: ", line);
                         mem_ifh.cache_cb.write <= '1;
+        $display ($time, " DEBUG2: ", line);
                         mem_ifh.cache_cb.req_valid <= '1;
                         break;
                 end
@@ -41,6 +43,7 @@ task flush_line ();
 endtask
 
 task load_line ();
+        $display ($time, " DEBUG: ", line);
         if (status_ram[line][`VALID] && status_ram[line][`MODIFIED]) flush_line ();
 
         do begin

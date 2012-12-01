@@ -3,7 +3,7 @@ class packet;
         rand byte data;
         rand bit write;
 
-        function show () begin
+        function show (); begin
                 if (write) begin
                         $display ("0x%08X Write 0x%08X", addr, data);
                 end else begin

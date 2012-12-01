@@ -1,5 +1,5 @@
 interface core_cache_if (input clk);
-        logic [`SYS_BUS_WIDTH - 1:0]    haddr;
+        logic [`ADDR_BUS_WIDTH - 1:0]   haddr;
         logic byte                      hrdata;
         logic byte                      hwdata;
         logic                           hwrite;

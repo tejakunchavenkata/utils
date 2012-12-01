@@ -35,9 +35,6 @@ begin
 
         @ (negedge clk);
         @ (negedge clk);
-        fork
-                coreh.run ();
-        join
 
         $display ("%s", {100{"-"}});
         $stop;

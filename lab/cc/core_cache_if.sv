@@ -10,13 +10,13 @@ interface core_cache_if (input clk);
         logic                           hready;
 
         clocking core_cb @ (posedge clk);
-                input ready, data_in;
-                output addr, req_valid, write, flush_all, data_out;
+                input hrdata, hready, hgrant;
+                output haddr, hwdata, hwrite, hreq;
         endclocking
 
         clocking cache_cb @ (posedge clk);
-                output ready, data_in;
-                input addr, req_valid, write, flush_all, data_out;
+                output hrdata, hready, hgrant;
+                input haddr, hwdata, hwrite, hreq;
         endclocking
 
         modport core_p (clocking core_cb);

@@ -1,4 +1,7 @@
 `include "defines.sv"
+`include "core_cache_if.sv"
+`include "core.sv"
+`include "cache.sv"
 
 module board;
 

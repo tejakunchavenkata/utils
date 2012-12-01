@@ -34,7 +34,7 @@ begin
         $display ("%s", {100{"-"}});
 
         @ (negedge clk);
-        repeat 100 @ (negedge clk);
+        repeat (100) @ (negedge clk);
 
         $display ("%s", {100{"-"}});
         $stop;

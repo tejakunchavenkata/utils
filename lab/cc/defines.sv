@@ -1,4 +1,4 @@
-`timescale 5ns/1ps
+`timescale 1ns/1ps
 
 `define TIME_PERIOD 10
 

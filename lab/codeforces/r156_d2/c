@@ -1,0 +1,69 @@
+#! /usr/bin/perl -wl
+#------------------------------------------------
+# Author:    vj
+# Created:   Sun Dec 16 21:51:46 IST 2012
+# File Name: c
+# USAGE: 
+#       c 
+# 
+# 
+#------------------------------------------------
+use strict;
+use List::Util qw(first max maxstr min minstr reduce shuffle sum);
+
+my $DEBUG = 2;
+
+#my $n = <STDIN>;
+#chomp (my @seq = split /\s+/, <STDIN>);
+
+my @seq;
+push @seq, 1 + int rand 10 ** 6 foreach (1 .. 4000);
+($DEBUG > 3) && print "@seq";
+
+my %pos;
+for (my $i = 0; $i < @seq; $i++) {
+        push @{$pos{$seq[$i]}}, $i;
+}
+
+my @no = sort {$a <=> $b} keys %pos;
+($DEBUG > 2) && print "$_ -> @{$pos{$_}}" foreach @no;
+
+my ($curSol, $x, $y, $flag);
+my $sol = 0;
+
+for (my $i = 0; $i < @no; $i++) {
+        for (my $j = $i+1; $j < @no; $j++) {
+                if (${$pos{$no[$i]}}[0] < ${$pos{$no[$j]}}[0]) {
+                        $flag = 1;
+                } else {
+                        $flag = 0;
+                }
+                $x = $y = 0;
+                $curSol = 1;
+
+                while (1) {
+                        if ($flag) {
+                                if (${$pos{$no[$j]}}[$y] < ${$pos{$no[$i]}}[$x]) {
+                                        $y++;
+                                        last if ($y == scalar @{$pos{$no[$j]}});
+                                } else {
+                                        $flag = ! $flag;
+                                        $curSol++;
+                                }
+                        } else {
+                                if (${$pos{$no[$i]}}[$x] < ${$pos{$no[$j]}}[$y]) {
+                                        $x++;
+                                        last if ($x == scalar @{$pos{$no[$i]}});
+                                } else {
+                                        $flag = ! $flag;
+                                        $curSol++;
+                                }
+                        }
+                }
+
+                $sol = $sol > $curSol ? $sol : $curSol;
+                ($DEBUG > 1) && print "$no[$i]\t$no[$j]\t-> $curSol";
+        }
+}
+
+print $sol;

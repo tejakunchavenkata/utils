@@ -1,0 +1,22 @@
+#! /usr/bin/perl -wl
+#------------------------------------------------
+# Author:    vj
+# Created:   Sun Dec 16 21:13:10 IST 2012
+# File Name: b
+# USAGE: 
+#       b 
+# 
+# 
+#------------------------------------------------
+chomp (my $str = <STDIN>);
+
+#$str = 'x';
+#$str .= 'x' x 10 ** 6;
+#$str .= 'y' x 10 ** 6;
+
+$cnt = 0;
+foreach (split /\s*/, $str) { if ($_ eq 'x') { $cnt++ } else { $cnt-- } }
+
+if ( $cnt > 0 ) { $sol = 'x' } else { $sol = 'y'; $cnt = 0 - $cnt }
+
+print $sol x $cnt;

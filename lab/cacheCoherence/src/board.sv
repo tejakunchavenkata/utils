@@ -14,6 +14,7 @@
 module board;
 
 reg clk, rst;
+int clkCnt, trash;
 
 initial clk = '0;
 always #(`TIME_PERIOD >> 1) clk = ~clk;
@@ -22,6 +23,11 @@ initial begin
         rst = '1;
         @ (negedge clk) rst = '0;
 end
+
+initial trash = $random (`RND_SEED);
+
+initial clkCnt = 0;
+always @ (negedge clk) clkCnt = clkCnt + 1;
 
 ahblite_if core2cache_if0h (clk);
 ahblite_if core2cache_if1h (clk);
@@ -40,10 +46,10 @@ snoop_if cache2arb_if1hs (clk); //, arb2cache_if1hs (clk);
 snoop_if cache2arb_if2hs (clk); //, arb2cache_if2hs (clk);
 snoop_if cache2arb_if3hs (clk); //, arb2cache_if3hs (clk);
 
-core core0h (clk, rst, core2cache_if0h);
-core core1h (clk, rst, core2cache_if1h);
-core core2h (clk, rst, core2cache_if2h);
-core core3h (clk, rst, core2cache_if3h);
+core #(0) core0h (clk, rst, core2cache_if0h);
+core #(0) core1h (clk, rst, core2cache_if1h);
+core #(0) core2h (clk, rst, core2cache_if2h);
+core #(0) core3h (clk, rst, core2cache_if3h);
 
 cache cache0h (clk, rst, core2cache_if0h, cache2arb_if0h, cache2arb_if0hs, cache2arb_if0hs); //arb2cache_if0hs);
 cache cache1h (clk, rst, core2cache_if1h, cache2arb_if1h, cache2arb_if1hs, cache2arb_if1hs); //arb2cache_if1hs);
@@ -62,7 +68,8 @@ memory memoryh (clk, rst, arb2mem_ifh);
 
 initial begin
         $display ("%s", {100{"-"}});
-        #100000;
+        //$monitor ($time, "Line state... ", cache0h.status_ram[0].name);
+        #1000000;
         $display ("%s", {100{"-"}});
         $finish;
         //$stop;
@@ -70,7 +77,7 @@ end
 
 //always @ (negedge clk) if (!rst) $display ("%-9d %s", $time, {10{"-"}});
 
-`ifdef IF_TRACE
+`ifdef DATA_TRACE
 always @ (negedge clk) if (!rst) begin
         $display ("%-9d %s", $time, {10{"-"}});
         $display ("C-C#0 ", `FORMAT_AHB_LITE_IF (core2cache_if0h), " --- C#0-Bus ", `FORMAT_AHB_LITE_IF (cache2arb_if0h), " <-> ", `FORMAT_SNOOP_IF (cache2arb_if0hs));
@@ -81,9 +88,10 @@ always @ (negedge clk) if (!rst) begin
 end
 `endif
 
-`define SPEED_INFO
+`define TRAFFIC_TRACE
 
-`ifdef SPEED_INFO
+`ifdef TRAFFIC_TRACE
+
 always @ (posedge core2cache_if0h.hreq) $display ("%-9d: C -> C#0", $time);
 always @ (negedge core2cache_if0h.hreq) $display ("%-9d: C <- C#0", $time);
 

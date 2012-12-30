@@ -2,7 +2,7 @@
 
 `define TIME_PERIOD 10
 
-`define ADDR_BUS_WIDTH 13
+`define ADDR_BUS_WIDTH 14
 
 `define LOG2_LINE_SIZE 6
 `define LINE_SIZE (1 << `LOG2_LINE_SIZE)

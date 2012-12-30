@@ -1,3 +1,5 @@
+`define MEM_LATENCY 50
+
 module memory (input reg clk, rst, ahblite_if.slave_p bus_ifh);
 
 typedef enum bit [3:0] {HS_IDLE, HS_GRANT, HS_ADDR, HS_WD, HS_WDONE, HS_RD} ahblite_slave_state_t;
@@ -57,7 +59,7 @@ always @ (posedge clk) begin
                         if ( bus_ifh.hwrite ) begin
                                 CUR_STATE <= HS_RD;
                         end else begin
-                                delay <= `URND % 4;
+                                delay <= `MEM_LATENCY;
                                 bus_ifh.hready <= '0;
                                 CUR_STATE <= HS_WD;
                         end

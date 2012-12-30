@@ -14,9 +14,9 @@ typedef enum bit [3:0] {
 
 module cache (input clk, input rst, ahblite_if.slave_p core_ifh, ahblite_if.master_p bus_ifh, snoop_if.master_p snoopm_ifh, snoop_if.slave_p snoops_ifh);
 
-reg [`LINE_SIZE - 1 : 0] [7:0]  data_ram        [`NUM_LINES-1:0];
-reg [`TAG_WIDTH - 1 : 0]        tag_ram         [`NUM_LINES-1:0];
-line_state_t                    status_ram      [`NUM_LINES-1:0];
+reg [`LINE_SIZE - 1 : 0] [7:0]  data_ram        [0 : `NUM_LINES-1];
+reg [`TAG_WIDTH - 1 : 0]        tag_ram         [0 : `NUM_LINES-1];
+line_state_t                    status_ram      [0 : `NUM_LINES-1];
 
 cache_state_t CUR_STATE, NXT_STATE;
 reg [`ADDR_BUS_WIDTH - 1:0] addr;
@@ -103,7 +103,15 @@ always @ (posedge clk) if (!rst) begin
 
                 addr <= core_ifh.haddr;
                 opr  <= core_ifh.hwrite;
-
+                /*
+                $display (
+                        "addr   : %x\n", core_ifh.haddr,
+                        "tag    : %x\n", tag (core_ifh.haddr),
+                        "line   : %x\n", line (core_ifh.haddr),
+                        "offset : %x\n", offset (core_ifh.haddr),
+                        "miss   : %x\n", miss (core_ifh.haddr)
+                );
+                */
                 if ( (snoops_ifh.snoop_valid && core_ifh.haddr == snoops_ifh.saddr) ||
                         need_bus (core_ifh.haddr, core_ifh.hwrite) ) begin
 
@@ -222,6 +230,7 @@ always @ (posedge clk) if (!rst) begin
                         status_ram [line (addr)] <= opr === WRITE ? MODIFIED : (snoopm_ifh.other_copies ? SHARED : EXCLUSIVE);
                         tag_ram [line (addr)]    <= tag (addr);
                         CUR_STATE <= IDLE;
+                        bus_ifh.hreq <= '0;
 
                 end
 

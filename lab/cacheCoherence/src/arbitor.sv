@@ -306,10 +306,10 @@ always @ (posedge clk) if (!rst) begin
 
                 if (mem_ifh.hready) begin
                         case (sel)
-                                2'd0: begin c_if0h.hrdata <= mem_ifh.hrdata; c_if0h.hready <= '1; end
-                                2'd1: begin c_if1h.hrdata <= mem_ifh.hrdata; c_if1h.hready <= '1; end
-                                2'd2: begin c_if2h.hrdata <= mem_ifh.hrdata; c_if2h.hready <= '1; end
-                                2'd3: begin c_if3h.hrdata <= mem_ifh.hrdata; c_if3h.hready <= '1; end
+                                2'd0: begin c_if0h.hrdata <= mem_ifh.hrdata; c_if0h.hready <= '1; mem_ifh.hreq <= '0; end
+                                2'd1: begin c_if1h.hrdata <= mem_ifh.hrdata; c_if1h.hready <= '1; mem_ifh.hreq <= '0; end
+                                2'd2: begin c_if2h.hrdata <= mem_ifh.hrdata; c_if2h.hready <= '1; mem_ifh.hreq <= '0; end
+                                2'd3: begin c_if3h.hrdata <= mem_ifh.hrdata; c_if3h.hready <= '1; mem_ifh.hreq <= '0; end
                         endcase
                         CUR_STATE <= FREE;
                 end

@@ -6,7 +6,6 @@ set history=100
 
 set diffopt=iwhite
 
-"set tabstop=2
 
 set et
 
@@ -19,3 +18,8 @@ set foldcolumn=12
 
 set wildmenu
 set wildmode=list:longest,full
+
+set guifont=courier
+
+set shiftwidth=2
+set tabstop=2

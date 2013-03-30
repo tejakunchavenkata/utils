@@ -1,4 +1,4 @@
-sudo apt-get -yu install tcsh subversion git vim-gnome g++ exuberant-ctags cscope make gawk flex bison vlc openvpn youtube-dl expect evince-gtk gnuplot-nox mutt
+sudo apt-get -yu install tcsh subversion git vim-gnome g++ exuberant-ctags cscope make gawk flex bison vlc openvpn youtube-dl expect evince-gtk gnuplot-nox mutt scons
 
 sudo apt-get -yu install verilog gtkwave
 

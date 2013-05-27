@@ -1,2 +1,0 @@
-setenv PINTOS_HOME /home/vj/lab/pintos
-set path = ( $PINTOS_HOME/src/utils $path )

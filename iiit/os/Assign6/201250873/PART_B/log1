@@ -1,0 +1,38 @@
+gcc -pthread 201250873_B.c
+./a.out
+A: Incrementing x
+B: Reading x: 0
+B: Incrementing y
+B: Reading x: 188439
+B: Incrementing y
+B: Reading x: 371541
+B: Incrementing y
+B: Reading x: 608178
+B: Incrementing y
+B: Reading x: 803689
+B: Incrementing y
+A: Reading y: 4829764
+A: Incrementing x
+B: Reading x: 1041749
+B: Incrementing y
+B: Reading x: 1302387
+B: Incrementing y
+A: Reading y: 6929874
+A: Incrementing x
+B: Reading x: 2068507
+B: Incrementing y
+A: Reading y: 7949619
+A: Incrementing x
+B: Reading x: 3045715
+B: Incrementing y
+A: Reading y: 9000000
+A: Incrementing x
+A: Reading y: 9000000
+A: Incrementing x
+A: Reading y: 9000000
+A: Incrementing x
+A: Reading y: 9000000
+A: Incrementing x
+A: Reading y: 9000000
+A: Incrementing x
+A: Reading y: 9000000

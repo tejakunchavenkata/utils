@@ -4,7 +4,7 @@ sudo apt-get -yu install verilog gtkwave
 
 sudo apt-get -yu install openjdk-7-jre-headless openjdk-7-jdk
 
-#sudo add-apt-repository -y ppa:ubuntu-wine/ppa
+# #sudo add-apt-repository -y ppa:ubuntu-wine/ppa
 #sudo apt-get -yu install wine
 
 sudo apt-get -yu update

@@ -1,26 +1,18 @@
-#! /usr/bin/expect
+#! /usr/bin/expect 
 #------------------------------------------------
-# Author:    kvkrishna
-# Created:   Tue Jul  5 16:10:18 IST 2011
+# Author:    kasula
+# Created:   Wed May  8 05:18:36 PDT 2013
 # File Name: test
-# 
-# 
+# USAGE: 
+#       test 
 # 
 # 
 #------------------------------------------------
-spawn su amasood
-expect "Password:"
-send "XXXXXXXXXXX\r"
+set host [lindex $argv 0]
+set pass [lindex $argv 1]
+spawn telnet -a $host
+expect "Password: "
+send "$pass\r"
 expect "0 $ "
-sleep 2
-send "whoami\r"
-interact
-
-spawn su gkavya
-expect "Password:"
-send "XXXXXXX\r"
-send "source ~kvkrishna/.cshrc\r"
+send "g++ -v\r"
 expect "0 $ "
-sleep 2
-send "whoami\r"
-interact

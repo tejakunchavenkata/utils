@@ -1,4 +1,4 @@
-#! /usr/bin/perl -w
+#! /usr/bin/perl -wli
 #------------------------------------------------
 # Author:    kasula
 # Created:   Tue Jul 19 04:36:33 PDT 2011
@@ -8,14 +8,8 @@
 # 
 # 
 #------------------------------------------------
-$PASSWD = $ARGV[0];
-shift ;
-foreach $File (@ARGV) {
-        open IFH, "<$File"     or die "Opening $File     failed due to $!" ;
-        open OFH, ">$File.ecr" or die "Opening $File.ecr failed due to $!" ;
-        while (<IFH>) {
-                printf OFH "%s\n", $_ xor $PASSWD ;
-        }
-        close IFH;
-        close OFH;
+$key = shift;
+while (<>) {
+        chomp;
+        print $_ ^ substr ($key x (1 + ((length ) / (length $key))), 0, length);
 }

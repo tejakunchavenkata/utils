@@ -1,0 +1,26 @@
+GREP
+
+NAME
+        grep - print lines matching a pattern
+
+Named after... 
+        the 'ed' command - g/re/p (global / regular expression / print)
+
+SYNOPSIS
+       grep [options] PATTERN [FILE...]
+       grep [options] [-e PATTERN | -f FILE] [FILE...]
+
+USEFULL Options
+       -A (After)                       -B (Before)                     -C NUM (Context)
+       --colour{=never,=always,=auto,}
+       -i, --ignore-case
+       -v, --invert-match
+       -c, --count                      
+       -m NUM, --max-count=NUM
+       -n, --line-number
+       -e PATTERN, --regexp=PATTERN
+       -F, --fixed-strings              -G, --basic-regexp              -E, --extended-regexp           -P, --perl-regexp
+       -H, --with-filename              -h, --no-filename
+       -L, --files-without-match        -l, --files-with-matches
+       -o, --only-matching
+       -q, --quiet, --silent

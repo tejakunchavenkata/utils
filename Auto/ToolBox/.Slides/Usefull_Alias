@@ -1,0 +1,22 @@
+Alias
+-------
+
+alias   ls              'ls -Fh --color=tty '
+
+alias   mkcd            'mkdir -p \!* ; cd \!*'
+
+alias   man             'man -a'
+
+alias   goodcat         'head -v -n -0'
+
+alias   tnet            'xhost + ; telnet -a '
+
+alias   MATH            'set \!:1 = `echo "\!:3-$" | bc -l`'
+
+set     path            = ( ./ $path ~/Auto/MyPerl ~/Auto/MyShell ~/Auto/Perl ~/Auto/Shell )
+alias   MyOpen          "$EDITOR "'`which \!*`'
+
+
+Special...
+
+alias   cwdcmd          'clear ; echo "Host: $HOST" ; echo -n "PWD: "; pwd ; echo "Contents:" ; ls '

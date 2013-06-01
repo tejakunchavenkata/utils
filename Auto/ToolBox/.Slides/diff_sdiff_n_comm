@@ -1,0 +1,29 @@
+DIFF and SDIFF
+
+NAME
+       diff - find differences between two files or directories
+
+SYNOPSIS
+       diff [options] from-file to-file
+       sdiff -o outfile [options] from-file to-file
+
+USEFULL Options
+       -b     Ignore white space.
+       -B     Ignore  blank lines.
+       -i     Ignore  case
+       -s     Report when two files are the same.
+
+
+
+
+COMM
+
+NAME
+       comm - compare two sorted files line by line
+
+SYNOPSIS
+       comm [OPTION]... FILE1 FILE2
+
+DESCRIPTION
+        -1      -2      -3 
+        -12     -13     -23

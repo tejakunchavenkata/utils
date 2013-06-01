@@ -1,0 +1,24 @@
+                                                INDEX
+                                                ^^^^^
+
+    csh & tcsh exclusive
+  ------------------------
+    WildCards in shell                                          
+    Variables
+    SpecialVariables                General Commands
+    History                       ---------------------
+    Usefull Alias                 grep          replace
+    Redirection                   diff          tr
+                                  sdiff         split
+                                  wc            cut                     Command Generals
+                                  cat           paste                 --------------------
+                                  tac           sort                         gawk
+                                  rev           uniq                         sed
+                                  nl            find    
+Oneliners
+
+Here Documents                                                                             Moving on to scripting
+                                                                                         --------------------------
+bc - An arbitrary precision calculator language in Terminal                                Conditional Statements
+                                                                                                   Loops
+Effective Que utilization                                                                   Argument Processing

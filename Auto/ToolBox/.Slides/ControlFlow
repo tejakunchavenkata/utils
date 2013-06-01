@@ -1,0 +1,26 @@
+Conditional Statements                                                                         
+------------------------                                                                       
+                                                                                               
+                                    if ( expression ) statement                   test ( EXPRESSION )               
+switch (string)                                                                   test ! EXPRESSION                 
+case str1:                                  -or-                                  test EXPRESSION1 -a EXPRESSION2   
+    ...                                                                           test EXPRESSION1 -o EXPRESSION2   
+    breaksw                         if (expr) then                                test -n STRING                    
+...                                 ...                                           test -z STRING                    
+default:                            else if (expr2) then                          test STRING1 = STRING2            
+    ...                             ...                                           test STRING1 != STRING2           
+    breaksw                         else                                          test INTEGER1 -eq INTEGER2        
+endsw                               ...                                           test INTEGER1 -ne INTEGER2        
+                                    endif                                         test INTEGER1 -ge INTEGER2        
+                                                                                  test INTEGER1 -gt INTEGER2        
+                                                                                  test INTEGER1 -le INTEGER2        
+                                                                                  test INTEGER1 -lt INTEGER2        
+                                                                                  test FILE1 -nt FILE2              
+                                                                                  test FILE1 -ot FILE2
+                                                  File Enquiry Operations
+                                                      test -e FILE         
+                                                      test -d FILE         
+                                                      test -f FILE         
+                                                      test -L FILE, -h FILE
+                                                      test -O FILE         
+                                                      test -rwx FILE       

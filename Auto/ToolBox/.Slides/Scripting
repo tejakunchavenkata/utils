@@ -1,0 +1,18 @@
+Scripting.... 
+
+        Why Scripting...?
+
+        Time is precious. It is non-sense-ical to waste time typing a frequently used sequence of commands at a command prompt, 
+        more especially if they are abnormally long or complex. Scripting is a way by which one can alleviate this necessity by - 
+        automating these command sequences in order to make ones life at the shell easier and more productive. Scripting is all -
+        about making the computer, the tool, do the work.
+
+Advantage :
+
+        -- Reduces the work
+
+        -- Avoids the redundant repeated work
+
+        -- Reusable 
+
+        -- Less possibility of error occurance

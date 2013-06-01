@@ -1,0 +1,12 @@
+CUT                                                                        PASTE
+                                                                           
+NAME                                                                       NAME
+       cut - remove sections from each line of files                              paste - merge lines of files
+                                                                           
+SYNOPSIS                                                                   SYNOPSIS
+       cut [OPTION]... [FILE]...                                                  paste [OPTION]... [FILE]...
+                                                                           
+DESCRIPTION                                                                DESCRIPTION
+       -b, --bytes=LIST                                                           -d, --delimiters=LIST
+       -d, --delimiter=DELIM                                                      -s, --serial
+       -f, --fields=LIST                        N                       

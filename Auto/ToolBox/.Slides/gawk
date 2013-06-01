@@ -1,0 +1,25 @@
+GAWK
+
+NAME
+       gawk - pattern scanning and processing language
+
+HIStory
+        GNU a w k   :           A - Aho,        W - Weinberger,         K - Kernighan
+
+SYNOPSIS
+       gawk [ options ] -f program-file [ -- ] file ...
+       gawk [ options ] [ -- ] program-text file ...
+
+OPTIONS
+       -F fs            --field-separator fs
+       -v var=val       --assign var=val
+       -f program-file  --file program-file
+
+Predifined Variables                                     Operators
+       NR          FNR                                          
+       NF                                                      $                                 
+       FILENAME                                                ++ -- ^ + - ! * / %	         
+       FS                                                      < > <= >= != == ~ !~	      
+       RS                                                      && || ?:	                  
+       OFS                                                     = += -=  *= /= %= ^= 
+       ORS                                              

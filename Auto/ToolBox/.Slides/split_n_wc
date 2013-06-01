@@ -1,0 +1,30 @@
+SPLIT
+
+NAME
+       split - split a file into pieces
+
+SYNOPSIS
+       split [OPTION] [INPUT [PREFIX]]
+
+DESCRIPTION
+       -a, --suffix-length=N
+       -d, --numeric-suffixes
+       -l, --lines=NUMBER
+
+
+
+
+WC
+
+NAME
+       wc - print the number of newlines, words, and bytes in files
+
+SYNOPSIS
+       wc [OPTION]... [FILE]...
+
+DESCRIPTION
+       -c, --bytes
+       -m, --chars
+       -l, --lines
+       -L, --max-line-length
+       -w, --words

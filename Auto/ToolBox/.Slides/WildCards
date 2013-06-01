@@ -1,0 +1,12 @@
+WildCards
+----------
+
+        Expansion wildcards                     echo b{1,2,3}
+
+        Matching WildCards                      echo b???
+                                                echo b*
+                                                echo b[1-3]*
+                                                echo b[^1-3]*
+                                                echo b[45]*
+
+        Ignoring Patterns in ls                 ls -I 

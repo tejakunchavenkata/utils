@@ -1,0 +1,14 @@
+Loops                                           Discontinuties
+------                                          ---------------
+                                                
+repeat NUMBER COMMAND                           goto
+                                                break
+                                                continue
+foreach VAR ( LIST_OF_WORDS )                   exit
+...
+end                                             Others
+                                                -------
+                                                
+while ( EXPRESSION )                            sleep NO_SEC
+...                                             usleep NO_MICRO_SEC
+end                                             wait

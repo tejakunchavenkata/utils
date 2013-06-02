@@ -12,7 +12,7 @@ set et
 syn on
 filetype plugin indent on
 
-set foldnestmax=32
+set foldnestmax=0
 set foldmethod=indent
 set foldcolumn=12
 

@@ -20,6 +20,7 @@ set wildmenu
 set wildmode=list:longest,full
 
 set guifont=courier
+set guioptions -=T
 
 set shiftwidth=2
 set tabstop=2

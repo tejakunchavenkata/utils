@@ -16,6 +16,7 @@ sudo apt-get -yu install  \
   expect                  \
   evince-gtk              \
   gnuplot-nox             \
+  gnuplot-x11             \
   mutt                    \
   scons                   \
   terminator              \

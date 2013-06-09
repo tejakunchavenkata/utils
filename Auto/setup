@@ -15,7 +15,6 @@ sudo apt-get -yu install  \
   youtube-dl              \
   expect                  \
   evince-gtk              \
-  gnuplot-nox             \
   gnuplot-x11             \
   mutt                    \
   scons                   \

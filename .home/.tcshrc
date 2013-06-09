@@ -9,7 +9,6 @@ set     echo_style      = both
 set     correct         = cmd
 set     prompt          = '%? $ '
 setenv  EDITOR          gvim
-setenv  MYSVN           'https://personal-scripts-84529.googlecode.com/svn'
 #setenv  LC_ALL          c                                       # sort command control
 alias   ls              'ls -FhxX --color=tty '
 alias   ll              'ls -l '
@@ -31,7 +30,7 @@ alias   grep            'grep --color --exclude-dir ".svn"'
 alias   excpp           'rm -f \!*.out ; g++ -W -Wall -Wno-sign-compare -O2 -s -pipe -mmmx -msse -msse2 -msse3 \!*.cpp -o \!*.out ; \!*.out'
 alias   Count           'unset CountVar ; set -f CountVar = (`echo \!*`) ; echo $#CountVar '
 alias   Countz          'unset CountVar ; set -f CountVar = (`echo \!*`) ; zenity --title "Count" --info --text "\!* -> `echo $#CountVar`"'
-alias	Report	        'tput cup \!:1 \!:2 ; echo \!:3-$'
+alias	  Report	        'tput cup \!:1 \!:2 ; echo \!:3-$'
 alias   JobsC           'jobs >&! .running.jobs.found ; wc -l .running.jobs.found ; rm -f .running.jobs.found'
 alias   Calc            'perl -le "print eval \!*"'
 alias   fdt             'date +%m%d%H%M%S'
@@ -50,7 +49,7 @@ if ($path[1] != "./") set path = (      ./                                      
                                 )
 ##########################################################################################################
 if ($?LS_COLORS) then
-        setenv  LS_COLORS       "$LS_COLORS""*.pdf=35\;01:""*.odp=34\;01:""*.doc=34\;01:""*.ods=34\;01:""*.docx=34\;01:""*.ppt=34\;01:""*.e=33:""*.sv=33:""*.v=33:"
+        setenv  LS_COLORS "$LS_COLORS""*.pdf=35\;01:""*.odp=34\;01:""*.doc=34\;01:""*.ods=34\;01:""*.docx=34\;01:""*.ppt=34\;01:""*.e=33:""*.sv=33:""*.v=33:"
 else
-        setenv  LS_COLORS       "*.pdf=35\;01:""*.odp=34\;01:""*.doc=34\;01:""*.ods=34\;01:""*.docx=34\;01:""*.ppt=34\;01:""*.e=33:""*.sv=33:""*.v=33:"
+        setenv  LS_COLORS "*.pdf=35\;01:""*.odp=34\;01:""*.doc=34\;01:""*.ods=34\;01:""*.docx=34\;01:""*.ppt=34\;01:""*.e=33:""*.sv=33:""*.v=33:"
 endif

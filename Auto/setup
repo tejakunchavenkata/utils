@@ -31,7 +31,8 @@ sudo apt-get -yu install  \
   gtkwave                 \
   openjdk-7-jre-headless  \
   openjdk-7-jdk           \
-  ubuntu-tweak
+  ubuntu-tweak            \
+  zlib1g-dev
 
 #sudo apt-get -yu install wine
 

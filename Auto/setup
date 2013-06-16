@@ -12,6 +12,8 @@ sudo apt-get -yu install  \
   vim-gnome               \
   g++                     \
   gcc-multilib            \
+  gcc-4.7-multilib        \
+  g++-4.7-multilib        \
   exuberant-ctags         \
   cscope                  \
   make                    \

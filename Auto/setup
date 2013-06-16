@@ -41,7 +41,7 @@ mkdir svn
 cd svn
 svn co https://google-styleguide.googlecode.com/svn/trunk/cpplint cpplint
 svn co https://personal-scripts-84529.googlecode.com/svn/trunk    ps84529
-svn co https://vj84529.googlecode.com/svn/trunk                   vj84529
+#svn co https://vj84529.googlecode.com/svn/trunk                   vj84529
 svn co https://gpac-ann.googlecode.com/svn/trunk                  gpac-ann
 
 ln -sv $PWD/ps84529/Auto $PWD/vj84529/Library ~/

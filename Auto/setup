@@ -36,7 +36,8 @@ sudo apt-get -yu install  \
   openjdk-7-jdk           \
   ubuntu-tweak            \
   zlib1g-dev              \
-  libsdl1.2-dev
+  libsdl1.2-dev           \
+  ubuntu-vm-builder
 
 #sudo apt-get -yu install wine
 

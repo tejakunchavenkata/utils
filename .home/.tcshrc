@@ -9,6 +9,7 @@ set     echo_style      = both
 set     correct         = cmd
 set     prompt          = '%? $ '
 setenv  EDITOR          gvim
+setenv  CDPATH          ~/.warmhole
 #setenv  LC_ALL          c                                       # sort command control
 alias   ls              'ls -FhxX --color=tty '
 alias   ll              'ls -l '

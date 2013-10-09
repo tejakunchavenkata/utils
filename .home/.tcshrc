@@ -8,6 +8,7 @@ set     histdup         = erase
 set     echo_style      = both
 set     correct         = cmd
 set     prompt          = '%? $ '
+set     rprompt         = '%p'
 setenv  EDITOR          gvim
 #setenv  LC_ALL          c                                       # sort command control
 alias   ls              'ls -FhxX --color=tty '

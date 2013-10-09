@@ -14,7 +14,7 @@ filetype plugin indent on
 
 set foldnestmax=12
 set foldmethod=indent
-set foldcolumn=12
+"set foldcolumn=12
 set foldlevel=12
 
 set wildmenu

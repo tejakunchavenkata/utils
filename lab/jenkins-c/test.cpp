@@ -3,6 +3,6 @@
 using namespace std;
 
 int main () {
-  cout << "Tsting Jenkins in CPP\n";
+  cout << "Testing Jenkins in CPP\n";
   return 0;
 }

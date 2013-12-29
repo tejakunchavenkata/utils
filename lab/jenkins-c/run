@@ -1,0 +1,16 @@
+#! /usr/bin/tcsh
+#------------------------------------------------
+# Author:    vijaya
+# Created:   Sun Dec 29 17:28:42 IST 2013
+# File Name: run
+# USAGE: 
+#       run 
+# 
+# 
+#------------------------------------------------
+rm -rf test
+mkdir test
+cd test
+
+g++ $WORKSPACE/test.cpp
+./a.out

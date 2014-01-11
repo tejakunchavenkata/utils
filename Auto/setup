@@ -5,38 +5,39 @@ sudo add-apt-repository -y \
 sudo apt-get -yu update
 sudo apt-get -yu dist-upgrade
 
-sudo apt-get -yu install  \
-  tcsh                    \
-  subversion              \
-  git                     \
-  vim-gnome               \
-  g++                     \
-  gcc-multilib            \
-  gcc-4.7-multilib        \
-  g++-4.7-multilib        \
-  exuberant-ctags         \
-  cscope                  \
-  make                    \
-  gawk                    \
-  flex                    \
-  bison                   \
-  vlc                     \
-  openvpn                 \
-  youtube-dl              \
-  expect                  \
-  evince-gtk              \
-  gnuplot-x11             \
-  mutt                    \
-  scons                   \
-  konsole                 \
-  terminator              \
-  verilog                 \
-  gtkwave                 \
-  openjdk-7-jre-headless  \
-  openjdk-7-jdk           \
-  ubuntu-tweak            \
-  zlib1g-dev              \
-  libsdl1.2-dev           \
+sudo apt-get -yu install    \
+  tcsh                      \ # Shell
+  subversion                \ # SVN
+  git                       \ # GIT
+  vim-gtk                   \ # GTK vim
+  g++                       \
+  gcc-multilib              \
+  gcc-4.7-multilib          \
+  g++-4.7-multilib          \
+  exuberant-ctags           \
+  cscope                    \
+  make                      \
+  gawk                      \
+  flex                      \ # Lexical analyzer - Compiler
+  bison                     \
+  vlc                       \
+  openvpn                   \
+  youtube-dl                \
+  expect                    \
+  evince-gtk                \
+  gnuplot-x11               \
+  mutt                      \
+  scons                     \
+  konsole                   \ # Terminal Emulator
+  terminator                \ # Terminal Emulator
+  verilog                   \ # HDL Wave viewer
+  gtkwave                   \
+  openjdk-7-jre-headless    \
+  openjdk-7-jdk             \
+  ubuntu-tweak              \
+  zlib1g-dev                \
+  libsdl1.2-dev             \
+  libmodule-signature-perl  \ # For checking signature before installing cpan modules
   ubuntu-vm-builder
 
 #sudo apt-get -yu install wine

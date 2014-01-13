@@ -27,3 +27,5 @@ set lines=999 columns=999
 
 set shiftwidth=2
 set tabstop=2
+
+au BufNewFile,BufRead *.yaml,*.yml so ~/.vim/yaml.vim

@@ -18,6 +18,7 @@ alias   cl              'clear ; echo "Host: $HOST" ; echo -n "PWD: "; pwd '
 alias   cls             'clear ; echo "Host: $HOST" ; echo -n "PWD: "; pwd ; echo "Contents:" ; ls '
 alias   cwdcmd          'clear ; echo "Host: $HOST" ; echo -n "PWD: "; pwd ; echo "Contents:" ; ls '
 alias   cll             'clear ; echo "Host: $HOST" ; echo -n "PWD: "; pwd ; echo "Contents:" ; ll '
+alias   tree            'tree -CF'
 alias   sc              "source ~/.home/.tcshrc"
 alias   c               "$EDITOR ~/.home/.tcshrc"
 alias   mkcd            'mkdir -p \!* ; cd \!*'

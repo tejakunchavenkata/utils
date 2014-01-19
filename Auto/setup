@@ -21,6 +21,7 @@ sudo apt-get -yu install    \
   flex                      \ # Lexical analyzer - Compiler
   bison                     \
   vlc                       \
+  graphviz                  \ # For viewing CFG - image/gui - Compiler
   openvpn                   \
   youtube-dl                \
   expect                    \

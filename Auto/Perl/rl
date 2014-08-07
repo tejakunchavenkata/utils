@@ -8,16 +8,5 @@
 # 
 # 
 #------------------------------------------------
-open IFH, "<$ARGV[0]" or die "Opening $ARGV[0] failed\n";
-@Lines = <IFH>;
-close IFH;
-
-for ($i = @Lines; --$i; ) {
-        $j = int rand ($i+1);
-        next if $i == $j;
-        @Lines[$i,$j] = @Lines[$j,$i];
-}
-
-open OFH, ">$ARGV[0]" or die "Opening $ARGV[0] failed\n";
-print OFH @Lines;
-close OFH;
+use List::Util 'shuffle';
+print shuffle (<>);

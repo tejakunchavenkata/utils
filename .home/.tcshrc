@@ -8,7 +8,7 @@ set     histdup         = erase
 set     echo_style      = both
 set     correct         = cmd
 set     prompt          = '%? $ '
-set     rprompt         = '%p'
+# set     rprompt         = '%p'
 setenv  EDITOR          gvim
 #setenv  LC_ALL          c                                       # sort command control
 alias   ls              'ls -FhxX --color=tty '
@@ -47,8 +47,6 @@ if ($path[1] != "./") set path = (      ./                                      
                                         ~/Auto/Perl                                                     \
                                         ~/Auto/Shell                                                    \
                                         ~/Auto/Fun                                                      \
-                                        ~/login                                                         \
-                                        ~/Proj                                                          \
                                 )
 ##########################################################################################################
 if ($?LS_COLORS) then

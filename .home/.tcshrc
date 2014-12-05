@@ -54,3 +54,16 @@ if ($?LS_COLORS) then
 else
         setenv  LS_COLORS "*.pdf=35\;01:""*.odp=34\;01:""*.doc=34\;01:""*.ods=34\;01:""*.docx=34\;01:""*.ppt=34\;01:""*.e=33:""*.sv=33:""*.v=33:"
 endif
+
+# Bindkeys for Arrow keys
+if ($term == "xterm" || $term == "vt100"  || $term == "vt102" || $term !~ "con*") then
+  # bind keypad keys for console, vt100, vt102, xterm
+  bindkey     "^[[1;5D" backward-word
+  bindkey     "^[[1;5C" forward-word
+  bindkey     "\e[1~"   beginning-of-line  # Home
+  bindkey     "\e[7~"   beginning-of-line  # Home rxvt
+  bindkey     "\e[2~"   overwrite-mode     # Ins
+  bindkey     "\e[3~"   delete-char        # Delete
+  bindkey     "\e[4~"   end-of-line        # End
+  bindkey     "\e[8~"   end-of-line        # End rxvt
+endif

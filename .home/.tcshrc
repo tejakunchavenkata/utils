@@ -56,6 +56,7 @@ else
 endif
 
 # Bindkeys for Arrow keys
+if ($?term == 0) setenv term = xterm # Tweak
 if ($term == "xterm" || $term == "vt100"  || $term == "vt102" || $term !~ "con*") then
   # bind keypad keys for console, vt100, vt102, xterm
   bindkey     "^[[1;5D" backward-word

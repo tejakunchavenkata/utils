@@ -9,6 +9,7 @@ set     echo_style      = both
 set     correct         = cmd
 set     prompt          = '%? $ '
 # set     rprompt         = '%p'
+setenv  TZ              Asia/Calcutta
 setenv  EDITOR          gvim
 #setenv  LC_ALL          c                                       # sort command control
 alias   ls              'ls -FhxX --color=tty '
@@ -36,7 +37,6 @@ alias   countDots       'echo \!* | grep -o . | wc -l'
 alias	  Report	        'tput cup \!:1 \!:2 ; echo \!:3-$'
 alias   JobsC           'jobs >&! .running.jobs.found ; wc -l .running.jobs.found ; rm -f .running.jobs.found'
 alias   Calc            'perl -le "print eval \!*"'
-alias   fdt             'date +%m%d%H%M%S'
 alias   RandSTR         "head /dev/urandom | uuencode -m - | sed -n 2p | sed 's#[^a-zA-Z0-9_]##g' | cut -b 1-32"
 unalias cp mv rm
 ##########################################################################################################

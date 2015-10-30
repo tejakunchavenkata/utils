@@ -47,10 +47,10 @@ set guioptions -=r
 " Always in fullscreen
 set lines=999 columns=999
 
-
+" Makes vim very slow
 " Highlight current column and line
-set cursorline
-hi CursorLine guibg=#eeeeee
+" set cursorline
+" hi CursorLine guibg=#eeeeee
 " set cursorcolumn
 " hi CursorColumn guibg=#eeeeee
 

@@ -15,10 +15,10 @@ setenv  EDITOR          gvim
 alias   ls              'ls -FhxX --color=tty '
 alias   ll              'ls -l '
 alias   la              'ls -a '
-alias   cl              'clear ; echo "Host: $HOST" ; echo -n "PWD: "; pwd '
-alias   cls             'clear ; echo "Host: $HOST" ; echo -n "PWD: "; pwd ; echo "Contents:" ; ls '
-alias   cwdcmd          'clear ; echo "Host: $HOST" ; echo -n "PWD: "; pwd ; echo "Contents:" ; ls '
-alias   cll             'clear ; echo "Host: $HOST" ; echo -n "PWD: "; pwd ; echo "Contents:" ; ll '
+alias   cl              'clear ; pwd '
+alias   cls             'clear ; pwd ; ls '
+alias   cwdcmd          'clear ; pwd ; ls '
+alias   cll             'clear ; pwd ; ll '
 alias   tree            'tree -CF'
 alias   sc              "source ~/.home/.tcshrc"
 alias   c               "$EDITOR ~/.home/.tcshrc"

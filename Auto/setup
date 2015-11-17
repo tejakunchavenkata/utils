@@ -1,53 +1,57 @@
-sudo add-apt-repository -y \
-  ppa:tualatrix/next
-# ppa:ubuntu-wine/ppa
 
 sudo apt-get -yu update
 sudo apt-get -yu dist-upgrade
 
 sudo apt-get -yu install    \
   tcsh                      \ # Shell
-  subversion                \ # SVN
   git                       \ # GIT
   vim-gtk                   \ # GTK vim
   g++                       \
-  gcc-multilib              \
-  gcc-4.7-multilib          \
-  g++-4.7-multilib          \
   exuberant-ctags           \
-  cscope                    \
   make                      \
   gawk                      \
-  flex                      \ # Lexical analyzer - Compiler
-  bison                     \
-  vlc                       \
-  graphviz                  \ # For viewing CFG - image/gui - Compiler
-  openvpn                   \
-  youtube-dl                \
   expect                    \
-  evince-gtk                \
   gnuplot-x11               \
   mutt                      \
-  scons                     \
-  konsole                   \ # Terminal Emulator
   terminator                \ # Terminal Emulator
-  verilog                   \ # HDL Wave viewer
-  gtkwave                   \
-  openjdk-7-jre-headless    \
-  openjdk-7-jdk             \
-  ubuntu-tweak              \
-  zlib1g-dev                \
-  libsdl1.2-dev             \
-  libmodule-signature-perl  \ # For checking signature before installing cpan modules
-  ubuntu-vm-builder
+  ubuntu-tweak
 
-#sudo apt-get -yu install wine
+# Unused anymore
+#
+# sudo add-apt-repository -y \
+#   ppa:tualatrix/next
+# ppa:ubuntu-wine/ppa
+#
+#   subversion                \ # SVN
+#   wine
+#   gcc-multilib              \
+#   gcc-4.7-multilib          \
+#   g++-4.7-multilib          \
+#   cscope                    \
+#   flex                      \ # Lexical analyzer - Compiler
+#   bison                     \
+#   vlc                       \
+#   graphviz                  \ # For viewing CFG - image/gui - Compiler
+#   openvpn                   \
+#   youtube-dl                \
+#   evince-gtk                \
+#   scons                     \
+#   konsole                   \ # Terminal Emulator
+#   verilog                   \ # HDL Wave viewer
+#   gtkwave                   \
+#   openjdk-7-jre-headless    \
+#   openjdk-7-jdk             \
+#   zlib1g-dev                \
+#   libsdl1.2-dev             \
+#   libmodule-signature-perl  \ # For checking signature before installing cpan modules
+#   ubuntu-vm-builder
 
-mkdir svn
-cd svn
-svn co https://google-styleguide.googlecode.com/svn/trunk/cpplint cpplint
-svn co https://personal-scripts-84529.googlecode.com/svn/trunk    ps84529
-#svn co https://vj84529.googlecode.com/svn/trunk                   vj84529
-svn co https://gpac-ann.googlecode.com/svn/trunk                  gpac-ann
-
-ln -sv $PWD/ps84529/Auto $PWD/vj84529/Library ~/
+# Stale
+# mkdir svn
+# cd svn
+# svn co https://google-styleguide.googlecode.com/svn/trunk/cpplint cpplint
+# svn co https://personal-scripts-84529.googlecode.com/svn/trunk    ps84529
+# #svn co https://vj84529.googlecode.com/svn/trunk                   vj84529
+# svn co https://gpac-ann.googlecode.com/svn/trunk                  gpac-ann
+# 
+# ln -sv $PWD/ps84529/Auto $PWD/vj84529/Library ~/

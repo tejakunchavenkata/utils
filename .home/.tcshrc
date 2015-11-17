@@ -14,13 +14,8 @@ setenv  EDITOR          gvim
 #setenv  LC_ALL          c                                       # sort command control
 alias   ls              'ls -FhxX --color=tty '
 alias   ll              'ls -l '
-alias   la              'ls -a '
-alias   cl              'clear ; pwd '
-alias   cls             'clear ; pwd ; ls '
-alias   cwdcmd          'clear ; pwd ; ls '
-alias   cll             'clear ; pwd ; ll '
+alias   cls             'clear'
 alias   tree            'tree -CF'
-alias   sc              "source ~/.home/.tcshrc"
 alias   c               "$EDITOR ~/.home/.tcshrc"
 alias   mkcd            'mkdir -p \!* ; cd \!*'
 alias   man             'man -a'
@@ -34,7 +29,6 @@ alias   Count           'unset CountVar ; set -f CountVar = (`echo \!*`) ; echo 
 alias   Countz          'unset CountVar ; set -f CountVar = (`echo \!*`) ; zenity --title "Count" --info --text "\!* -> `echo $#CountVar`"'
 alias   countDots       'echo \!* | grep -o . | wc -l'
 alias	  Report	        'tput cup \!:1 \!:2 ; echo \!:3-$'
-alias   JobsC           'jobs >&! .running.jobs.found ; wc -l .running.jobs.found ; rm -f .running.jobs.found'
 alias   Calc            'perl -le "print eval \!*"'
 alias   RandSTR         "head /dev/urandom | uuencode -m - | sed -n 2p | sed 's#[^a-zA-Z0-9_]##g' | cut -b 1-32"
 unalias cp mv rm

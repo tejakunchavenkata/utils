@@ -1,4 +1,3 @@
-
 sudo apt-get -yu update
 sudo apt-get -yu dist-upgrade
 
@@ -13,13 +12,11 @@ sudo apt-get -yu install    \
   expect                    \
   gnuplot-x11               \
   mutt                      \
-  terminator                \ # Terminal Emulator
-  ubuntu-tweak
+  classicmenu-indicator     \ # Classic menu for ubuntu
+  terminator                  # Terminal Emulator
 
 # Unused anymore
 #
-# sudo add-apt-repository -y \
-#   ppa:tualatrix/next
 # ppa:ubuntu-wine/ppa
 #
 #   subversion                \ # SVN

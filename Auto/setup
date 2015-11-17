@@ -1,19 +1,20 @@
 sudo apt-get -yu update
 sudo apt-get -yu dist-upgrade
 
-sudo apt-get -yu install    \
-  tcsh                      \ # Shell
-  git                       \ # GIT
-  vim-gtk                   \ # GTK vim
-  g++                       \
-  exuberant-ctags           \
-  make                      \
-  gawk                      \
-  expect                    \
-  gnuplot-x11               \
-  mutt                      \
-  classicmenu-indicator     \ # Classic menu for ubuntu
-  terminator                  # Terminal Emulator
+sudo apt-get -yu install        \
+  tcsh                          \ # Shell
+  git                           \ # GIT
+  vim-gtk                       \ # GTK vim
+  g++                           \
+  exuberant-ctags               \
+  make                          \
+  gawk                          \
+  expect                        \
+  gnuplot-x11                   \
+  mutt                          \
+  classicmenu-indicator         \ # Classic menu for ubuntu
+  compizconfig-settings-manager \ # Disabling animations and other config changes
+  terminator                      # Terminal Emulator
 
 # Unused anymore
 #

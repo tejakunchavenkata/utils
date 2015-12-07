@@ -27,17 +27,7 @@ set wildmode=list:longest,full
 
 " VIM font settings
 if has("gui_running")
-  if has("gui_gtk2")
-    set guifont=Courier\ New\ 9
-  elseif has("gui_photon")
-    set guifont=Courier\ New:s9
-  elseif has("gui_kde")
-    set guifont=Courier\ New/9/-1/5/50/0/0/0/1/0
-  elseif has("x11")
-    set guifont=-*-courier-medium-r-normal-*-*-180-*-*-m-*-*
-  else
-    set guifont=Courier_New:h9:cDEFAULT
-  endif
+  set guifont=Courier\ 10\ Pitch\ 9 
 endif
 
 " Simplyfy VIM, by removing buttons/scrollbar

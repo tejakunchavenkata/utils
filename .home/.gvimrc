@@ -133,8 +133,8 @@ let Tlist_Auto_Update = 1
 let Tlist_Close_On_Select = 0
 "Remove extra information and blank lines from	the taglist window.
 let Tlist_Compact_Format = 0
-"Specifies the path to the ctags utility.
-let Tlist_Ctags_Cmd = '/depot/ctag-5.5.4/bin/ctags'
+"Specifies the path to the ctags utility. # Use default
+" let Tlist_Ctags_Cmd = '>>> which ctags'
 "Show prototypes and not tags in the taglist window.
 " let Tlist_Display_Prototype                     = 0
 "Show tag scope next to the tag name.

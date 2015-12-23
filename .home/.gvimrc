@@ -27,7 +27,7 @@ set wildmode=list:longest,full
 
 " VIM font settings
 if has("gui_running")
-  set guifont=Courier\ 10\ Pitch\ 9 
+  set guifont=Courier\ 10\ Pitch\ 10
 endif
 
 " Simplyfy VIM, by removing buttons/scrollbar

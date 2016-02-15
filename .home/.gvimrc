@@ -105,18 +105,6 @@ syntax enable
 set background=dark
 colorscheme solarized
 
-
-" Perforce
-let g:p4CmdPath = '/usr/local/bin/p4'
-let g:p4ClientRoot = '/remote/us01home15/kasula/p4/dwarc'
-let g:p4Port = 'p4p-us01:1900'
-let g:p4User = 'kasula'
-
-let g:p4EnableMenu = 1
-if getline(1) =~ '^# A Perforce '
-  setfiletype perforce
-endif
-
 " TOHtml settings
 let g:html_number_lines = 0
 let g:html_dynamic_folds = 0

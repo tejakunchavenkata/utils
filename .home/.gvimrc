@@ -27,7 +27,7 @@ set wildmode=list:longest,full
 
 " VIM font settings
 if has("gui_running")
-  set guifont=Courier\ 10\ Pitch\ 10
+  set guifont=Courier\ 10\ Pitch\ 9
 endif
 
 " Simplyfy VIM, by removing buttons/scrollbar
@@ -52,8 +52,8 @@ set textwidth=100
 set formatoptions+=t
 
 " Colors the given column
-let &colorcolumn=join(range(101,999),",")
 highlight ColorColumn ctermbg=2 guibg=#eeeeee
+let &colorcolumn=join(range(101,999),",")
 
 " How do I read zip files in vim directly, without unzipping
 augroup gzip
@@ -102,7 +102,7 @@ let g:solarized_visibility="high"    "default value is normal
 let g:solarized_diffmode="high"    "default value is normal
 let g:solarized_hitrail=1    "default value is 0
 syntax enable
-set background=dark
+set background=light
 colorscheme solarized
 
 " TOHtml settings

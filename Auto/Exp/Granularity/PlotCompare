@@ -1,0 +1,19 @@
+#! /usr/bin/gnuplot
+#------------------------------------------------
+# Author:    kasula
+# Created:   Sun Jul 10 07:55:37 PDT 2011
+# File Name: PlotCompare
+# 
+# 
+# 
+# 
+#------------------------------------------------
+set term png small
+set output "~/Comp5000.png"
+set grid
+set title 'Comparrisions Ideal Vs Simulated'
+set xlabel 'No of Hits'
+set ylabel 'No of Trials'
+set xrange [0:50000]
+set yrange [0:50000]
+plot 'GoldCalcs/GoldAccu5000.cal' ti 'Caculated' with line, 'GoldSims/Gold5000.sim' ti 'Simulated' with line

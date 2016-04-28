@@ -1,0 +1,24 @@
+SED
+
+NAME
+       sed - stream editor for filtering and transforming text
+
+SYNOPSIS
+       sed [OPTION]... {script-only-if-no-other-script} [input-file]...
+
+DESCRIPTION
+       -n, --quiet, --silent
+       -e script, --expression=script
+       -f script-file, --file=script-file
+       -i[SUFFIX], --in-place[=SUFFIX]
+       -s, --separate
+
+COMMAND SYNOPSIS
+       =      Print the current line number.
+       a
+       i
+       q        Q
+       d
+       p
+       s/regexp/replacement/
+       y/source/dest/

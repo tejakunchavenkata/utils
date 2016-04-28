@@ -1,0 +1,30 @@
+QSUB
+
+NAME
+       qsub   -	 submit a batch job to Sun Grid Engine.
+
+SYNTAX
+       qsub [ options ] [ command | -- [ command_args ]]
+
+OPTIONS
+       -@ optionfile (Comment "#")
+       -a date_time ([[CC]YY]MMDDhhmm[.SS])
+
+       -cwd                                     -l resource=value,...           -P project_name                 -q wc_queue_list
+       -hard                                    -soft
+       
+       -e [[hostname]:]path,...                 -o [[hostname]:]path,...        -i [[hostname]:]file,...
+       -j y[es]|n[o]
+
+       -N name                                  -hold_jid    wc_job_list
+       -t n[-m[:s]]                             -hold_jid_ad wc_job_list
+
+       -m b|e|a|s|n,...                         -M user[@host],...
+
+       -p priority (-1023 to 1024)
+
+       -sync y[es]|n[o]
+
+RELATED
+       qdel name
+       qdel name -t n[-m]

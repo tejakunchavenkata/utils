@@ -1,0 +1,32 @@
+CAT                                                                               NL
+                                                                                  
+NAME                                                                              NAME
+       cat - concatenate files and print on the standard output                          nl - number lines of files
+                                                                                  
+SYNOPSIS                                                                          SYNOPSIS
+       cat [OPTION] [FILE]...                                                            nl [OPTION]... [FILE]...
+                                                                                  
+DESCRIPTION                                                                       DESCRIPTION
+       -b, --number-nonblank                                                             
+       -E, --show-ends                                                                   -i, --page-increment=NUMBER
+       -n, --number                                                                      -l, --join-blank-lines=NUMBER
+       -s, --squeeze-blank                                                               -n, --number-format=FORMAT
+                                                                                         -s, --number-separator=STRING
+                                                                                         -w, --number-width=NUMBER
+
+TAC                                                                               
+                                                                                         FORMAT is one of:
+NAME                                                                                     ln     left justified, no leading zeros
+       tac - concatenate and print files in reverse                                      rn     right justified, no leading zeros
+                                                                                         rz     right justified, leading zeros
+SYNOPSIS
+       tac [FILE]...
+
+
+REV
+
+NAME
+     rev - reverse lines of a file
+
+SYNOPSIS
+     rev [file]

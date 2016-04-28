@@ -1,0 +1,14 @@
+#! /usr/bin/perl -w
+#------------------------------------------------
+# Author:    kasula
+# Created:   Tue Feb  7 08:33:46 PST 2012
+# File Name: PackUp
+# USAGE: 
+#       PackUp 
+# 
+# 
+#------------------------------------------------
+$buf = pack("CCCC", 65, 66, 67, 68);
+print "$buf\n";
+@Vals = unpack("C[4]", "ABCD");
+printf "%d %d %d %d\n", @Vals;

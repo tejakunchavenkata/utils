@@ -1,0 +1,64 @@
+#
+set     autolist
+set     notify                                                  # jobs
+set     rmstar
+set     noclobber
+set     ignoreeof
+set     histdup         = erase
+set     echo_style      = both
+set     correct         = cmd
+set     prompt          = '%? $ '
+# set     rprompt         = '%p'
+setenv  TZ              Asia/Calcutta
+setenv  EDITOR          gvim
+#setenv  LC_ALL          c                                       # sort command control
+alias   ls              'ls -FhxX --color=tty '
+alias   ll              'ls -l '
+alias   cls             'clear ; echo "Host: $HOST" ; echo -n "PWD: "; pwd ; echo "Contents:" ; ls '
+alias   cwdcmd          'clear ; echo "Host: $HOST" ; echo -n "PWD: "; pwd ; echo "Contents:" ; ls '
+alias   tree            'tree -CF'
+alias   c               "$EDITOR ~/.home/.tcshrc"
+alias   mkcd            'mkdir -p \!* ; cd \!*'
+alias   man             'man -a'
+alias   g               'gvim -o'
+alias   goodcat         'head -v -n -0'
+alias   tnet            'xhost + ; telnet -a '
+alias   ux              'chmod +rx '
+alias   grep            'grep --color'
+alias   excpp           'rm -f \!*.out ; g++ -W -Wall -Wno-sign-compare -O2 -s -pipe -mmmx -msse -msse2 -msse3 \!*.cpp -o \!*.out ; \!*.out'
+alias   Count           'unset CountVar ; set -f CountVar = (`echo \!*`) ; echo $#CountVar '
+alias   Countz          'unset CountVar ; set -f CountVar = (`echo \!*`) ; zenity --title "Count" --info --text "\!* -> `echo $#CountVar`"'
+alias   countDots       'echo \!* | grep -o . | wc -l'
+alias	  Report	        'tput cup \!:1 \!:2 ; echo \!:3-$'
+alias   Calc            'perl -le "print eval \!*"'
+alias   RandSTR         "head /dev/urandom | uuencode -m - | sed -n 2p | sed 's#[^a-zA-Z0-9_]##g' | cut -b 1-32"
+unalias cp mv rm
+##########################################################################################################
+if ($path[1] != "./") set path = (      ./                                                              \
+                                        $path                                                           \
+                                        ~/Auto/MyPerl                                                   \
+                                        ~/Auto/MyShell                                                  \
+                                        ~/Auto/Perl                                                     \
+                                        ~/Auto/Shell                                                    \
+                                        ~/Auto/Fun                                                      \
+                                )
+##########################################################################################################
+if ($?LS_COLORS) then
+        setenv  LS_COLORS "$LS_COLORS""*.pdf=35\;01:""*.odp=34\;01:""*.doc=34\;01:""*.ods=34\;01:""*.docx=34\;01:""*.ppt=34\;01:""*.e=33:""*.sv=33:""*.v=33:"
+else
+        setenv  LS_COLORS "*.pdf=35\;01:""*.odp=34\;01:""*.doc=34\;01:""*.ods=34\;01:""*.docx=34\;01:""*.ppt=34\;01:""*.e=33:""*.sv=33:""*.v=33:"
+endif
+
+# Bindkeys for Arrow keys
+if ($?term == 0) setenv term xterm # Tweak
+if ($term == "xterm" || $term == "vt100"  || $term == "vt102" || $term !~ "con*") then
+  # bind keypad keys for console, vt100, vt102, xterm
+  bindkey     "^[[1;5D" backward-word
+  bindkey     "^[[1;5C" forward-word
+  bindkey     "\e[1~"   beginning-of-line  # Home
+  bindkey     "\e[7~"   beginning-of-line  # Home rxvt
+  bindkey     "\e[2~"   overwrite-mode     # Ins
+  bindkey     "\e[3~"   delete-char        # Delete
+  bindkey     "\e[4~"   end-of-line        # End
+  bindkey     "\e[8~"   end-of-line        # End rxvt
+endif

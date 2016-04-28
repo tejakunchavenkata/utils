@@ -1,0 +1,795 @@
+#!/usr/bin/wish
+
+frame .mw
+frame .mw.cola -height 100
+frame .mw.colb -height 100
+
+set Dw 25
+set Mw 20
+set DisabledColor "Gray65"
+
+set BgColor "White"
+
+#
+# Initial parameter values
+#
+
+set jobname "RNaseA"
+set almost1 20
+set seed 1985
+set numsim 300
+set cutoff 0.95
+set S2cutoff 0.7
+set Fcutoff 0.80
+set model1only "No"
+set gamma -2.710
+set rNH 1.02
+set N15CSA -160
+set mpdb "pdbfile"
+set R1file1 "R1file"
+set R2file1 "R2file"
+set NOEfile1 "NOEfile"
+set field1 "600"
+set R1file2 ""
+set R2file2 ""
+set NOEfile2 ""
+set field2 ""
+set tensor "Axially Symmetric"
+set optimize "Yes"
+set maxloop 10
+set tm 4.12
+set tmMin 3.8
+set tmMax 4.5
+set tmGrid 5
+set tmConv 0.001
+set Dratio 0.819
+set DratioMin 0.8
+set DratioMax 0.9
+set DratioGrid 5
+set DratioConv 0.001
+set Theta 20
+set ThetaMin 0
+set ThetaMax 40
+set ThetaGrid 5
+set ThetaConv 0.001
+set Phi 0
+set PhiMin 0
+set PhiMax 360
+set PhiGrid 20
+set PhiConv 0.001
+
+
+#
+# The input/output routines
+#
+
+proc save_config {} \
+{
+	set file [open FMF.config w+]
+
+	set exportvars "tensor cutoff Fcutoff optimize maxloop almost1 S2cutoff seed \
+		numsim jobname gamma rNH N15CSA tm tmMin tmMax tmGrid tmConv \
+		Dratio DratioMin DratioMax DratioGrid DratioConv Theta ThetaMin ThetaMax 
+		ThetaGrid ThetaConv Phi PhiMin PhiMax PhiGrid PhiConv model1only"
+
+	foreach var $exportvars \
+	{
+		set string "set f \$\:\:$var"
+		eval $string
+		puts $file "$var $f"
+	}
+
+	puts $file "mpdb $::mpdb"
+	puts $file "file{0}{R1} $::R1file1"
+	puts $file "file{0}{R2} $::R2file1"	
+	puts $file "file{0}{NOE} $::NOEfile1"
+	puts $file "file{0}{field} $::field1"
+
+	if {$::field2 > 0} \
+	{
+		puts $file "file{1}{R1} $::R1file2"
+		puts $file "file{1}{R2} $::R2file2"	
+		puts $file "file{1}{NOE} $::NOEfile2"
+		puts $file "file{1}{field} $::field2"
+	}
+
+	close $file
+}
+
+proc load_config {} \
+{
+	set checkf [file exists FMF.config]
+	if {$checkf == 0} \
+	{
+		puts "No configuration file found!"
+		return	
+	}
+
+	set file [open FMF.config r]
+	
+	while {[gets $file line] >= 0} \
+	{
+		set varname [lindex $line 0]
+		set varval [join [lrange $line 1 end]]
+		set isfile [string first "file" $varname]
+		set slen [string length $varname]
+		if {($isfile == -1) && ($slen > 0)} \
+		{
+			set act "set \::$varname \"$varval\""
+			eval $act
+		} \
+		elseif {($isfile > -1) && ($slen > 0)} \
+		{
+			if {$varname == "file{0}{R1}"} \
+				{set act "set \::R1file1 $varval"}
+			if {$varname == "file{0}{R2}"} \
+				{set act "set \::R2file1 $varval"}
+			if {$varname == "file{0}{NOE}"} \
+				{set act "set \::NOEfile1 $varval"}
+			if {$varname == "file{0}{field}"} \
+				{set act "set \::field1 $varval"}
+			if {$varname == "file{1}{R1}"} \
+				{set act "set \::R1file2 $varval"}
+			if {$varname == "file{1}{R2}"} \
+				{set act "set \::R2file2 $varval"}
+			if {$varname == "file{1}{NOE}"} \
+				{set act "set \::NOEfile2 $varval"}
+			if {$varname == "file{1}{field}"} \
+				{set act "set \::field2 $varval"}
+			
+			eval $act
+		}
+	}
+
+	close $file
+	update_disp
+}
+
+#
+# Some procedures for manipulating the interface
+#
+
+proc tmconfig {status} \
+{
+	if {$status == "disable"} \
+	{
+		.mw.colb.tm.tmentry configure -state disabled -background $::DisabledColor			
+		.mw.colb.tm.tmMinentry configure -state disabled -background $::DisabledColor			
+		.mw.colb.tm.tmMaxentry configure -state disabled -background $::DisabledColor			
+		.mw.colb.tm.tmGridentry configure -state disabled -background $::DisabledColor			
+		.mw.colb.tm.tmConventry configure -state disabled -background $::DisabledColor			
+
+	} \
+	elseif {$status == "only1"} \
+	{
+		.mw.colb.tm.tmentry configure -state normal -background $::BgColor
+		.mw.colb.tm.tmMinentry configure -state disabled -background $::DisabledColor			
+		.mw.colb.tm.tmMaxentry configure -state disabled -background $::DisabledColor			
+		.mw.colb.tm.tmGridentry configure -state disabled -background $::DisabledColor			
+		.mw.colb.tm.tmConventry configure -state disabled -background $::DisabledColor			
+
+	} \
+	elseif {$status == "enable"} \
+	{
+		.mw.colb.tm.tmentry configure -state normal -background $::BgColor
+		.mw.colb.tm.tmMinentry configure -state normal -background $::BgColor
+		.mw.colb.tm.tmMaxentry configure -state normal -background $::BgColor
+		.mw.colb.tm.tmGridentry configure -state normal -background $::BgColor
+		.mw.colb.tm.tmConventry configure -state normal -background $::BgColor
+
+	}
+}
+
+proc drconfig {status} \
+{
+	if {$status == "disable"} \
+	{
+		.mw.colb.dr.drentry configure -state disabled -background $::DisabledColor			
+		.mw.colb.dr.drMinentry configure -state disabled -background $::DisabledColor			
+		.mw.colb.dr.drMaxentry configure -state disabled -background $::DisabledColor			
+		.mw.colb.dr.drGridentry configure -state disabled -background $::DisabledColor			
+		.mw.colb.dr.drConventry configure -state disabled -background $::DisabledColor			
+	} \
+	elseif {$status == "only1"} \
+	{
+		.mw.colb.dr.drentry configure -state normal -background $::BgColor			
+		.mw.colb.dr.drMinentry configure -state disabled -background $::DisabledColor			
+		.mw.colb.dr.drMaxentry configure -state disabled -background $::DisabledColor			
+		.mw.colb.dr.drGridentry configure -state disabled -background $::DisabledColor			
+		.mw.colb.dr.drConventry configure -state disabled -background $::DisabledColor			
+	} \
+	elseif {$status == "enable"} \
+	{
+		.mw.colb.dr.drentry configure -state normal -background $::BgColor
+		.mw.colb.dr.drMinentry configure -state normal -background $::BgColor
+		.mw.colb.dr.drMaxentry configure -state normal -background $::BgColor
+		.mw.colb.dr.drGridentry configure -state normal -background $::BgColor
+		.mw.colb.dr.drConventry configure -state normal -background $::BgColor
+	}
+}
+
+proc thconfig {status} \
+{
+	if {$status == "disable"} \
+	{
+		.mw.colb.th.thentry configure -state disabled -background $::DisabledColor			
+		.mw.colb.th.thMinentry configure -state disabled -background $::DisabledColor			
+		.mw.colb.th.thMaxentry configure -state disabled -background $::DisabledColor			
+		.mw.colb.th.thGridentry configure -state disabled -background $::DisabledColor			
+		.mw.colb.th.thConventry configure -state disabled -background $::DisabledColor			
+	} \
+	elseif {$status == "only1"} \
+	{
+		.mw.colb.th.thentry configure -state normal -background $::BgColor			
+		.mw.colb.th.thMinentry configure -state disabled -background $::DisabledColor			
+		.mw.colb.th.thMaxentry configure -state disabled -background $::DisabledColor			
+		.mw.colb.th.thGridentry configure -state disabled -background $::DisabledColor			
+		.mw.colb.th.thConventry configure -state disabled -background $::DisabledColor			
+	} \
+	elseif {$status == "enable"} \
+	{
+		.mw.colb.th.thentry configure -state normal -background $::BgColor
+		.mw.colb.th.thMinentry configure -state normal -background $::BgColor
+		.mw.colb.th.thMaxentry configure -state normal -background $::BgColor
+		.mw.colb.th.thGridentry configure -state normal -background $::BgColor
+		.mw.colb.th.thConventry configure -state normal -background $::BgColor
+	}
+}
+
+proc phconfig {status} \
+{
+	if {$status == "disable"} \
+	{
+		.mw.colb.ph.phentry configure -state disabled -background $::DisabledColor			
+		.mw.colb.ph.phMinentry configure -state disabled -background $::DisabledColor			
+		.mw.colb.ph.phMaxentry configure -state disabled -background $::DisabledColor			
+		.mw.colb.ph.phGridentry configure -state disabled -background $::DisabledColor			
+		.mw.colb.ph.phConventry configure -state disabled -background $::DisabledColor			
+	} \
+	elseif {$status == "only1"} \
+	{
+		.mw.colb.ph.phentry configure -state normal -background $::BgColor			
+		.mw.colb.ph.phMinentry configure -state disabled -background $::DisabledColor			
+		.mw.colb.ph.phMaxentry configure -state disabled -background $::DisabledColor			
+		.mw.colb.ph.phGridentry configure -state disabled -background $::DisabledColor			
+		.mw.colb.ph.phConventry configure -state disabled -background $::DisabledColor			
+	} \
+	elseif {$status == "enable"} \
+	{
+		.mw.colb.ph.phentry configure -state normal -background $::BgColor
+		.mw.colb.ph.phMinentry configure -state normal -background $::BgColor
+		.mw.colb.ph.phMaxentry configure -state normal -background $::BgColor
+		.mw.colb.ph.phGridentry configure -state normal -background $::BgColor
+		.mw.colb.ph.phConventry configure -state normal -background $::BgColor
+	}
+}
+
+proc maxiterconfig {status} \
+{
+	if {$status == "disable"} \
+	{
+		.mw.colb.tf.maxentry configure -state disabled -background $::DisabledColor
+	} \
+	elseif {$status == "enable"} \
+	{
+		.mw.colb.tf.maxentry configure -state normal -background $::BgColor
+	}
+}
+
+proc mpdbconfig {status} \
+{
+	if {$status == "disable"} \
+	{
+		.mw.cola.data.pdbentry configure -state disabled -background $::DisabledColor
+	} \
+	elseif {$status == "enable"} \
+	{
+		.mw.cola.data.pdbentry configure -state normal -background $::BgColor
+	}
+}
+
+
+
+proc update_disp {} \
+{
+	if {($::tensor == "Axially Symmetric") && ($::optimize == "Yes")} \
+	{
+		mpdbconfig enable
+		tmconfig enable
+		thconfig enable
+		phconfig enable
+		drconfig enable
+		maxiterconfig enable
+	}
+	if {($::tensor == "Axially Symmetric") && ($::optimize == "No")} \
+	{
+		mpdbconfig enable
+		tmconfig only1
+		thconfig only1
+		phconfig only1
+		drconfig only1
+		maxiterconfig disable
+	}
+	if {($::tensor == "Isotropic") && ($::optimize == "Yes")} \
+	{
+		mpdbconfig disable
+		tmconfig enable
+		thconfig disable
+		phconfig disable
+		drconfig disable
+		maxiterconfig enable
+	}
+	if {($::tensor == "Isotropic") && ($::optimize == "No")} \
+	{
+		mpdbconfig disable
+		tmconfig only1
+		thconfig disable
+		phconfig disable
+		drconfig disable
+		maxiterconfig disable
+	}
+
+}
+
+#
+# First the Column A Stuff
+#
+
+frame .mw.cola.mf
+
+label .mw.cola.mf.biglabel -text "FAST ModelFree Parameters"
+
+label .mw.cola.mf.joblabel -anchor w -width $Dw -text "Name for Output Files: "
+label .mw.cola.mf.sselabel -anchor w -width $Dw -text "SSE Cutoff: "
+label .mw.cola.mf.ftestlabel -anchor w -width $Dw -text "FTest Cutoff: "
+label .mw.cola.mf.m1label -anchor w -width $Dw -text "Model 1 Only? "
+label .mw.cola.mf.m1cutlabel -anchor w -width $Dw -text "Model 1 Cutoff: "
+label .mw.cola.mf.s2cutlabel -anchor w -width $Dw -text "S2 Cutoff: "
+label .mw.cola.mf.seedlabel -anchor w -width $Dw -text "Random Number Seed: "
+label .mw.cola.mf.simlabel -anchor w -width $Dw -text "Number of MC Simulations: "
+label .mw.cola.mf.blank
+
+menubutton .mw.cola.mf.sseb -textvariable cutoff \
+	-relief raised -width $Mw -menu .mw.cola.mf.sseb.menu
+menubutton .mw.cola.mf.ftestb -textvariable Fcutoff \
+	-relief raised -width $Mw -menu .mw.cola.mf.ftestb.menu
+menubutton .mw.cola.mf.m1onlyb -textvariable model1only \
+	-relief raised -width $Mw -menu .mw.cola.mf.m1onlyb.menu
+
+menu .mw.cola.mf.sseb.menu -tearoff 0 
+.mw.cola.mf.sseb.menu add command -label "            0.95            " \
+	-command "set cutoff 0.95" 
+.mw.cola.mf.sseb.menu add command -label "            0.90            " \
+	-command "set cutoff 0.90" 
+.mw.cola.mf.sseb.menu add command -label "            0.85            " \
+	-command "set cutoff 0.85" 
+
+menu .mw.cola.mf.ftestb.menu -tearoff 0
+.mw.cola.mf.ftestb.menu add command -label "            0.85            " \
+	-command "set Fcutoff 0.85"
+.mw.cola.mf.ftestb.menu add command -label "            0.80            " \
+	-command "set Fcutoff 0.80"
+.mw.cola.mf.ftestb.menu add command -label "            0.75            " \
+	-command "set Fcutoff 0.75"
+
+menu .mw.cola.mf.m1onlyb.menu -tearoff 0
+.mw.cola.mf.m1onlyb.menu add command -label "            Yes             " \
+	-command "set model1only Yes"
+.mw.cola.mf.m1onlyb.menu add command -label "            No              " \
+	-command "set model1only No"
+
+entry .mw.cola.mf.jobentry -width $Mw -textvariable jobname \
+	-background "White"
+entry .mw.cola.mf.m1cutentry -width $Mw -textvariable almost1\
+	-background "White"
+entry .mw.cola.mf.seedentry -width $Mw -textvariable seed\
+	-background "White"
+entry .mw.cola.mf.simentry -width $Mw -textvariable numsim\
+	-background "White"
+entry .mw.cola.mf.s2cutentry -width $Mw -textvariable S2cutoff\
+	-background "White"
+
+grid .mw.cola.mf.biglabel -row 0 -column 0 -columnspan 2
+
+grid .mw.cola.mf.joblabel -row 1 -column 0
+grid .mw.cola.mf.sselabel -row 2 -column 0
+grid .mw.cola.mf.ftestlabel -row 3 -column 0
+grid .mw.cola.mf.m1label -row 4 -column 0
+grid .mw.cola.mf.m1cutlabel -row 5 -column 0
+grid .mw.cola.mf.s2cutlabel -row 6 -column 0
+grid .mw.cola.mf.seedlabel -row 7 -column 0
+grid .mw.cola.mf.simlabel -row 8 -column 0
+grid .mw.cola.mf.blank -row 9 -column 0
+
+grid .mw.cola.mf.jobentry -row 1 -column 1
+grid .mw.cola.mf.sseb -row 2 -column 1
+grid .mw.cola.mf.ftestb -row 3 -column 1
+grid .mw.cola.mf.m1onlyb -row 4 -column 1
+grid .mw.cola.mf.m1cutentry -row 5 -column 1
+grid .mw.cola.mf.s2cutentry -row 6 -column 1
+grid .mw.cola.mf.seedentry -row 7 -column 1
+grid .mw.cola.mf.simentry -row 8 -column 1
+
+#
+# MFPAR Parameters
+#
+frame .mw.cola.mfpar
+
+label .mw.cola.mfpar.biglabel -text "MFPAR Parameters"
+
+label .mw.cola.mfpar.glabel -anchor w -width $Dw -text "15N Magnetogyric Ratio: "
+label .mw.cola.mfpar.rlabel -anchor w -width $Dw -text "N-H Bond Distance (A): "
+label .mw.cola.mfpar.csalabel -anchor w -width $Dw -text "15N CSA (ppm): "
+label .mw.cola.mfpar.blank -text ""
+
+entry .mw.cola.mfpar.gentry -width $Mw -textvariable gamma\
+	-background "White"
+entry .mw.cola.mfpar.rentry -width $Mw -textvariable rNH\
+	-background "White"
+entry .mw.cola.mfpar.csaentry -width $Mw -textvariable N15CSA\
+	-background "White"
+
+
+grid .mw.cola.mfpar.biglabel -row 0 -column 0 -columnspan 2
+grid .mw.cola.mfpar.glabel -row 1 -column 0
+grid .mw.cola.mfpar.rlabel -row 2 -column 0
+grid .mw.cola.mfpar.csalabel -row 3 -column 0
+grid .mw.cola.mfpar.blank -row 4
+
+grid .mw.cola.mfpar.gentry -row 1 -column 1
+grid .mw.cola.mfpar.rentry -row 2 -column 1
+grid .mw.cola.mfpar.csaentry -row 3 -column 1
+
+#
+# Data entry parameters
+#
+frame .mw.cola.data
+
+proc getfile {file} \
+{
+		set ::$file [tk_getOpenFile -title {Select Data File}]
+}
+
+label .mw.cola.data.biglabel -text "Data Files"
+
+label .mw.cola.data.pdblabel -anchor w -width $Dw -text "PDB File: "
+label .mw.cola.data.blank1 -text ""
+label .mw.cola.data.r11label -anchor w -width $Dw -text "R1 Input File 1: "
+label .mw.cola.data.r21label -anchor w -width $Dw -text "R2 Input File 1: "
+label .mw.cola.data.noe1label -anchor w -width $Dw -text "NOE Input File 1: "
+label .mw.cola.data.f1label -anchor w -width $Dw -text "Field 1 (MHz): "
+label .mw.cola.data.blank2 -text ""
+label .mw.cola.data.r12label -anchor w -width $Dw -text "R1 Input File 2: "
+label .mw.cola.data.r22label -anchor w -width $Dw -text "R2 Input File 2: "
+label .mw.cola.data.noe2label -anchor w -width $Dw -text "NOE Input File 2: "
+label .mw.cola.data.f2label -anchor w -width $Dw -text "Field 2 (MHz): "
+label .mw.cola.data.blank3 -text ""
+
+entry .mw.cola.data.pdbentry -width $Mw -textvariable mpdb\
+	-background "White"
+entry .mw.cola.data.r11entry -width $Mw -textvariable R1file1\
+	-background "White"
+entry .mw.cola.data.r21entry -width $Mw -textvariable R2file1\
+	-background "White"
+entry .mw.cola.data.noe1entry -width $Mw -textvariable NOEfile1\
+	-background "White"
+entry .mw.cola.data.f1entry -width $Mw -textvariable field1\
+	-background "White"
+entry .mw.cola.data.r12entry -width $Mw -textvariable R1file2\
+	-background "White"
+entry .mw.cola.data.r22entry -width $Mw -textvariable R2file2\
+	-background "White"
+entry .mw.cola.data.noe2entry -width $Mw -textvariable NOEfile2\
+	-background "White"
+entry .mw.cola.data.f2entry -width $Mw -textvariable field2\
+	-background "White"
+
+button .mw.cola.data.pdbb -bitmap "gray50" \
+	-command "getfile mpdb"
+button .mw.cola.data.r11b -bitmap "gray50" \
+	-command "getfile R1file1"
+button .mw.cola.data.r21b -bitmap "gray50" \
+	-command "getfile R2file1"
+button .mw.cola.data.noe1b -bitmap "gray50" \
+	-command "getfile NOEfile1"
+button .mw.cola.data.r12b -bitmap "gray50" \
+	-command "getfile R1file2"
+button .mw.cola.data.r22b -bitmap "gray50" \
+	-command "getfile R2file2"
+button .mw.cola.data.noe2b -bitmap "gray50" \
+	-command "getfile NOEfile2"
+
+grid .mw.cola.data.biglabel -row 0 -column 0 -columnspan 2
+grid .mw.cola.data.pdblabel -row 1 -column 0  
+grid .mw.cola.data.blank1 -row 2 -column 0  
+grid .mw.cola.data.r11label -row 3 -column 0  
+grid .mw.cola.data.r21label -row 4 -column 0  
+grid .mw.cola.data.noe1label -row 5 -column 0  
+grid .mw.cola.data.f1label -row 6 -column 0
+grid .mw.cola.data.blank2 -row 7 -column 0  
+grid .mw.cola.data.r12label -row 8 -column 0  
+grid .mw.cola.data.r22label -row 9 -column 0  
+grid .mw.cola.data.noe2label -row 10 -column 0  
+grid .mw.cola.data.f2label -row 11 -column 0
+grid .mw.cola.data.blank3 -row 12 -column 0
+
+grid .mw.cola.data.pdbentry -row 1 -column 1 
+grid .mw.cola.data.r11entry -row 3 -column 1
+grid .mw.cola.data.r21entry -row 4 -column 1  
+grid .mw.cola.data.noe1entry -row 5 -column 1  
+grid .mw.cola.data.f1entry -row 6 -column 1
+grid .mw.cola.data.r12entry -row 8 -column 1  
+grid .mw.cola.data.r22entry -row 9 -column 1  
+grid .mw.cola.data.noe2entry -row 10 -column 1  
+grid .mw.cola.data.f2entry -row 11 -column 1
+
+grid .mw.cola.data.pdbb -row 1 -column 2
+grid .mw.cola.data.r11b -row 3 -column 2
+grid .mw.cola.data.r21b -row 4 -column 2
+grid .mw.cola.data.noe1b -row 5 -column 2
+grid .mw.cola.data.r12b -row 8 -column 2
+grid .mw.cola.data.r22b -row 9 -column 2
+grid .mw.cola.data.noe2b -row 10 -column 2
+
+#
+# Next pack all of the Column A stuff together
+#
+
+grid .mw.cola.mf -row 0 -column 0
+grid .mw.cola.mfpar -row 1 -column 0
+grid .mw.cola.data -row 2 -column 0
+
+#
+# Next the Column B Stuff
+#
+
+#
+# Tensor Optimization
+#
+frame .mw.colb.tf
+
+#
+# Tensor Selection
+#
+
+label .mw.colb.tf.tensorlabel -anchor w -width $Dw -text "Diffusion Tensor: " 
+menubutton .mw.colb.tf.tensorbutton -textvariable tensor \
+	-relief raised -width $Mw -menu .mw.colb.tf.tensorbutton.tensormenu
+
+menu .mw.colb.tf.tensorbutton.tensormenu -tearoff 0
+.mw.colb.tf.tensorbutton.tensormenu add command -label "Axially Symmetric" \
+	-command "set tensor {Axially Symmetric}; update_disp"
+.mw.colb.tf.tensorbutton.tensormenu add command -label "Isotropic" \
+	-command "set tensor Isotropic; update_disp"
+
+grid .mw.colb.tf.tensorlabel -row 0 -column 0
+grid .mw.colb.tf.tensorbutton -row 0 -column 1
+
+#
+# Optimize Tensor
+#
+
+frame .mw.colb.tf.optimize
+
+label .mw.colb.tf.optlabel -width $Dw -anchor w -text "Optimize Tensor? "
+menubutton .mw.colb.tf.optbutton -textvariable optimize \
+	-relief raised -width $Mw -menu .mw.colb.tf.optbutton.optmenu
+
+menu .mw.colb.tf.optbutton.optmenu -tearoff 0
+.mw.colb.tf.optbutton.optmenu add command -label "            Yes           " \
+	-command "set optimize Yes; update_disp"
+.mw.colb.tf.optbutton.optmenu add command -label "            No            " \
+	-command "set optimize No; update_disp"
+
+grid .mw.colb.tf.optlabel -row 1 -column 0
+grid .mw.colb.tf.optbutton -row 1 -column 1
+
+#
+# Maximum Iterations
+#
+
+frame .mw.colb.tf.maxiter
+label .mw.colb.tf.maxlabel -anchor w -width $Dw -text "Maximum Iterations:"
+entry .mw.colb.tf.maxentry -textvariable maxloop -background "White"
+
+grid .mw.colb.tf.maxlabel -row 2 -column 0
+grid .mw.colb.tf.maxentry -row 2 -column 1
+
+#
+# Put all of the tf frame together
+#
+
+label .mw.colb.tf.blank -text ""
+grid .mw.colb.tf.blank -row 3 -column 0
+
+#
+# Now for the tm parameters
+#
+frame .mw.colb.tm
+
+label .mw.colb.tm.tmlabel -anchor w -width $Dw -text "Initial tm (ns): "
+label .mw.colb.tm.tmMinlabel -anchor w -width $Dw -text "tm Min (ns): "
+label .mw.colb.tm.tmMaxlabel -anchor w -width $Dw -text "tm Max (ns): "
+label .mw.colb.tm.tmGridlabel -anchor w -width $Dw -text "tm Gridsearch Steps: "
+label .mw.colb.tm.tmConvlabel -anchor w -width $Dw -text "tm Convergence Limit: "
+label .mw.colb.tm.blank -text ""
+
+entry .mw.colb.tm.tmentry -textvariable tm\
+	-background "White"
+entry .mw.colb.tm.tmMinentry -textvariable tmMin\
+	-background "White"
+entry .mw.colb.tm.tmMaxentry -textvariable tmMax\
+	-background "White"
+entry .mw.colb.tm.tmGridentry -textvariable tmGrid\
+	-background "White"
+entry .mw.colb.tm.tmConventry -textvariable tmConv\
+	-background "White"
+
+grid .mw.colb.tm.tmlabel -row 0 -column 0
+grid .mw.colb.tm.tmMinlabel -row 1 -column 0
+grid .mw.colb.tm.tmMaxlabel -row 2 -column 0
+grid .mw.colb.tm.tmGridlabel -row 3 -column 0
+grid .mw.colb.tm.tmConvlabel -row 4 -column 0
+grid .mw.colb.tm.blank -row 5
+
+grid .mw.colb.tm.tmentry -row 0 -column 1
+grid .mw.colb.tm.tmMinentry -row 1 -column 1
+grid .mw.colb.tm.tmMaxentry -row 2 -column 1
+grid .mw.colb.tm.tmGridentry -row 3 -column 1
+grid .mw.colb.tm.tmConventry -row 4 -column 1
+
+#
+# Next the Dratio parameters
+#
+frame .mw.colb.dr
+
+label .mw.colb.dr.drlabel -anchor w -width $Dw -text "Initial Dratio: "
+label .mw.colb.dr.drMinlabel -anchor w -width $Dw -text "Dratio Min: "
+label .mw.colb.dr.drMaxlabel -anchor w -width $Dw -text "Dratio Max: "
+label .mw.colb.dr.drGridlabel -anchor w -width $Dw -text "Dratio Gridsearch Steps: "
+label .mw.colb.dr.drConvlabel -anchor w -width $Dw -text "Dratio Convergence Limit: "
+label .mw.colb.dr.blank -text ""
+
+entry .mw.colb.dr.drentry -textvariable Dratio\
+	-background "White"
+entry .mw.colb.dr.drMinentry -textvariable DratioMin\
+	-background "White"
+entry .mw.colb.dr.drMaxentry -textvariable DratioMax\
+	-background "White"
+entry .mw.colb.dr.drGridentry -textvariable DratioGrid\
+	-background "White"
+entry .mw.colb.dr.drConventry -textvariable DratioConv\
+	-background "White"
+
+grid .mw.colb.dr.drlabel -row 0 -column 0
+grid .mw.colb.dr.drMinlabel -row 1 -column 0
+grid .mw.colb.dr.drMaxlabel -row 2 -column 0
+grid .mw.colb.dr.drGridlabel -row 3 -column 0
+grid .mw.colb.dr.drConvlabel -row 4 -column 0
+grid .mw.colb.dr.blank -row 5
+
+grid .mw.colb.dr.drentry -row 0 -column 1
+grid .mw.colb.dr.drMinentry -row 1 -column 1
+grid .mw.colb.dr.drMaxentry -row 2 -column 1
+grid .mw.colb.dr.drGridentry -row 3 -column 1
+grid .mw.colb.dr.drConventry -row 4 -column 1
+
+#
+# Theta Parameters
+#
+frame .mw.colb.th
+
+label .mw.colb.th.thlabel -anchor w -width $Dw -text "Initial Theta: "
+label .mw.colb.th.thMinlabel -anchor w -width $Dw -text "Theta Min (deg): "
+label .mw.colb.th.thMaxlabel -anchor w -width $Dw -text "Theta Max (deg): "
+label .mw.colb.th.thGridlabel -anchor w -width $Dw -text "Theta Gridsearch Steps: "
+label .mw.colb.th.thConvlabel -anchor w -width $Dw -text "Theta Convergence Limit: "
+label .mw.colb.th.blank -text ""
+
+entry .mw.colb.th.thentry -textvariable Theta\
+	-background "White"
+entry .mw.colb.th.thMinentry -textvariable ThetaMin\
+	-background "White"
+entry .mw.colb.th.thMaxentry -textvariable ThetaMax\
+	-background "White"
+entry .mw.colb.th.thGridentry -textvariable ThetaGrid\
+	-background "White"
+entry .mw.colb.th.thConventry -textvariable ThetaConv\
+	-background "White"
+
+grid .mw.colb.th.thlabel -row 0 -column 0
+grid .mw.colb.th.thMinlabel -row 1 -column 0
+grid .mw.colb.th.thMaxlabel -row 2 -column 0
+grid .mw.colb.th.thGridlabel -row 3 -column 0
+grid .mw.colb.th.thConvlabel -row 4 -column 0
+grid .mw.colb.th.blank -row 5
+
+grid .mw.colb.th.thentry -row 0 -column 1
+grid .mw.colb.th.thMinentry -row 1 -column 1
+grid .mw.colb.th.thMaxentry -row 2 -column 1
+grid .mw.colb.th.thGridentry -row 3 -column 1
+grid .mw.colb.th.thConventry -row 4 -column 1
+
+#
+# Phi Parameters
+#
+frame .mw.colb.ph
+
+label .mw.colb.ph.phlabel -anchor w -width $Dw -text "Initial Phi: "
+label .mw.colb.ph.phMinlabel -anchor w -width $Dw -text "Phi Min (deg): "
+label .mw.colb.ph.phMaxlabel -anchor w -width $Dw -text "Phi Max (deg): "
+label .mw.colb.ph.phGridlabel -anchor w -width $Dw -text "Phi Gridsearch Steps: "
+label .mw.colb.ph.phConvlabel -anchor w -width $Dw -text "Phi Convergence Limit: "
+label .mw.colb.ph.blank -text ""
+
+entry .mw.colb.ph.phentry -textvariable Phi\
+	-background "White"
+entry .mw.colb.ph.phMinentry -textvariable PhiMin\
+	-background "White"
+entry .mw.colb.ph.phMaxentry -textvariable PhiMax\
+	-background "White"
+entry .mw.colb.ph.phGridentry -textvariable PhiGrid\
+	-background "White"
+entry .mw.colb.ph.phConventry -textvariable PhiConv\
+	-background "White"
+
+grid .mw.colb.ph.phlabel -row 0 -column 0
+grid .mw.colb.ph.phMinlabel -row 1 -column 0
+grid .mw.colb.ph.phMaxlabel -row 2 -column 0
+grid .mw.colb.ph.phGridlabel -row 3 -column 0
+grid .mw.colb.ph.phConvlabel -row 4 -column 0
+grid .mw.colb.ph.blank -row 5
+
+grid .mw.colb.ph.phentry -row 0 -column 1
+grid .mw.colb.ph.phMinentry -row 1 -column 1
+grid .mw.colb.ph.phMaxentry -row 2 -column 1
+grid .mw.colb.ph.phGridentry -row 3 -column 1
+grid .mw.colb.ph.phConventry -row 4 -column 1
+
+
+#
+# Pack all of column B together
+#
+
+label .mw.colb.biglabel -text "Tensor Optimization Parameters"
+
+grid .mw.colb.biglabel -row 0 -column 0 
+grid .mw.colb.tf -row 1 -column 0
+grid .mw.colb.tm -row 2 -column 0
+grid .mw.colb.dr -row 3 -column 0
+grid .mw.colb.th -row 4 -column 0
+grid .mw.colb.ph -row 5 -column 0
+
+#
+# Main level widgets
+#
+
+frame .mw.titleframe
+label .mw.titleframe.title -text "FAST ModelFree v1.1" \
+	-font "Helvetica 36 normal" -foreground "#272b0000ffff"
+pack .mw.titleframe.title
+
+set Bw 18
+set Bcolor "WhiteSmoke"
+
+frame .mw.buttonframe
+button .mw.buttonframe.b1 -text "Quit" -width $Bw -background $Bcolor \
+	-command "exit"
+
+button .mw.buttonframe.b2 -text "Load Config" -width $Bw -background $Bcolor \
+	-command "load_config"
+button .mw.buttonframe.b3 -text "Save Config" -width $Bw -background $Bcolor \
+	-command "save_config"
+button .mw.buttonframe.b4 -text "Save Config and Exit" -width $Bw \
+	-background Red2 -command "save_config; exit"
+pack .mw.buttonframe.b1 -side left -expand 1
+pack .mw.buttonframe.b2 -side left -expand 1
+pack .mw.buttonframe.b3 -side left -expand 1
+pack .mw.buttonframe.b4 -side left -expand 1
+
+grid .mw.titleframe -row 0 -column 0 -columnspan 2 -pady 1
+grid .mw.cola -row 1 -column 0 -padx 20
+grid .mw.colb -row 1 -column 1 -padx 20
+grid .mw.buttonframe -row 2 -column 0 -columnspan 2
+
+pack .mw

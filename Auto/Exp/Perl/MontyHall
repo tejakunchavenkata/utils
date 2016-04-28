@@ -1,0 +1,24 @@
+#! /usr/bin/perl -w
+#------------------------------------------------
+# Author:    kasula
+# Created:   Thu Jul 14 04:31:53 PDT 2011
+# File Name: MontyHall
+# 
+# 
+# 
+# 
+#------------------------------------------------
+for ($i=0, $Stay=0, $Swth=0; $i<$ARGV[0]; $i++) {
+        @Boxes = (0, 0, 0);
+        $Place = int rand 3;
+        $Boxes[$Place] = 1;
+        #####
+        $Select = int rand 3;
+        #####
+        do { $Open = int rand 3;} until ($Open != $Select and $Open != $Place);
+        #####
+        #print "Boxes: @Boxes | Selected: $Select | Opened: $Open\n";
+        if ($Place == $Select)  { $Stay++; }
+        else                    { $Swth++; }
+}
+print "StayWins: $Stay SwitchWins: $Swth\n";

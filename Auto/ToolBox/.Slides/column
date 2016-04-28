@@ -1,0 +1,12 @@
+COLUMN
+
+NAME
+     column - columnate lists
+
+SYNOPSIS
+     column [-t] [-s sep] [file ...]
+
+DESCRIPTION
+     -s	     (delimit)
+
+     -t	     (Det the number of columns) 

@@ -1,0 +1,61 @@
+#! /usr/bin/perl -w
+#------------------------------------------------
+# Author:    kvkrishna
+# Created:   Thu Sep 15 17:54:08 IST 2011
+# File Name: Show
+# USAGE: 
+# 
+# 
+# 
+#------------------------------------------------Subs
+sub CreateFrame;
+sub ShowSlide;
+#------------------------------------------------Initial settings
+chomp ( $Cols = `tput cols` );
+chomp ( $Rows = `tput lines`);
+system "clear ; tput civis"  ;
+$Dir = $ENV{PWD};
+CreateFrame ;
+#------------------------------------------------Load Order of Slides
+open SLD, "$Dir/.Slides/_Order" or die "Opening $Dir/.Slides/_Order failed\n";
+@Slides = <SLD>;
+close SLD;
+#------------------------------------------------Show Slides
+for ($i=0; $i<@Slides; $i++) {
+        @SldName = split /\s+/, $Slides[$i] ;
+        next if ($SldName[0] =~ /^#/);
+        ShowSlide "$Dir/.Slides/$SldName[0]" ;
+        #printf "$SldName[0]\n";
+        chomp ( $DummyVar = <STDIN> );
+        $i -= 2 if ($DummyVar eq 'p') ;
+}
+print "$DummyVar\n";
+system 'rm -f .Frame; tput clear; tput cnorm';
+#------------------------------------------------Sub CreateFrame
+sub CreateFrame {
+        open OFH, ">.Frame" or die "Opening .Frame failed\n";
+        for ($i=1; $i < $Rows; $i++) {
+                if ( ($Rows * 3 / 20) < $i and $i < ($Rows * 17 / 20) ) {
+                        printf OFH "\n" ;
+                } else {
+                        printf OFH "%s\n", ' 'x$Cols ;
+                }
+        }
+        printf OFH "%s", ' 'x$Cols ;
+        close OFH ; 
+}
+#------------------------------------------------Sub ShowSlide
+sub ShowSlide { 
+        system "tput clear; tput rev; cat .Frame; tput sgr0" ;
+        $Height = `wc -l $_[0] | gawk '{print \$1}'` ;
+        $Width  = `wc -L $_[0] | gawk '{print \$1}'` ;
+        $X = int (($Rows - $Height) / 2);
+        $Y = int (($Cols - $Width ) / 2);
+        open IFH, "<$_[0]" or die "Opening $_[0] failed\n";
+        while (<IFH>) {
+                system "tput cup $X $Y";
+                print ;
+                $X++;
+        }
+        close IFH;
+}

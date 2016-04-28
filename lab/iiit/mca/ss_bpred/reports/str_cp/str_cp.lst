@@ -1,0 +1,178 @@
+GAS LISTING /tmp/ccF4qFyY.s 			page 1
+
+
+   1              		.file	1 "reports/str_cp/str_cp.c"
+   2              	
+   3              	 # GNU C 2.7.2.3 [AL 1.1, MM 40, tma 0.1] SimpleScalar running sstrix compiled by GNU C
+   4              	
+   5              	 # Cc1 defaults:
+   6              	 # -mgas -mgpOPT
+   7              	
+   8              	 # Cc1 arguments (-G value = 8, Cpu = default, ISA = 1):
+   9              	 # -quiet -dumpbase -g -o
+  10              	
+  11              	gcc2_compiled.:
+  12              	__gnu_compiled_c:
+  13              		.rdata
+  14              		.align	2
+  15              	$LC0:
+  16 0000 74686973 		.ascii	"this is a long string this is a long string this is a lo"
+  16      20697320 
+  16      61206C6F 
+  16      6E672073 
+  16      7472696E 
+  17 0038 6E672073 		.ascii	"ng string this is a long string this is a long string\000"
+  17      7472696E 
+  17      67207468 
+  17      69732069 
+  17      73206120 
+  18 006e 0000     		.align	2
+  19              	$LC1:
+  20 0070 74686973 		.ascii	"this is also a string this is also a string this is also"
+  20      20697320 
+  20      616C736F 
+  20      20612073 
+  20      7472696E 
+  21 00a8 20612073 		.ascii	" a string this is also a string this is also a string\000"
+  21      7472696E 
+  21      67207468 
+  21      69732069 
+  21      7320616C 
+  22 00de 0000     		.text
+  23              		.align	2
+  24              		.globl	main
+  25              	
+  26              		.text
+  28              	
+   1:reports/str_cp/str_cp.c **** int main () {
+  29              		.loc	1 1
+  30              		.ent	main
+  31              	main:
+  32              		.frame	$fp,256,$31		# vars= 232, regs= 2/0, args= 16, extra= 0
+  33              		.mask	0xc0000000,-4
+  34              		.fmask	0x00000000,0
+  35 0000 43000000 		subu	$sp,$sp,256
+  35      00FF1D1D 
+  36 0008 34000000 		sw	$31,252($sp)
+  36      FC001F1D 
+  37 0010 34000000 		sw	$fp,248($sp)
+  37      F8001E1D 
+  38 0018 42000000 		move	$fp,$sp
+GAS LISTING /tmp/ccF4qFyY.s 			page 2
+
+
+  38      001E1D00 
+  39 0020 02000000 		jal	__main
+  39      00000000 
+  40              	
+   2:reports/str_cp/str_cp.c ****   char str1[] = "this is a long string this is a long string this is a long string this is a long s
+  41              		.loc	1 2
+  45 0028 43000000 		addu	$2,$fp,16
+  45      1000021E 
+  46 0030 43000000 		addu	$3,$fp,16
+  46      1000031E 
+  47 0038 A2000000 		la	$2,$LC0
+  47      00000200 
+  47      43000000 
+  47      50010202 
+  48 0048 42000000 		move	$4,$3
+  48      00040300 
+  49 0050 42000000 		move	$5,$2
+  49      00050200 
+  50 0058 43000000 		li	$6,0x0000006e		# 110
+  50      6E000600 
+  51 0060 02000000 		jal	memcpy
+  51      00000000 
+  52 0068 43000000 		addu	$2,$fp,128
+  52      8000021E 
+  53              	
+   3:reports/str_cp/str_cp.c ****   char str2[] = "this is also a string this is also a string this is also a string this is also a s
+  54              		.loc	1 3
+  55 0070 43000000 		addu	$2,$fp,128
+  55      8000021E 
+  56 0078 A2000000 		la	$3,$LC1
+  56      00000300 
+  56      43000000 
+  56      C0010303 
+  57 0088 42000000 		move	$4,$2
+  57      00040200 
+  58 0090 42000000 		move	$5,$3
+  58      00050300 
+  59 0098 43000000 		li	$6,0x0000006e		# 110
+  59      6E000600 
+  60 00a0 02000000 		jal	memcpy
+  60      00000000 
+  61              	
+   4:reports/str_cp/str_cp.c ****   int i = 100;
+  62              		.loc	1 4
+  63 00a8 43000000 		li	$2,0x00000064		# 100
+  63      64000200 
+  64 00b0 34000000 		sw	$2,240($fp)
+  64      F000021E 
+  65              	
+   5:reports/str_cp/str_cp.c ****   while (i--) strcpy (str1, str2);
+  66              		.loc	1 5
+  67              	$L2:
+  68 00b8 28000000 		lw	$2,240($fp)
+  68      F000021E 
+  69 00c0 43000000 		subu	$3,$2,1
+  69      FFFF0302 
+  70 00c8 42000000 		move	$2,$3
+GAS LISTING /tmp/ccF4qFyY.s 			page 3
+
+
+  70      00020300 
+  71 00d0 34000000 		sw	$2,240($fp)
+  71      F000021E 
+  72 00d8 43000000 		li	$3,-1			# 0xffffffff
+  72      FFFF0300 
+  73 00e0 06000000 		bne	$2,$3,$L4
+  73      02000302 
+  74 00e8 01000000 		j	$L3
+  74      46000000 
+  75              	$L4:
+  76 00f0 43000000 		addu	$2,$fp,128
+  76      8000021E 
+  77 00f8 43000000 		addu	$4,$fp,16
+  77      1000041E 
+  78 0100 42000000 		move	$5,$2
+  78      00050200 
+  79 0108 02000000 		jal	strcpy
+  79      00000000 
+  80 0110 01000000 		j	$L2
+  80      2E000000 
+  81              	$L3:
+  82              	
+   6:reports/str_cp/str_cp.c ****   return 0;
+  83              		.loc	1 6
+  84 0118 42000000 		move	$2,$0
+  84      00020000 
+  85 0120 01000000 		j	$L1
+  85      4A000000 
+  86              	
+   7:reports/str_cp/str_cp.c **** }
+  87              		.loc	1 7
+  88              	$L1:
+  89 0128 42000000 		move	$sp,$fp			# sp not trusted here
+  89      001D1E00 
+  90 0130 28000000 		lw	$31,252($sp)
+  90      FC001F1D 
+  91 0138 28000000 		lw	$fp,248($sp)
+  91      F8001E1D 
+  92 0140 43000000 		addu	$sp,$sp,256
+  92      00011D1D 
+  93 0148 03000000 		j	$31
+  93      0000001F 
+  94              		.end	main
+GAS LISTING /tmp/ccF4qFyY.s 			page 4
+
+
+DEFINED SYMBOLS
+     /tmp/ccF4qFyY.s:11     .text:0000000000000000 gcc2_compiled.
+     /tmp/ccF4qFyY.s:12     .text:0000000000000000 __gnu_compiled_c
+     /tmp/ccF4qFyY.s:31     .text:0000000000000000 main
+
+UNDEFINED SYMBOLS
+__main
+memcpy
+strcpy

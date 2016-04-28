@@ -1,0 +1,35 @@
+#! /bin/tcsh -f
+#------------------------------------------------
+# Author:    kvkrishna
+# Created:   Fri Sep 23 16:15:14 IST 2011
+# File Name: ArgProcessing
+# USAGE: 
+#       ArgProcessing [-str1 <string>] [--str2 <string>] [-h|-help]
+# 
+# 
+#------------------------------------------------ARGUMENT PROCESSING BLOCK
+while ($#argv)
+        set CUR_ARG = `echo $argv[1] | tr A-Z a-z`
+        shift
+        switch ($CUR_ARG)
+        case "-str1":
+                set VAR1 = $argv[1]
+                echo "Variable_1 = $VAR1"
+                shift
+                breaksw
+        case "--str2":
+                set VAR2 = $argv[1]
+                echo "Variable_2 = $VAR2"
+                shift
+                breaksw
+        case "-h":
+        case "-help":
+                sed -n 6,10p $0
+                exit 0
+                breaksw
+        default:
+                echo "Unknown option"
+                exit 8
+                breaksw
+        endsw
+end

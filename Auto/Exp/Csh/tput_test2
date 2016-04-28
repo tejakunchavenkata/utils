@@ -1,0 +1,18 @@
+#! /bin/tcsh -f
+#------------------------------------------------
+# Author:    kvkrishna
+# Created:   Fri Jul 29 12:39:25 IST 2011
+# File Name: tput_test2
+# USAGE: 
+# 
+# 
+# 
+#------------------------------------------------
+clear
+@ i = 0
+while ($i < 100)
+        usleep 100000
+        tput cup 10 10
+        echo "$i / 100"
+        @ i = $i + 1 
+end

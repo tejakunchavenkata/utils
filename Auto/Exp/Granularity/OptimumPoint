@@ -1,0 +1,32 @@
+#! /usr/bin/perl -w
+#------------------------------------------------
+# Author:    kasula
+# Created:   Thu Jul 14 01:51:49 PDT 2011
+# File Name: OptimumPoint
+# 
+# 
+# 
+# 
+#------------------------------------------------
+open EST, "<nHn" or die "Opening file nHn failed due to $!";
+@nHn = <EST>;   unshift (@nHn, "nHn\n");
+close EST;
+mkdir OptPoints;
+open SPLT, ">OptPoints/SubPlot" or die "Opening file : >OptPoints/SubPlot failed due to $!";
+printf SPLT "plot " ;
+foreach $Trgt ( @ARGV ) {
+        $Root = sqrt $Trgt ;
+        open FH, ">OptPoints/Opt$Trgt.log" or die "Opening >OptPoints/Opt$Trgt.log file failed due to $!" ;
+        for ($i=1; $i <= $Root; $i++) {
+                if (! ($Trgt % $i)) {
+                        $j = $Trgt/$i;
+                        printf FH "%6d %27.17f\n", $i, $nHn[$j]*$i;
+                        printf FH "%6d %27.17f\n", $j, $nHn[$i]*$j;
+                }
+        }
+        close FH;
+        system "sort -n OptPoints/Opt$Trgt.log -o OptPoints/Opt$Trgt.log";
+        printf SPLT "\"OptPoints/Opt$Trgt.log\" with line ti \"$Trgt\", " ;
+}
+close SPLT;
+system 'sed -i \'s/, $/ /g\' OptPoints/SubPlot';

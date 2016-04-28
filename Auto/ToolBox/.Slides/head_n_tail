@@ -1,0 +1,28 @@
+HEAD                                                           TAIL                                         
+                                                               
+NAME                                                           NAME
+       head - output the first part of files                          tail - output the last part of files
+                                                               
+SYNOPSIS                                                       SYNOPSIS
+       head [OPTION]... [FILE]...                                     tail [OPTION]... [FILE]...
+                                                               
+DESCRIPTION                                                    DESCRIPTION
+       -c, --bytes=[-]N                                               --retry
+       -n, --lines=[-]N                                               -c, --bytes=N
+       -q, --quiet, --silent                                          -f, --follow[={name|descriptor}]
+       -v, --verbose                                                  -F     same as --follow=name --retry
+                                                                      -n, --lines=N
+                                                                      -q, --quiet, --silent
+                                                                      -s, --sleep-interval=S
+                                                                      -v, --verbose
+
+
+
+TAILF
+
+NAME
+       tailf - follow the growth of a log file
+
+SYNOPSIS
+       tailf file
+

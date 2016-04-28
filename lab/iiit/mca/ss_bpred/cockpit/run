@@ -1,0 +1,49 @@
+#! /usr/bin/tcsh
+#------------------------------------------------
+# Author:    vj
+# Created:   Sat Sep 15 07:26:26 IST 2012
+# File Name: run
+# USAGE: 
+#       run 
+# 
+# 
+#------------------------------------------------
+rm -rf reports
+mkdir reports
+
+foreach src ( src/*.c )
+        set logOrder = ()
+        mkdir -pv reports/$src:r:t
+        set prgm = reports/$src:r:t/$src:t
+        cp -vf $src $prgm
+        $SIMPLE_SCALAR_HOME/bin/sslittle-na-sstrix-gcc $prgm -o $prgm:r.out
+        $SIMPLE_SCALAR_HOME/bin/sslittle-na-sstrix-gcc $prgm -c -g -Wa,-a,-ad > & $prgm:r.lst
+        $SIMPLE_SCALAR_HOME/bin/sslittle-na-sstrix-objdump --disassemble-all $prgm:r.out > & $prgm:r.dump
+        rm -f $prgm:r:t.o
+        foreach opt ( 'taken' 'nottaken' )
+          echo $opt
+          $SIMPLE_SCALAR_HOME/simplesim-3.0/sim-bpred -bpred $opt $prgm:r.out > & reports/$src:r:t/$opt.log
+          set logOrder = ( $logOrder reports/$src:r:t/$opt.log )
+        end
+
+        foreach bimodSize ( 2 4 8 16 32 64 128 256 512 1024 2048 4096 )
+          echo bimod $bimodSize
+          $SIMPLE_SCALAR_HOME/simplesim-3.0/sim-bpred -bpred bimod -bpred:bimod $bimodSize $prgm:r.out > & reports/$src:r:t/bimod_$bimodSize.log
+          set logOrder = ( $logOrder reports/$src:r:t/bimod_$bimodSize.log )
+        end
+
+        foreach X ( 0 1 )                                                       # xor
+          foreach N ( 1 2 4 8 )                                                 # no Of shift Reg
+            foreach W ( 1 2 3 4 5 6 7 8 )                                       # width Of shift reg
+              # noOfCounters
+              @ M = `perl -le "print 2 ** ( $N + $W )"`
+              echo 2lev $N $M $W $X
+              $SIMPLE_SCALAR_HOME/simplesim-3.0/sim-bpred -bpred 2lev -bpred:2lev $N $M $W $X $prgm:r.out > & reports/$src:r:t/2lev_${N}_${M}_${W}_${X}.log
+              set logOrder = ( $logOrder reports/$src:r:t/2lev_${N}_${M}_${W}_${X}.log )
+            end
+          end
+        end
+
+        cockpit/analyzer $logOrder > reports/$src:r:t/report.csv
+        column -ts, reports/$src:r:t/report.csv > reports/$src:r:t/report.ssv
+end

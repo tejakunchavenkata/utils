@@ -1,0 +1,19 @@
+#! /usr/bin/gnuplot
+#------------------------------------------------
+# Author:    kasula
+# Created:   Fri Jul  8 09:42:47 PDT 2011
+# File Name: PlotCal
+# 
+# 
+# 
+# 
+#------------------------------------------------
+set term png small
+set output "~/Calculations.png"
+set grid 
+set title 'Calculated Results' 
+set xlabel 'No of Hits' 
+set ylabel 'No of Trials' 
+set xrange [0:20000]
+set yrange [0:100000]
+load "GoldCalcs/SubPlot"

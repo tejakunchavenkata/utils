@@ -1,0 +1,24 @@
+SORT
+
+NAME
+       sort - sort lines of text files
+
+SYNOPSIS
+       sort [OPTION]... [FILE]...
+
+USEFULL Options
+       -b, --ignore-leading-blanks
+
+       -f, --ignore-case
+
+       -n, --numeric-sort
+
+       -r, --reverse
+
+       -c, --check
+
+       -t, --field-separator=SEP                       -k, --key=POS1[,POS2]
+
+       -o, --output=FILE
+
+       -u, --unique

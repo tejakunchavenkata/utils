@@ -1,0 +1,23 @@
+#! /usr/bin/perl -w
+#------------------------------------------------
+# Author:    kasula
+# Created:   Thu Feb 23 20:35:17 PST 2012
+# File Name: HiResTime
+# USAGE: 
+#       HiResTime 
+# 
+# 
+#------------------------------------------------
+use Time::HiRes qw/gettimeofday/;
+
+my $seconds = gettimeofday();           # in scalar context it returns a fractional number of seconds
+my $ms      = int($seconds*1000);       # convert into milliseconds
+
+print "$seconds seconds is $ms milliseconds\n";
+
+#in list context it returns the integer number of seconds and the remaining time in ms
+($seconds, my $fraction) = gettimeofday();
+$ms = $fraction + $seconds * 1000; #convert into milliseconds
+
+print "$seconds seconds + $fraction milliseconds is $ms milliseconds\n";
+

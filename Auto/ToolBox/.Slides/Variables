@@ -1,0 +1,30 @@
+                                             Variables
+                                           -------------
+        
+        
+                     shell                                             env
+        
+        Create
+            set                                                  setenv [name [value]]
+            set name ...
+            set name=word ...
+            set [-r] [-f|-l] name=(wordlist) ...    
+            set name[index]=word ...
+            set -r    
+            set -r name ...    
+            set -r name=word ...    
+        
+        Destroy
+            unset pattern                                        unsetenv pattern
+
+
+
+
+
+
+Numeric Capabilities                     Special Operations                       
+   @                                            r     e                          $Var    ______________?
+   @ name = expr                           __________ _                          $#Var   ______________?
+   @ name[index] = expr                    /a/b/c/d/e.f                          $?Var   ______________?
+   @ name++|--                             ________ ___                          $%Var   ______________?
+   @ name[index]++|--                          h     t

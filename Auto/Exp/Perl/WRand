@@ -1,0 +1,25 @@
+#! /usr/bin/perl -w
+#------------------------------------------------
+# Author:    kvkrishna
+# Created:   Wed May 18 21:14:31 IST 2011
+# File Name: WRand
+# 
+# 
+# 
+# 
+#------------------------------------------------
+sub wrand {
+        my $i;
+        my $Tot = 0;
+        for ($i=0; $i < @_; $i+=2) { $Tot += $_[$i] }
+        my $SUM = 0;
+        my $Val = int rand $Tot ;
+        for ($i=0; $i < @_; $i+=2) { $SUM += $_[$i]; return $_[$i+1] if ( $SUM > $Val) }
+}
+printf "%s\n", &wrand (1, 'A', 0, 'B', 0, 'C', 4, 'D');
+#$Trgt = 99999;
+#while ($Trgt--){
+#        $Val = wrand @ARGV;
+#        $OP{$Val}++ ;
+#}
+#print "$_\t$OP{$_}\n" foreach sort keys %OP ;

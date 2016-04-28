@@ -1,0 +1,151 @@
+#! /usr/bin/perl -wl
+#------------------------------------------------
+# Author:    kasula
+# Created:   Mon Oct 29 21:11:28 PDT 2012
+# File Name: projectBuilder
+# USAGE: 
+#       projectBuilder 
+# 
+# 
+#------------------------------------------------
+die "Undefined or Invalid module name" if not (defined $ARGV[0] && &validName ($ARGV[0]));
+die "File Exists" if (-e "$ARGV[0].v" || -e "tb_$ARGV[0].v");
+
+@pl = ("\n>>>", map { "\n" . '  ' x $_ } (1 .. 10));
+
+%allPorts = ();
+&getPorts ($_) foreach ('input', 'output', 'inout');
+
+my (@inputs, @outputs, @inouts);
+foreach (keys %allPorts) {
+  if    ($allPorts{$_}[0] =~ /^input$/)   {push @inputs,  $_}
+  elsif ($allPorts{$_}[0] =~ /^output$/)  {push @outputs, $_}
+  elsif ($allPorts{$_}[0] =~ /^inout$/)   {push @inouts,  $_}
+  else  { print "$pl[0]Warning: Unknown port ignored" }
+}
+
+@inputs  = sort {$a cmp $b} @inputs;
+@outputs = sort {$a cmp $b} @outputs;
+@inouts  = sort {$a cmp $b} @inouts;
+
+&buildModule;
+&buildTB;
+
+#------------------------------------------------ Validae Name
+sub validName { ($_[0] =~ /^[a-z]/i && $_[0] =~ /^\w+$/) }
+
+#------------------------------------------------ get Ports Information
+sub getPorts {
+  my ($portType, $portCnt) = ($_[0], undef);
+	while (not defined $portCnt) {
+    printf "$pl[1]Enter number of <$portType> ports: ";
+	  chomp ($portCnt = <STDIN>);
+    do {printf "$pl[0]ERROR: Its isn't numeric!!!"; $portCnt = undef} if ($portCnt !~ /^\d+$/);
+  }
+	
+  my ($name, $size);
+  while ($portCnt-- > 0) {
+    while (1) {
+  		printf "$pl[2]Enter name of <$portType> PORT ($portCnt): ";	chomp ($name = <STDIN>);
+		  if (! &validName ($name)) { printf "$pl[0]ERROR: Invalid name!!!" }
+      elsif (exists $allPorts{$name}) { printf "$pl[0]ERROR: Port name already in use!!!" }
+      else { last }
+    }
+    
+    while (1) {
+  		printf "$pl[2]Enter size of <$portType> PORT ($name): ";	chomp ($size = <STDIN>);
+		  if ($size !~ /^\d+$/ || $size < 1) { printf "$pl[0]ERROR: Invalid size!!!" }
+      else { last }
+    }
+    
+    $allPorts{$name} = [$portType, $size - 1];
+	}
+}
+
+#------------------------------------------------ prepare main module file
+sub buildModule {
+  open my $FH, ">$ARGV[0].v" or die "Opening $ARGV[0].v failed due to $!";
+  select $FH;
+
+  printf "module $ARGV[0] (clk, rst, %s);\n", join ", ", @inputs, @inouts, @outputs;
+  
+  printf "\n// Inputs\ninput clk, rst;";
+  foreach (@inputs)   { printf "\ninput %-9s$_;",      $allPorts{$_}[1] ? "[$allPorts{$_}[1]:0] " : '' }
+  
+  printf "\n\n// Inouts" if (scalar @inouts);
+  foreach (@inouts)   { printf "\ninout reg %-9s$_;",  $allPorts{$_}[1] ? "[$allPorts{$_}[1]:0] " : '' }
+  
+  printf "\n\n// Outputs";
+  foreach (@outputs)  { printf "\noutput reg %-9s$_;", $allPorts{$_}[1] ? "[$allPorts{$_}[1]:0] " : '' }
+
+  printf <<EOF;
+\n
+always @ (posedge clk);
+begin
+  if (rst)
+  begin
+  
+  end
+  else
+  begin
+  
+  end
+end
+
+endmodule
+EOF
+  
+  select STDOUT;
+  close $FH;
+}
+
+#------------------------------------------------ prepare testbench
+sub buildTB {
+  open my $FH, ">tb_$ARGV[0].v" or die "Opening tb_$ARGV[0].v failed due to $!";
+  select $FH;
+
+	printf <<EOF;
+`define NEG @ (negedge clk)
+`define POS @ (posedge clk)
+`define PERIOD_BY_2 5
+
+module tb_$ARGV[0];
+EOF
+  
+  printf "\n// Inputs\nreg clk, rst;";
+  foreach (@inputs)   { printf "\nreg %-9s$_;",  $allPorts{$_}[1] ? "[$allPorts{$_}[1]:0] " : '' }
+  
+  printf "\n\n// Inouts" if (scalar @inouts);
+  foreach (@inouts)   { printf "\nwire %-9s$_;", $allPorts{$_}[1] ? "[$allPorts{$_}[1]:0] " : '' }
+  
+  printf "\n\n// Outputs";
+  foreach (@outputs)  { printf "\nwire %-9s$_;", $allPorts{$_}[1] ? "[$allPorts{$_}[1]:0] " : '' }
+
+	printf "\n\n$ARGV[0] U0 (.clk(clk), .rst(rst), %s);", join ", ", map { ".$_($_)" } @inputs, @inouts, @outputs;
+  
+	printf <<EOF, join "; ", map { "$_ = 'd0" } @inputs, @inouts;
+
+
+always #`PERIOD_BY_2 clk = ~clk;
+
+initial
+begin
+  clk = 'd0;
+  rst = 'd1;
+  `NEG;
+  `NEG rst = 'd0;
+  #500 \$finish;
+end
+
+initial
+begin
+  `POS;
+  %s;
+end
+
+endmodule
+EOF
+
+  select STDOUT;
+  close $FH;
+}

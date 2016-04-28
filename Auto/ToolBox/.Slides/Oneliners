@@ -1,0 +1,21 @@
+Oneliners
+-----------
+
+Counting...                                             alias Count 'unset CountVar ; set -f CountVar = (`echo \!*`) ; echo $#CountVar '
+(limits)
+
+Go to previous directory...                             cd -
+
+Removing empty files                                    find . -name '*' -type f -size 0 -exec rm -vf '{}' \;
+                                                        file * | gawk -F : '$2 ~ /empty/{print $1}' | xargs rm -vf
+
+Removing empty Directories                              find . -name '*' -type d -exec rmdir -pv '{}' \;
+
+Removing     matching lines from file                   sed -i '/pattern/d'   file
+Removing non matching lines from file                   sed -i '/pattern/\!d' file
+
+Removing files with     matching string                 grep -l 'pattern' files* | xargs rm -v
+Removing files with out matching string                 grep -L 'pattern' files* | xargs rm -v
+
+Printing USAGE                                          grep 'USAGE:' -m 1 -A $NO $0
+                                                        sed -n ${ST_LNO},${END_LNO}p $0

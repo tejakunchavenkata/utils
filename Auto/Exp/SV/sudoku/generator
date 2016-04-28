@@ -1,0 +1,77 @@
+#! /depot/perl-5.8.9/bin/perl -wl
+#------------------------------------------------
+# Author:    kasula
+# Created:   Tue Feb 12 03:08:10 PST 2013
+# File Name: generator
+# USAGE: 
+#       generator 
+# 
+# 
+#------------------------------------------------
+$b = $ARGV[0];
+$l = $b * $b;
+$enumStr = "AAA";
+
+# Single Box
+foreach $x (0 .. $b - 1) {
+  foreach $y (0 .. $b - 1) {
+    foreach $i (0 .. $b - 1) {
+      foreach $j (0 .. $b - 1) {
+        next if ($x == $i && $y == $j);
+        if ($x.$y < $i.$j) {
+          push @box, [$x, $y, $i, $j];
+        }
+      }
+    }
+  }
+}
+
+# All Boxes
+for ($x=0; $x<$l; $x+=$b) {
+  for ($y=0; $y<$l; $y+=$b) {
+    foreach $curBox (@box){
+      $cs{(${$curBox}[0] + $x) . ',' . (${$curBox}[1] + $y) . ',' . (${$curBox}[2] + $x) . ',' . (${$curBox}[3] + $y)}++;
+    }
+  }
+}
+
+# Rows & Cols
+foreach $x (0 .. $l - 1) {
+  foreach $y (0 .. $l -1) {
+    $cs{"$x,$y,$x,$_"}++ foreach ($y+1 .. $l -1);
+    $cs{"$y,$x,$_,$x"}++ foreach ($y+1 .. $l -1);
+  }
+}
+
+#printf "%s\n", "@{$_}" foreach (@box);
+#printf "%s\n", $_ foreach (sort {$a cmp $b} keys %cs);
+
+printf "class board;\n";
+printf "  typedef enum {\n";
+printf "    %s=$_,\n", $enumStr++ foreach (1 .. $l - 1);
+printf "    %s\n", $enumStr;
+printf "  } elements;\n";
+printf "  rand elements ele[$l][$l];\n";
+
+printf "  constraint all {\n";
+foreach (sort {$a cmp $b} keys %cs) {
+  @_ = split /,/;
+  print "    ele[$_[0]][$_[1]] != ele[$_[2]][$_[3]];";
+}
+printf "  // NUMBER OF CONSTRAINTS: %d\n", scalar keys %cs;
+printf "  }\n";
+
+printf "  function new ();\n";
+printf "    if (! this.randomize ()) begin\n";
+printf "      \$display (\"ERROR: Randomization failed...!!!\");\n";
+printf "    end\n";
+printf "  endfunction: new\n";
+
+
+printf "  function show ();\n";
+foreach $x (0 .. $l -1) {
+  printf "    \$display (%s);\n", join ", ", map {"ele[$x][$_]"} (0 .. $l -1);
+}
+printf "  endfunction: show\n";
+
+printf "endclass: board\n";

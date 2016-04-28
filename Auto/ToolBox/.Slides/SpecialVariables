@@ -1,0 +1,14 @@
+Special Variables
+-----------------
+
+
+set     rmstar                         |        $argv[0]        $argv[1]        $argv[2]
+set     autolist                       |        $0              $1              $2
+set     echo_style      = both         |        
+set     correct         = cmd          |        $argv[*]        ==      $*
+set     prompt          = '%? $ '      |        $#argv          ==      $#
+setenv  EDITOR          gvim           |        $%argv          !=      $% (SYNTAX ERROR)
+set     echo                           |        
+set     verbose                        |        $status         ==      $?
+                                       |        
+                                       |        STDIN : $<        

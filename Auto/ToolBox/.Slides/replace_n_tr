@@ -1,0 +1,22 @@
+REPLACE
+
+NAME
+       replace - a string-replacement utility
+
+SYNOPSIS
+       replace arguments
+
+
+
+TR
+
+NAME
+       tr - translate or delete characters
+
+SYNOPSIS
+       tr [OPTION]... SET1 [SET2]
+
+DESCRIPTION
+       -c, -C, --complement
+       -d, --delete
+       -s, --squeeze-repeats

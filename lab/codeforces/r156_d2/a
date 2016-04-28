@@ -1,0 +1,25 @@
+#! /usr/bin/perl -wl
+#------------------------------------------------
+# Author:    vj
+# Created:   Sun Dec 16 21:03:14 IST 2012
+# File Name: a
+# USAGE: 
+#       a 
+# 
+# 
+#------------------------------------------------
+my %cnt = (chest => 0, biceps => 0, back => 0);
+chomp (my $n = <STDIN>);
+chomp (my @vals = split /\s+/, <STDIN>);
+
+for (my $i = 0; $i < @vals; ) {
+        $cnt{chest} += $vals[$i]; last if (++$i >= scalar @vals);
+        $cnt{biceps} += $vals[$i]; last if (++$i >= scalar @vals);
+        $cnt{back} += $vals[$i]; last if (++$i >= scalar @vals);
+}
+
+$sol = 'chest';
+$sol = 'biceps' if ($cnt{biceps} > $cnt{$sol});
+$sol = 'back' if ($cnt{back} > $cnt{$sol});
+
+print $sol;

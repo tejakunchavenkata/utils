@@ -1,0 +1,1701 @@
+#!/usr/bin/perl
+# Writen by Roger Cole 11/2001
+#
+# Modified to allow for partial datasets
+# also working on bug where all spins get assigned early on in process
+#
+# Fixed FTest for Models 4 and 5
+# Fixed file cleanup for FTests 3/4 and 2/5
+#
+# v1.2 includes fixes for case sensitivity when selecting axially symmetric models
+# and in their inclusion in later fitting runs. Thanks to Dr. Doug Kojetin for pointing 
+# this out and providing the corrections.
+
+$modelfree = "/usr/local/modelfree4.1/modelfree4";
+
+#
+# If the config file is present, load the values and
+# get the show on the road!
+#
+
+
+if (-e "./FMF.config")
+{
+
+	open (INPUT,"FMF.config");
+
+	#
+	# First do everything but the files
+	#
+
+	while ( ($line=<INPUT>) !~ /file\{/)
+	{
+		@par=split /\s+/, $line;
+		$line =~ s/$par[0]//;
+		$line =~ s/\s//;
+		$line =~ s/\n//g;
+		${$par[0]}=$line;
+	}
+
+	#
+	# Now do the files separately, since they have to be put into
+	# a hash. This allows more than 2 fields if any cares to do it.
+	#
+
+	while ($line =~ /file\{/)
+	{
+		$line =~ s/\n//g;
+		$line =~ s/\{/ /g;
+		$line =~ s/\}/ /g;
+		@par = split /\s+/, $line;
+		$file{$par[1]}{$par[2]}=$par[3];
+		$line=<INPUT>;
+	}
+	close INPUT;
+
+	if (!(-e "$file{0}{R1}")) {die "Error with R1 file!\n";}
+	if (!(-e "$file{0}{R2}")) {die "Error with R2 file!\n";}
+	if (!(-e "$file{0}{NOE}")) {die "Error with NOE file!\n";}		
+
+	#
+	# A few parameters need to have values changed
+	#
+	
+	if ($tensor eq 'Axially Symmetric') 
+	{
+		$tensor="axial";
+		$pdboption = "-s $mpdb";
+	}
+	else 
+	{
+		$tensor="isotropic";
+		$pdboption = "";
+		$mpdb="";
+	}
+	
+}
+else
+{
+	print "\nERROR: Could not open config.FMF\n";
+	print "\tPlease run setupFMF\n\n";
+	exit (1);
+}
+
+#
+# Gridsearch and Parameter Optimization Limits 
+#
+
+# ******** Model 1 ***********************************
+
+$init[1][3]=0.8;			# S2s Initial value
+$min[1][3]=0;				# S2s Minimum Value
+$max[1][3]=1.0;			# S2s Maximum value
+$mgrid[1][3]=5;			# S2s gridsearch steps
+
+# ******** Model 2 ***********************************
+
+$init[2][3]=0.8;			# S2s Initial Value
+$min[2][3]=0;				# S2s Minimum Value
+$max[2][3]=1.0;			# S2s Maximum Value
+$mgrid[2][3]=8;			# S2s gridsearch steps
+
+$init[2][4]=30;			# te Initial Value
+$min[2][4]=0;				# te Minimum Value
+$max[2][4]=2000.0;		# te Maximum Value
+$mgrid[2][4]=200;			# te gridsearch steps
+
+
+# ******** Model 3 ***********************************
+
+$init[3][3]=0.8;			# S2s Initial Value
+$min[3][3]=0;				# S2s Minimum Value
+$max[3][3]=1.0;			# S2s Maximum Value
+$mgrid[3][3]=5;			# S2s gridsearch steps
+
+$init[3][5]=1.1;			# Rex Initial Value
+$min[3][5]=0;				# Rex Minimum Value
+$max[3][5]=80.0;			# Rex Maximum Value
+$mgrid[3][5]=10;			# Rex gridsearch steps
+
+# ******** Model 4 ***********************************
+
+$init[4][3]=0.8;			# S2s Initial Value
+$min[4][3]=0;				# S2s Minimum Value
+$max[4][3]=1.0;			# S2s Maximum Value
+$mgrid[4][3]=8;			# S2s gridsearch steps
+
+$init[4][4]=30;			# te Initial Value
+$min[4][4]=10;				# te Minimum Value
+$max[4][4]=2000.0;		# te Maximum Value
+$mgrid[4][4]=200;			# te gridsearch steps
+
+$init[4][5]=0;				# Rex Initial Value
+$min[4][5]=0;				# Rex Minimum Value
+$max[4][5]=80.0;			# Rex Maximum Value
+$mgrid[4][5]=8;			# Rex gridsearch steps
+
+
+# ******** Model 5 ***********************************
+
+$init[5][2]=0.8;			# S2f Initial Value
+$min[5][2]=0;				# S2f Minimum Value
+$max[5][2]=1.0;			# S2f Maximum Value
+$mgrid[5][2]=8;			# S2f gridsearch steps
+
+$init[5][3]=0.8;			# S2s Initial Value
+$min[5][3]=0;				# S2s Minimum Value
+$max[5][3]=1.0;			# S2s Maximum Value
+$mgrid[5][3]=8;			# S2s gridsearch steps
+
+$init[5][4]=1000;			# te Initial Value
+$min[5][4]=500;			# te Minimum Value
+$max[5][4]=(1500*$tm);	# te Maximum Value
+$mgrid[5][4]=200;			# te gridsearch steps
+
+#
+# No more user input below here ****************************************
+#
+
+$mi = "mfinput";
+$mp = "$jobname.MFPAR";
+$md = "$jobname.MFDATA";
+$mm = "$jobname.MFMODEL.1";	# First model file with all model 1
+
+#
+# Model Parameter Limits -- things not set by user
+#
+
+# Model 1
+
+$init[1][0]=0;			# tloc
+$init[1][1]=0;			# theta
+$init[1][2]=1;			# S2f
+$init[1][4]=0;			# te
+$init[1][5]=0;			# Rex
+
+$min[1][0]=0;			# tloc
+$min[1][1]=0;			# theta
+$min[1][2]=0;			# S2f
+$min[1][4]=0;			# te
+$min[1][5]=0;			# Rex
+
+$max[1][0]=18.4;		# tloc
+$max[1][1]=90.0;		# theta
+$max[1][2]=1.0;		# S2f
+$max[1][4]=0.0;		# te
+$max[1][5]=0.0;		# Rex
+
+$mgrid[1][0]=0;			# tloc
+$mgrid[1][1]=0;			# theta
+$mgrid[1][2]=0;			# S2f
+$mgrid[1][4]=0;			# te
+$mgrid[1][5]=0;			# Rex
+
+# Model 2
+
+$init[2][0]=0;			# tloc
+$init[2][1]=0;			# theta
+$init[2][2]=1;			# S2f
+$init[2][5]=0;			# Rex
+
+$min[2][0]=0;			# tloc
+$min[2][1]=0;			# theta
+$min[2][2]=0;			# S2f
+$min[2][5]=0;			# Rex
+
+$max[2][0]=18.4;		# tloc
+$max[2][1]=90.0;		# theta
+$max[2][2]=1.0;			# S2f
+$max[2][5]=0.0;			# Rex
+
+$mgrid[2][0]=0;			# tloc
+$mgrid[2][1]=0;			# theta
+$mgrid[2][2]=0;			# S2f
+$mgrid[2][5]=0;			# Rex
+
+# Model 3
+
+$init[3][0]=0;			# tloc
+$init[3][1]=0;			# theta
+$init[3][2]=1;			# S2f
+$init[3][4]=0;			# te
+
+$min[3][0]=0;			# tloc
+$min[3][1]=0;			# theta
+$min[3][2]=0;			# S2f
+$min[3][4]=0;			# te
+
+$max[3][0]=18.4;		# tloc
+$max[3][1]=90.0;		# theta
+$max[3][2]=1.0;			# S2f
+$max[3][4]=0.0;			# te
+
+
+$mgrid[3][0]=0;			# tloc
+$mgrid[3][1]=0;			# theta
+$mgrid[3][2]=0;			# S2f
+$mgrid[3][4]=0;			# te
+
+
+# Model 4
+
+$init[4][0]=0;			# tloc
+$init[4][1]=0;			# theta
+$init[4][2]=1;			# S2f
+
+$min[4][0]=0;			# tloc
+$min[4][1]=0;			# theta
+$min[4][2]=0;			# S2f
+
+$max[4][0]=18.4;		# tloc
+$max[4][1]=90.0;		# theta
+$max[4][2]=1.0;			# S2f
+
+$mgrid[4][0]=0;			# tloc
+$mgrid[4][1]=0;			# theta
+$mgrid[4][2]=0;			# S2f
+
+# Model 5
+
+$init[5][0]=0;			# tloc
+$init[5][1]=0;			# theta
+$init[5][5]=0;			# Rex
+
+$min[5][0]=0;			# tloc
+$min[5][1]=0;			# theta
+$min[5][5]=0;			# Rex
+
+$max[5][0]=18.4;		# tloc
+$max[5][1]=90.0;		# theta
+$max[5][5]=0.0;			# Rex
+
+$mgrid[5][0]=0;			# tloc
+$mgrid[5][1]=0;			# theta
+$mgrid[5][5]=0;			# Rex
+
+for ($c=0;$c<6;$c++)
+{
+	$init[0][$c]=0;
+	$min[0][$c]=0;
+	$max[0][$c]=0;
+}
+
+sub get_te
+{
+	my $line = 0;
+	my $res = 0;
+	my $tefit = 0;
+	my $teerror = 0;
+	
+	open (INPUT, $_[0]);
+	while (($line = <INPUT>) !~ /data_model_1/) {}
+	while (($line = <INPUT>) !~ /te/) {}
+	while (($line = <INPUT>) !~ /stop/)
+	{
+		@par = split /\s+/, $line;
+		$res = $par[1];
+		$tefit = $par[2];
+		$teerror = $par[6];
+
+		${$_[1]}{$res}{te}=$tefit;
+		${$_[1]}{$res}{teerror} = $teerror;
+		#print "$res ${$_[1]}{$res}{te}\t";
+		#print "${$_[1]}{$res}{teerror}\n";
+	}
+	close INPUT;
+}
+
+sub get_params
+{
+	my $line = 0;
+	my $model = 0;
+	my $res = 0;
+	my $S2fit = 0;
+	my $S2error = 0;
+	my %out=();
+	my $m=0;
+	my $res=0;
+	my $parfit=0;
+	my $simerror=0;
+	my $used=0;
+	my @par=0;
+
+	open (INPUT, $_[0]);
+	while (($line = <INPUT>) !~ /data_spin/) {};
+	while (($line = <INPUT>) !~ /Residue/) {};
+
+	while (($line = <INPUT>) =~ /[0-9]/)
+	{
+		@par = split /\s+/, $line;
+		$res = $par[1];
+		$m = $par[2];
+	
+		if ($m == "000100") {$model = 1;}
+		if ($m == "000110") {$model = 2;}	
+		if ($m == "000101") {$model = 3;}
+		if ($m == "000111") {$model = 4;}
+		if ($m == "001110") {$model = 5;}
+
+		$out{$res}{model} = $model;
+	}	
+
+	while (($line = <INPUT>) !~ /data_model_1/) {};
+
+	while (($line = <INPUT>) !~ /S2/) {};
+	while (($line = <INPUT>) !~ /stop/)
+	{
+		@par = split /\s+/, $line;
+
+		$res = $par[1];
+		$parfit = $par[2];
+		$simerror = $par[6];
+		$used = $par[4];
+	
+		if ($used == 1) 
+		{
+			$out{$res}{S2} = $parfit;
+			$out{$res}{S2error} = $simerror;
+		}
+		if ($used == 0)
+		{
+			$out{$res}{S2} = "";
+			$out{$res}{S2error} = "";
+		}
+	}
+
+	while (($line = <INPUT>) !~ /S2f/) {};
+	while (($line = <INPUT>) !~ /stop/)
+	{
+		@par = split /\s+/, $line;
+
+		$res = $par[1];
+		$parfit = $par[2];
+		$simerror = $par[6];
+		$used = $par[4];
+	
+		if ($used == 1) 
+		{
+			$out{$res}{S2f} = $parfit;
+			$out{$res}{S2ferror} = $simerror;
+		}
+		if ($used == 0)
+		{
+			$out{$res}{S2f} = "";
+			$out{$res}{S2ferror} = "";
+		}
+	}
+
+	while (($line = <INPUT>) !~ /S2s/) {};
+	while (($line = <INPUT>) !~ /stop/)
+	{	
+		@par = split /\s+/, $line;
+
+		$res = $par[1];
+		$parfit = $par[2];
+		$simerror = $par[6];
+		$used = $par[4];
+	
+		if ($used == 1) 
+		{
+			$out{$res}{S2s} = $parfit;
+			$out{$res}{S2serror} = $simerror;
+		}
+		if ($used == 0)
+		{
+			$out{$res}{S2s} = "";
+			$out{$res}{S2serror} = "";
+		}
+	}
+
+	while (($line = <INPUT>) !~ /te/) {};
+	while (($line = <INPUT>) !~ /stop/)
+	{
+		@par = split /\s+/, $line;
+
+		$res = $par[1];
+		$parfit = $par[2];
+		$simerror = $par[6];
+		$used = $par[4];
+	
+		if ($used == 1) 
+		{
+			$out{$res}{te} = $parfit;
+			$out{$res}{teerror} = $simerror;
+		}
+		if ($used == 0)
+		{
+			$out{$res}{te} = "";
+			$out{$res}{teerror} = "";
+		}
+	}
+
+	while (($line = <INPUT>) !~ /Rex/) {};
+	while (($line = <INPUT>) !~ /stop/)
+	{
+		@par = split /\s+/, $line;
+
+		$res = $par[1];
+		$parfit = $par[2];
+		$simerror = $par[6];
+		$used = $par[4];
+	
+		if ($used == 1) 
+		{
+			$out{$res}{Rex} = $parfit;
+			$out{$res}{Rexerror} = $simerror;
+		}
+		if ($used == 0)
+		{
+			$out{$res}{Rex} = "";
+			$out{$res}{Rexerror} = "";
+		}
+	}
+
+	while (($line = <INPUT>) !~ /data_sse/) {};
+	while (($line = <INPUT>) !~ /Percentile/) {};
+	while (($line = <INPUT>) =~ /[0-9]/)
+	{
+		@par = split /\s+/, $line;
+
+		$res = $par[1];
+		$out{$res}{SSE} = $par[2];
+
+		while (($line = <INPUT>) !~ /stop/) {};
+
+	}
+
+	close (INPUT);
+
+	return %out;
+}
+
+sub save_params
+{
+	open (OUTPUT,">$_[0]");
+	my %inp = %{$_[1]};
+	
+	print OUTPUT "Res\tModel\tS2\tS2err\tS2f\tS2ferr\tS2s\tS2serr\tte\t\tteerr\t\tRex\tRexerr\tSSE\n";
+	foreach $x (sort resort keys %inp)
+	{
+		print OUTPUT "$x\t$inp{$x}{model}\t";
+		print OUTPUT "$inp{$x}{S2}\t$inp{$x}{S2error}\t";
+		if ($inp{$x}{S2ferror} > 0.0) 
+		{
+			print OUTPUT "$inp{$x}{S2f}\t$inp{$x}{S2ferror}\t";
+		}
+		else {print OUTPUT "\t\t";}
+		if ($inp{$x}{S2serror} > 0.0) 
+		{
+			print OUTPUT "$inp{$x}{S2s}\t$inp{$x}{S2serror}\t";
+		}
+		else {print OUTPUT "\t\t";}
+		if ($inp{$x}{teerror} > 0.0) 
+		{
+			printf OUTPUT "%.4e\t%.4e\t",$inp{$x}{te},$inp{$x}{teerror};
+		}
+		else {print OUTPUT "\t\t\t\t";}
+		if ($inp{$x}{Rexerror} > 0.0) 
+		{
+			print OUTPUT "$inp{$x}{Rex}\t$inp{$x}{Rexerror}\t";
+		}
+		else {print OUTPUT "\t\t";}
+		printf OUTPUT "%.3f\n",$inp{$x}{SSE};
+	}
+
+	close OUTPUT;
+}
+
+sub make_mfinput
+{
+	#
+	# There are 3 flavors of input files. 1 has a fixed tensor and no ftest,
+	# 2 had fixed tensor plus ftest, and 3 optimizes the tensor. Each form
+	# will be used a different points in the ModelFree process.
+	#
+
+	open (OUTPUT, ">$_[0]");
+
+	if ($_[1] == 1)
+	{	
+		print OUTPUT "optimization tval\n";
+		print OUTPUT "seed $seed\n";
+		print OUTPUT "search grid\n";
+		print OUTPUT "diffusion $tensor none\n";
+		print OUTPUT "algorithm fix grid 1\n";
+		print OUTPUT "simulations pred $numsim 0.0\n";
+		print OUTPUT "selection none\n";
+		print OUTPUT "sim_algorithm fix none 1\n\n";
+	}
+	if ($_[1] == 2)
+	{	
+		print OUTPUT "optimization tval\n";
+		print OUTPUT "seed $seed\n";
+		print OUTPUT "search grid\n";
+		print OUTPUT "diffusion $tensor none\n";
+		print OUTPUT "algorithm fix grid 1\n";
+		print OUTPUT "simulations pred $numsim 0.0\n";
+		print OUTPUT "selection ftest\n";
+		print OUTPUT "sim_algorithm fix grid 1\n\n";
+	}
+	if ($_[1] == 3)
+	{	
+		print OUTPUT "optimization tval\n";
+		print OUTPUT "seed $seed\n";
+		print OUTPUT "search grid\n";
+		if ($do_axial_gridsearch == 0)
+			{print OUTPUT "diffusion $tensor none\n";}
+		if ($do_axial_gridsearch == 1)
+			{print OUTPUT "diffusion $tensor grid\n";}
+		print OUTPUT "algorithm powell grid 1\n";
+		print OUTPUT "simulations pred $numsim 0.0\n";
+		print OUTPUT "selection none\n";
+		print OUTPUT "sim_algorithm powell none 1\n\n";
+	}
+	
+
+	$f1 = scalar(keys(%file));
+	print OUTPUT "fields $f1 ";
+	foreach $f2 (sort {$a <=> $b} keys %file)
+	{
+		print OUTPUT "$file{$f2}{field} ";
+	}
+	print OUTPUT "\n\n";
+
+	if ($tensor =~ /isotropic/)
+	{
+		print OUTPUT "tm\t$tm\t1\t2\t$tmMin\t$tmMax\t$tmGrid\n";
+	}
+	else
+	{
+		print OUTPUT "tm\t$tm\t1\t2\t$tmMin\t$tmMax\t$tmGrid\n";
+		print OUTPUT "Dratio\t$Dratio\t1\t2\t$DratioMin\t$DratioMax\t$DratioGrid\n";
+		print OUTPUT "Theta\t$Theta\t1\t2\t$ThetaMin\t$ThetaMax\t$ThetaGrid\n";
+		print OUTPUT "Phi\t$Phi\t1\t2\t$PhiMin\t$PhiMax\t$PhiGrid\n";
+
+
+	}
+
+	close (OUTPUT);
+}
+
+sub resort
+{        
+	if (($a =~ /\d+/) && ($b =~ /\d+/))
+        {
+		($c =$a) =~ s/[a-zA-Z]//g;
+                ($d = $b) =~ s/[a-zA-Z]//g;
+		return ($c <=> $d);         
+	}         
+	elsif ($a =~ /\d+/) {return -1;}
+	elsif ($b =~ /\d+/) {return 1;}
+        else {return ($a cmp $b);}
+}
+
+sub show_model
+{
+	my %model = %{$_[0]};
+	print "\nCurrent model assignments:\n";
+	for ($y = 1; $y < 6; $y++)
+	{
+		print "Model $y spins:\n";
+		foreach $x (sort resort keys %model)
+		{
+			if ($model{$x} == $y) {print "$x ";}
+		}
+		print "\n";
+	}
+	print "Unassigned spins:\n";
+	foreach $x (sort resort keys %model)
+	{
+		if ($model{$x} == 0) {print "$x ";}
+	}
+	print "\n";
+}
+
+sub make_mfmodel 
+{
+	#
+	# There are 2 flavors of mfmodel files. The first does not perform Ftest,
+	# the second form does.
+	#	
+
+
+	my @m = (
+		[0, 0, 0, 0, 0, 0],
+	 	[0, 0, 0, 1, 0, 0],
+		[0, 0, 0, 1, 1, 0],
+		[0, 0, 0, 1, 0, 1],
+		[0, 0, 0, 1, 1, 1],
+		[0, 0, 1, 1, 1, 0], 
+		[0, 0, 1, 1, 1, 1],
+		);
+	my $c=0;
+	my @a = @_;
+	my %mmodel=();
+	my %mmodel2=();
+	my $mod=0;
+	my $set=0;
+	my $spin=0;	
+
+	if ($#a == 1)
+	{
+		%mmodel = %{$_[1]};
+		open (MFMODEL, "> $_[0]");
+
+		foreach $c (sort resort keys %mmodel)
+		{
+			$mod = $mmodel{$c};
+			if ($mod != 0)
+			{
+				print MFMODEL "spin\t$c\n";
+				print MFMODEL "M1 tloc  $init[$mod][0] $m[$mod][0] 2 $min[$mod][0] $max[$mod][0] $mgrid[$mod][0]\n"; 
+				print MFMODEL "M1 Theta $init[$mod][1] $m[$mod][1] 2 $min[$mod][1] $max[$mod][1] $mgrid[$mod][1]\n";
+				print MFMODEL "M1 S2f   $init[$mod][2] $m[$mod][2] 2 $min[$mod][2] $max[$mod][2] $mgrid[$mod][2]\n";
+				print MFMODEL "M1 S2s   $init[$mod][3] $m[$mod][3] 2 $min[$mod][3] $max[$mod][3] $mgrid[$mod][3]\n";
+				print MFMODEL "M1 te    $init[$mod][4] $m[$mod][4] 2 $min[$mod][4] $max[$mod][4] $mgrid[$mod][4]\n";
+				print MFMODEL "M1 Rex   $init[$mod][5] $m[$mod][5] 2 $min[$mod][5] $max[$mod][5] $mgrid[$mod][5]\n";
+				print MFMODEL "\n";
+
+			}
+		}
+		close (MFMODEL);
+	}
+
+	if ($#a == 2)
+	{
+		%mmodel = %{$_[1]};
+		%mmodel2 = %{$_[2]};
+		open (MFMODEL, "> $_[0]");
+		foreach $c (sort resort keys %mmodel)
+		{
+			$mod = $mmodel{$c};
+			if ($mod != 0)
+			{
+				print MFMODEL "spin\t$c\n";
+				print MFMODEL "M1 tloc  $init[$mod][0] $m[$mod][0] 2 $min[$mod][0] $max[$mod][0] $mgrid[$mod][0]\n"; 
+				print MFMODEL "M1 Theta $init[$mod][1] $m[$mod][1] 2 $min[$mod][1] $max[$mod][1] $mgrid[$mod][1]\n";
+				print MFMODEL "M1 S2f   $init[$mod][2] $m[$mod][2] 2 $min[$mod][2] $max[$mod][2] $mgrid[$mod][2]\n";
+				print MFMODEL "M1 S2s   $init[$mod][3] $m[$mod][3] 2 $min[$mod][3] $max[$mod][3] $mgrid[$mod][3]\n";
+				print MFMODEL "M1 te    $init[$mod][4] $m[$mod][4] 2 $min[$mod][4] $max[$mod][4] $mgrid[$mod][4]\n";
+				print MFMODEL "M1 Rex   $init[$mod][5] $m[$mod][5] 2 $min[$mod][5] $max[$mod][5] $mgrid[$mod][5]\n";
+				print MFMODEL "\n";
+
+				$mod = $mmodel2{$c};			
+
+				print MFMODEL "M2 tloc  $init[$mod][0] $m[$mod][0] 2 $min[$mod][0] $max[$mod][0] $mgrid[$mod][0]\n"; 
+				print MFMODEL "M2 Theta $init[$mod][1] $m[$mod][1] 2 $min[$mod][1] $max[$mod][1] $mgrid[$mod][1]\n";
+				print MFMODEL "M2 S2f   $init[$mod][2] $m[$mod][2] 2 $min[$mod][2] $max[$mod][2] $mgrid[$mod][2]\n";
+				print MFMODEL "M2 S2s   $init[$mod][3] $m[$mod][3] 2 $min[$mod][3] $max[$mod][3] $mgrid[$mod][3]\n";
+				print MFMODEL "M2 te    $init[$mod][4] $m[$mod][4] 2 $min[$mod][4] $max[$mod][4] $mgrid[$mod][4]\n";
+				print MFMODEL "M2 Rex   $init[$mod][5] $m[$mod][5] 2 $min[$mod][5] $max[$mod][5] $mgrid[$mod][5]\n";
+				print MFMODEL "\n";
+			}
+			
+		}
+		close (MFMODEL);
+	}
+
+	#
+	# Now create the MFDATA file
+	#
+	open (OUTPUT, ">$jobname.MFDATA");
+
+	foreach $spin (sort resort keys %spins)
+	{
+		if ($mmodel{$spin} != 0)
+		{
+			print OUTPUT "spin\t$spin\n";
+			foreach $set (sort {$a <=> $b} keys %data)
+			{
+				$field = $file{$set}{field};
+				$data{$set}{$spin}{R1} += 0.0;
+				$data{$set}{$spin}{R2} += 0.0;
+				$data{$set}{$spin}{NOE} += 0.0;
+				$data{$set}{$spin}{R1err} += 0.0;
+				$data{$set}{$spin}{R2err} += 0.0;
+				$data{$set}{$spin}{NOEerr} += 0.0;
+				
+
+				print OUTPUT "R1\t$field\t";
+				print OUTPUT "$data{$set}{$spin}{R1}\t$data{$set}{$spin}{R1err}\t";
+				if ($data{$set}{$spin}{R1} > 0) {print OUTPUT "1\n";}
+				else {print OUTPUT "0\n";}
+
+				print OUTPUT "R2\t$field\t";
+				print OUTPUT "$data{$set}{$spin}{R2}\t$data{$set}{$spin}{R2err}\t";
+				if ($data{$set}{$spin}{R2} > 0) {print OUTPUT "1\n";}
+				else {print OUTPUT "0\n";}
+
+				print OUTPUT "NOE\t$field\t";
+				print OUTPUT "$data{$set}{$spin}{NOE}\t$data{$set}{$spin}{NOEerr}\t";
+				if (abs($data{$set}{$spin}{NOE}) > 0) {print OUTPUT "1\n";}
+				else {print OUTPUT "0\n";}
+
+				print OUTPUT "\n";
+			}
+		}
+	}
+	close (OUTPUT);
+	
+	#
+	# Now create the MFPAR file
+	#
+	open (OUTPUT, ">$jobname.MFPAR");
+	foreach $spin (sort resort keys %spins)
+	{
+		if ($mmodel{$spin} != 0)
+		{
+			print OUTPUT "spin\t$spin\n";
+			print OUTPUT "constants\t$spin\tN15\t$gamma\t$rNH\t$N15CSA\n";
+			print OUTPUT "vector N H\n\n";	
+		
+		}
+	}
+	close OUTPUT;
+
+}
+
+
+
+sub getSSE
+{
+	my $line=0;
+	my $done=0;
+	my $res=0;
+	my $SSE=0;
+	my @par=();
+	my $SSE95=0;
+
+	open(INPUT,$_[0]);
+
+	while (($line = <INPUT>) !~ /data_sse/) {}
+	while (($line = <INPUT>) !~ /Percentile/) {}
+
+	$line = <INPUT>;
+	$done = 0;
+	while ($done == 0)
+	{
+		@par = split /\s+/, $line;
+		$res = $par[1];
+		$SSE = $par[2];
+	
+		$found = 0;
+		while ($found == 0)
+		{
+			$line = <INPUT>;
+			@par = split /\s+/, $line;
+			if ($par[1] =~ /$cutoff/) {$found =1;}
+		}
+		$SSE95 = $par[2];
+	
+		${$_[1]}{$res}{SSE}=$SSE;
+		${$_[1]}{$res}{SSE95}=$SSE95;
+	
+		while (($line = <INPUT>) !~ /stop/) {}
+		$line = <INPUT>;
+		if ($line == "\n") {$done = 1;}	
+	}
+}
+
+sub getFtest
+{
+	open (INPUT, $_[0]);
+
+	while (($line = <INPUT>) !~ /data_F_dist/) {}
+	while (($line = <INPUT>) !~ /Percentile/) {}
+
+	$line = <INPUT>;
+	$done = 0;
+	while ($done == 0)
+	{
+		@par = split /\s+/, $line;
+		$res = $par[1];
+		$SSE = $par[2];
+		#$SSE95 = $par[3];	
+
+		$found = 0;
+		while ($found == 0)
+		{
+			$line = <INPUT>;
+			@par = split /\s+/, $line;
+			if ($par[1] =~ /$Fcutoff/) {$found =1;}
+		}
+		$SSE95 = $par[2];
+
+		#while (($line = <INPUT>) !~ /$Fcutoff/) {}
+		#@par = split /\s+/, $line;
+		#$SSE95 = $par[2];
+	
+		${$_[1]}{$res}{SSE}=$SSE;
+		${$_[1]}{$res}{SSE95}=$SSE95;
+	
+		while (($line = <INPUT>) !~ /stop/) {}
+		$line = <INPUT>;
+		if ($line == "\n") {$done = 1;}	
+	}
+}
+
+#
+# Here are the necessary routines to set up the input files.
+#
+
+sub load_data
+{
+	my %data=();
+	my $set=0;
+	my @par=();
+	my $res=0;
+	my $val=0;
+	my $err=0;
+	my @lines=();
+	my $line=0;
+
+	foreach $set (sort {$a <=> $b} keys %file)
+	{	 
+		$field = $file{$set}{field};
+	
+		open (INPUT, $file{$set}{R1});
+		@lines = <INPUT>;
+		close INPUT;
+		foreach $line (@lines)
+		{ 
+			@par = split /\s+/, $line;
+			$res = $par[0];
+			$val = $par[1];
+			$err = $par[2];	
+
+			if ($res !~ /X/)
+			{
+				$res =~ s/[A-Z]//g;
+				$data{$set}{$res}{R1}=$val;
+				$data{$set}{$res}{R1err}=$err;
+				$spins{$res}=1;
+			}
+		}
+
+		open (INPUT, $file{$set}{NOE});
+		@lines = <INPUT>;
+		close INPUT;
+		foreach $line (@lines)
+		{
+			@par = split /\s+/, $line;
+			$res = $par[0];
+			$val = $par[1];
+			$err = $par[2];	
+
+			if ($res !~ /X/)
+			{
+				$res =~ s/[A-Z]//g;
+				$data{$set}{$res}{NOE}=$val;
+				$data{$set}{$res}{NOEerr}=$err;
+				$spins{$res}=1;
+			}
+		}
+
+		open (INPUT, $file{$set}{R2});
+		@lines = <INPUT>;
+		close INPUT;
+		foreach $line (@lines)
+		{
+			@par = split /\s+/, $line;
+			$res = $par[0];
+			$val = $par[1];
+			$err = $par[2];	
+
+			if ($res !~ /X/)
+			{
+				$res =~ s/[A-Z]//g;
+				$data{$set}{$res}{R2}=$val;
+				$data{$set}{$res}{R2err}=$err;
+				$spins{$res}=1;
+			}
+		}
+	}
+
+	#
+	# Now to figure out how many data points per residue
+	#
+
+	%numpts=(); 
+
+	foreach $set (keys %data)
+	{
+		foreach $res (keys %spins)
+		{
+			if ($data{$set}{$res}{R1} > 0) {$numpts{$res}++;} 
+			if ($data{$set}{$res}{R2} > 0) {$numpts{$res}++;} 
+			if (abs($data{$set}{$res}{NOE}) > 0) {$numpts{$res}++;}
+		}
+	} 
+	
+	return (%data);
+}
+
+#
+# This is where the hard part of doing the model selection happens
+#
+
+sub run_modelfree()
+{
+	my $x;
+	my $numftest;
+	my %mmodel=();	
+	my %SSEdata=();
+	my %SSEdata1=();
+	my %SSEdata2=();	
+	my %SSEdata3=();
+	my %SSEdata4=();
+	my %SSEdata5=();
+	my %tedata=();
+	my %model=();
+	my %model1=();
+	my %model2=();
+	my %model3=();
+	my %S2 = ();
+	my %S2b = ();
+	
+	print "\n ***** Starting Model 1 *****\n\n";
+
+	foreach $x (sort resort keys %spins)
+	{
+		$mmodel{$x}=1;
+		$S2{$x}=0;
+	}
+
+	make_mfmodel("mfmodel.1",\%mmodel);
+
+	make_mfinput("mfinput",1);			# Fixed tensor, no ftest
+	make_mfinput("mfinput.2",2);		# Fixed tensor + ftest
+	make_mfinput("mfinput.3",3);		# Fill tensor optimization
+
+	if (-e "$mpdb.rotate") {system("rm $mpdb.rotate");}
+	if (-e "mfout.1") {system("rm mfout.1");}
+	system("$modelfree -i $mi -p $mp -d $md -m mfmodel.1 -o mfout.1 $pdboption");
+
+	%SSEdata=();
+	%model=();
+	%S2b=();
+	getSSE("mfout.1",\%SSEdata);
+	%S2b=get_params("mfout.1");
+
+	print "Results for Model 1:\n";
+	foreach $x (sort resort keys %SSEdata)
+	{
+		printf "$x\t%.3f\t\t%.3f",$SSEdata{$x}{SSE},$SSEdata{$x}{SSE95};
+		if ($SSEdata{$x}{SSE} < $SSEdata{$x}{SSE95})
+		{
+			$model{$x}=1;
+			$S2{$x}=$S2b{$x};
+			print "***";
+		}
+		else {$model{$x}=0;}
+		print "\n";
+	}
+	print "\n\n";
+
+	print "\n\nFinished Model 1\n";
+	show_model(\%model);
+
+	if ($model1only ne 'Yes')
+	{
+
+
+		#
+		# Next a new MFMODEL file must be made to check Model 2 and ModelFree
+		# must be executed. This must also be done for the Ftest.
+		#
+
+		print "\n ***** Starting Model 2 *****\n\n";
+
+		%model2=();
+		$num=0;
+		foreach $x (keys %SSEdata)
+		{
+			if ($model{$x} == 0) 
+			{
+				$model2{$x} = 2;
+				$num++;
+			}
+			else {$model2{$x}=0;}
+		}
+
+		if ($num > 0)
+		{
+			make_mfmodel("mfmodel.2",\%model2);
+			if (-e "$mpdb.rotate") {system("rm $mpdb.rotate");}
+			if (-e "mfout.2") {system("rm mfout.2");}
+			system("$modelfree -i $mi -p $mp -d $md -m mfmodel.2 -o mfout.2 $pdboption");
+
+			%SSEdata2=();
+			%model3=();
+			%model4=();
+			%S2b=();
+			getSSE("mfout.2",\%SSEdata2);
+			%S2b=get_params("mfout.2");
+			$num2=0;
+			foreach $x (keys %SSEdata2)
+			{
+				if (($model{$x} == 0) && ($SSEdata2{$x}{SSE} < $SSEdata2{$x}{SSE95}))
+				{
+					$model3{$x} = 1;
+					$model4{$x} = 2;
+					$num2++;
+				}
+				else
+				{
+					$model3{$x} = 0;
+					$model4{$x} = 0;
+				}
+			}
+
+			if ($num2 > 0)
+			{
+				make_mfmodel("mfmodel.12",\%model3,\%model4);
+				if (-e "$mpdb.rotate") {system("rm $mpdb.rotate");}
+				if (-e "mfout.12") {system("rm mfout.12");}
+				system("$modelfree -i mfinput.2 -p $mp -d $md -m mfmodel.12 -o mfout.12 $pdboption");
+
+				print "Results for Model 2:\n";
+				%SSEdata3=();
+				getFtest("mfout.12",\%SSEdata3);
+				foreach $x (sort resort keys %SSEdata2)
+				{
+					if ($model{$x} == 0)
+					{
+						printf "$x\t%.3f\t\t%.3f",$SSEdata2{$x}{SSE},$SSEdata2{$x}{SSE95};
+						if ($SSEdata2{$x}{SSE} < $SSEdata2{$x}{SSE95}) {print "*";}		
+						printf "\tFtest:\t%3.3e\t\t%3.3e",$SSEdata3{$x}{SSE},$SSEdata3{$x}{SSE95};
+	
+						$t1=0;
+						$t2=0;
+						if ($SSEdata2{$x}{SSE} < $SSEdata2{$x}{SSE95})
+							{$t1=1;}
+						if ($SSEdata3{$x}{SSE} > $SSEdata3{$x}{SSE95})
+							{$t2=1;}
+						if ( ($t1==1) && ($t2==1) ) 	
+						{
+							 $model{$x} = 2; 
+							 $S2{$x}=$S2b{$x};
+							 print "***";
+						}
+						print "\n";
+					}
+				}
+				print "\n\n";
+
+				print "\n\nFinished Model 2\n";
+				show_model(\%model);
+			}
+		}
+
+		#
+		# Next a new MFMODEL file must be made to check Model 3 and ModelFree
+		# must be executed. This must also be done for the Ftest.
+		#
+
+		print "\n ***** Starting Model 3 *****\n";
+
+		%model2=();
+		$num=0;
+		foreach $x (keys %SSEdata)
+		{
+			if ($model{$x} == 0) 
+			{
+				$model2{$x} = 3;
+				$num++;
+			}
+			else {$model2{$x}=0;}
+		}
+
+		if ($num > 0)
+		{
+			make_mfmodel("mfmodel.3",\%model2);
+			if (-e "$mpdb.rotate") {system("rm $mpdb.rotate");}
+			if (-e "mfout.3") {system("rm mfout.3");}
+			system("$modelfree -i $mi -p $mp -d $md -m mfmodel.3 -o mfout.3 $pdboption");
+	
+			%SSEdata2=();
+			%model3=();
+			%model4=();
+			%S2b=();
+			getSSE("mfout.3",\%SSEdata2);
+			%S2b=get_params("mfout.3");
+			$num2=0;
+			foreach $x (keys %SSEdata2)
+			{
+				if (($model{$x} == 0) && ($SSEdata2{$x}{SSE} < $SSEdata2{$x}{SSE95}))
+				{
+					$model3{$x}=1;
+					$model4{$x}=3;
+					$num2++;
+				}
+				else 
+				{
+					$model3{$x}=0;
+					$model4{$x}=0;
+				}
+			}
+
+			if ($num2 > 0)
+			{
+				make_mfmodel("mfmodel.13",\%model3,\%model4);
+				if (-e "$mpdb.rotate") {system("rm $mpdb.rotate");}
+				if (-e "mfout.13") {system("rm mfout.13");}
+				system("$modelfree -i mfinput.2 -p $mp -d $md -m mfmodel.13 -o mfout.13 $pdboption");
+
+				print "\n\nResults for Model 3:\n";
+				%SSEdata3=();
+				getFtest("mfout.13",\%SSEdata3);
+				foreach $x (sort resort keys %SSEdata2)
+				{
+					if ($model{$x} == 0)
+					{
+	
+						printf "$x\t%.3f\t\t%.3f",$SSEdata2{$x}{SSE},$SSEdata2{$x}{SSE95};
+						if ($SSEdata2{$x}{SSE} < $SSEdata2{$x}{SSE95}) {print "*";}		
+						printf "\tFtest:\t%3.3e\t\t%3.3e",$SSEdata3{$x}{SSE},$SSEdata3{$x}{SSE95};
+	
+
+						$t1=0;
+						$t2=0;
+						if ($SSEdata2{$x}{SSE} < $SSEdata2{$x}{SSE95})
+							{$t1=1;}
+						if ($SSEdata3{$x}{SSE} > $SSEdata3{$x}{SSE95})
+							{$t2=1;}
+						if ( ($t1==1) && ($t2==1) ) 
+							{
+								$model{$x} = 3; 
+							 	$S2{$x}=$S2b{$x};
+								 print "***";
+							}
+						print "\n";
+					}
+				}
+			}
+			print "\n\n";
+			print "\n\nFinished Model 3\n";
+			show_model(\%model);
+
+		}
+	
+	#	
+	# 			Applying the extra rule . .
+	#
+
+		%S2b=();
+		getSSE("mfout.1",\%SSEdata1);
+		%S2b=get_params("mfout.1");
+	
+		print "\n\nUnassigned spins where Model 1 SSE < $almost1:\n\n";
+	
+		foreach $x (sort resort keys %SSEdata1)
+		{
+			$r1 = $SSEdata1{$x}{SSE};
+			$r2 = $SSEdata1{$x}{SSE95};
+			$r3  = $almost1;		
+
+			if (($r1 < $r3) && ($model{$x} == 0))
+			{
+				$model{$x} = 1;
+				$S2{$x}=$S2b{$x};
+				print "Spin $x: SSE $r1 Old Cutoff $r2 New Cutoff $r3\n";
+			}
+		}
+		print "\n";
+		show_model(\%model);	 
+
+
+	#
+	# Now try fitting remaining spins to Model 4
+	#
+		print "\n ***** Starting Model 4 *****\n";
+		
+		%model2=();
+		%model3=();
+		%model4=();
+		$num=0;
+		foreach $x (keys %SSEdata)
+		{
+			if ($model{$x} == 0) 
+			{
+				$model2{$x} = 4;
+				$num++;
+			}
+			else {$model2{$x}=0;}
+		}
+
+		if ($num > 0)
+		{
+			make_mfmodel("mfmodel.4",\%model2);
+			if (-e "$mpdb.rotate") {system("rm $mpdb.rotate");}
+			if (-e "mfout.4") {system("rm mfout.4");}
+			system("$modelfree -i $mi -p $mp -d $md -m mfmodel.4 -o mfout.4 $pdboption");
+
+			%SSEdata2=();
+			%SSEdata3=();
+			%S2b=();
+			$numftest=0;
+			getSSE("mfout.4",\%SSEdata2);
+			%S2b=get_params("mfout.4");
+			print "Results for Model 4\n";
+			foreach $x (sort resort keys %SSEdata2)
+			{
+				if ($model{$x} == 0)
+				{
+					printf "$x\t%3.4e\t%3.4e",$SSEdata2{$x}{SSE},$SSEdata2{$x}{SSE95};
+
+					if ($numpts{$x} < 4)
+					{
+						if ($SSEdata2{$x}{SSE} < 0.001)
+						{
+							$model{$x} = 4;
+							$S2{$x}=$S2b{$x};
+							print "***";
+						}
+					}
+					if ($numpts{$x} > 3)
+					{
+						if ($SSEdata2{$x}{SSE} < $SSEdata2{$x}{SSE95})
+						{
+							$numftest++;
+							print "*** Need FTest";
+							$model3{$x}=3;
+							$model4{$x}=4;
+						}
+						else
+						{
+							$model3{$x}=0;
+							$model4{$x}=0;
+						}
+					}
+					print "\n";
+				}
+			}
+
+			if ($numftest > 0)
+			{
+				print "\n";
+				print "Need to perform FTest for Model 4\n\n";
+
+				make_mfmodel("mfmodel.34",\%model3,\%model4);
+				if (-e "$mpdb.rotate") {system ("rm $mpdb.rotate");}
+				if (-e "mfout.34") 	{system ("rm mfout.34");}
+				system("$modelfree -i mfinput.2 -p $mp -d $md -m mfmodel.34 -o mfout.34 $pdboption");
+			
+				getFtest("mfout.34",\%SSEdata3);
+				foreach $x (sort resort keys %SSEdata3)
+				{
+					print "$x\t$SSEdata3{$x}{SSE}\t$SSEdata3{$x}{SSE95}";
+					if ($SSEdata3{$x}{SSE} > $SSEdata3{$x}{SSE95})
+					{
+						print "$x PASSED FTest\n";
+						$model{$x}=4;
+						$S2{$x}=$S2b{$x};
+					}
+					else
+					{
+						print "$x FAILED FTest\n";
+					}
+				}
+			}
+
+			print "\n\nFinished Model 4\n";
+			show_model(\%model);
+		}
+
+
+	#
+	# 	Last but not least, Model 5
+	#
+
+
+		print "\n ***** Starting Model 5 *****\n\n";
+		%model2=();
+		%model3=();
+		%model4=();
+		$num=0;
+		foreach $x (keys %SSEdata)
+		{
+			if ($model{$x} == 0) 
+			{
+				$model2{$x} = 5;
+				$num++;
+			}
+			else {$model2{$x}=0;}
+		}
+
+		if ($num > 0)
+		{
+			make_mfmodel("mfmodel.5",\%model2);
+			if (-e "$mpdb.rotate") {system("rm $mpdb.rotate");}
+			if (-e "mfout.5") {system("rm mfout.5");}
+			system("$modelfree -i $mi -p $mp -d $md -m mfmodel.5 -o mfout.5 $pdboption");
+
+			%SSEdata2=();
+			%S2b=();
+			%tedata=();
+			$numftest=0;
+			getSSE("mfout.5",\%SSEdata2);
+			get_te("mfout.5",\%tedata);
+			%S2b=get_params("mfout.5");
+			print "\n\nResults for Model 5\n";
+			foreach $x (sort resort keys %SSEdata2)
+			{
+				if ($model{$x} == 0)
+				{
+					printf "$x\t%3.4e\t%3.4e",$SSEdata2{$x}{SSE},$SSEdata2{$x}{SSE95};
+					$fit=1;
+					if ($tedata{$x}{te} > ($tm*1000)) 
+					{
+						$fit=0;
+						print " Tm";
+					}
+					if ($tedata{$x}{te} < $tedata{$x}{teerror})
+					{
+						$fit=0;
+						print " Err";
+					}
+
+					if ($numpts{$x} < 4)
+					{
+						if (($SSEdata2{$x}{SSE} < 0.001) && ($fit ==1))
+						{
+							$model{$x}=5;
+							$S2{$x}=$S2b{$x};
+							print "***";
+						}
+					}
+					if ($numpts{$x} > 3)
+					{
+						if (($SSEdata2{$x}{SSE} < $SSEdata2{$x}{SSE95}) && ($fit==1))
+						{
+							print " Need FTest";
+							$model3{$x}=2;
+							$model4{$x}=5;
+							$numftest++;
+						}
+						else
+						{
+							$model3{$x}=0;
+							$model4{$x}=0;
+						}
+					}
+					print "\n";
+				}
+			}
+	
+			if ($numftest > 0)
+			{
+				print "\n";
+				print "Performing FTest for Model 5\n\n";
+												
+				make_mfmodel("mfmodel.25",\%model3,\%model4);
+				if (-e "$mpdb.rotate") {system ("rm $mpdb.rotate");}
+				if (-e "$mfout.25")	{system ("rm mfout.25");}
+				system("$modelfree -i mfinput.2 -p $mp -d $md -m mfmodel.25 -o mfout.25 $pdboption");
+
+				getFtest("mfout.25",\%SSEdata3);
+				foreach $x (sort resort keys %SSEdata3)
+				{
+					print "$x\t$SSEdata3{$x}{SSE}\t$SSEdata3{$x}{SSE95}";
+					if ($SSEdata3{$x}{SSE} > $SSEdata3{$x}{SSE95})
+					{
+						print " PASSED FTEST\n";
+						$model{$x}=5;
+						$S2{$x}=$S2b{$x};
+					}
+					else {print " FAILED FTEST\n";}
+				}
+			}
+		}
+		print "\n\nFinished Model 5\n";
+		show_model(\%model);
+	}
+
+	%SSEdata1=();
+	%SSEdata2=();
+	%SSEdata3=();
+	%SSEdata4=();
+	%SSEdata5=();
+	%model3=();
+	getSSE("mfout.1",\%SSEdata1);  		
+	if ($model1only ne "Yes")
+	{
+		if (-e "mfout.2") {getSSE("mfout.2",\%SSEdata2);}  		
+		if (-e "mfout.3") {getSSE("mfout.3",\%SSEdata3);}
+		if (-e "mfout.4") {getSSE("mfout.4",\%SSEdata4);}  		
+		if (-e "mfout.5") {getSSE("mfout.5",\%SSEdata5);}
+	}	
+
+	print "\n\nRemaining unassigned spins: \n";
+
+	foreach $x (sort resort keys %SSEdata1)
+	{
+		if ($model{$x} == 0)
+		{
+			print "Residue $x SSEs:\n";
+			print "Model 1: $SSEdata1{$x}{SSE} $SSEdata1{$x}{SSE95}\n";
+			print "Model 2: $SSEdata2{$x}{SSE} $SSEdata2{$x}{SSE95}\n";
+			print "Model 3: $SSEdata3{$x}{SSE} $SSEdata3{$x}{SSE95}\n";
+			print "Model 4: $SSEdata4{$x}{SSE} $SSEdata4{$x}{SSE95}\n";
+			print "Model 5: $SSEdata5{$x}{SSE} $SSEdata5{$x}{SSE95}\n";
+
+			print "\n\n";
+		}
+	}
+
+	#
+	# Now to select which spins to use during the diffusion tensor
+	#	optimization
+	#
+	# Throw out: S2 < $S2cutoff
+	#
+
+	
+	if ($optimize eq "Yes")
+	{
+		print "\nRemoving undesired spins for diffusion tensor optimization\n";
+		
+		%model3=();
+		foreach $x (sort resort keys %model)
+		{
+			$model3{$x}=$model{$x};
+			if (($model{$x} > 0) && ($model{$x} < 5) && ($S2{$x}{S2} < $S2cutoff))
+			{
+				$model3{$x}=0;
+				print "Throwing out $x, low S2 = $S2{$x}{S2}\n";
+			}
+			if (($model{$x}==5) && ($S2{$x}{S2} < ($S2cutoff*$S2cutoff)))
+			{
+				$model3{$x}=0;
+				print "Throwing out $x, low S2 = $S2{$x}{S2}\n";
+			}
+			
+		}
+		print "\n\n";	
+
+		print "\nModel assignments for final optimization:\n";
+	
+		show_model(\%model3);
+	
+	
+		make_mfmodel("mfmodel.final",\%model3);
+		if (-e "$mpdb.rotate") {system("rm $mpdb.rotate");}
+		if (-e "mfout.final") {system("rm mfout.final");}
+		system("$modelfree -i mfinput.3 -p $mp -d $md -m mfmodel.final -o mfout.final $pdboption");
+	}
+	else
+	{
+		print "Skipping tensor optimization.\n";
+	}
+
+	return %S2;
+}
+
+sub get_tensor
+{
+	my $line=0;
+	my @par=0;
+	my %out=();
+
+	open (INPUT, $_[0]);
+	while (($line=<INPUT>) !~ /Diffusion_name/) {}
+
+	$line=<INPUT>;
+	@par=split /\s+/, $line;
+	$out{tm} = $par[3];
+
+	if ($tensor eq 'axial')
+	{
+		$line=<INPUT>;
+		@par=split /\s+/, $line;
+		$out{dratio} = $par[3];
+	
+		$line=<INPUT>;
+		@par=split /\s+/, $line;
+		$out{theta} = $par[3];
+
+		$line=<INPUT>;
+		@par=split /\s+/, $line;
+		$out{phi} = $par[3];
+	}
+	close INPUT;
+
+	
+
+	return %out;
+}
+
+
+
+#
+# Main Program Loop (finally!)
+#
+
+#
+# First clear some variables, make some files and clean up
+# any previous results
+#
+
+$garbage[0]="$jobname.log";
+$garbage[1]="$jobname.MFDATA";
+$garbage[2]="$jobname.MFPAR";
+$garbage[3]="mfinput";
+$garbage[4]="mfinput.2";
+$garbage[5]="mfinput.3";
+$garbage[6]="mfmodel.1";
+$garbage[7]="mfmodel.12";
+$garbage[8]="mfmodel.13";
+$garbage[9]="mfmodel.2";
+$garbage[10]="mfmodel.3";
+$garbage[11]="mfmodel.4";
+$garbage[12]="mfmodel.5";
+$garbage[13]="mfout.1";
+$garbage[14]="mfout.12";
+$garbage[16]="mfout.13";
+$garbage[17]="mfout.2";
+$garbage[18]="mfout.3";
+$garbage[19]="mfout.4";
+$garbage[20]="mfout.5"; 
+$garbage[21]="mfout.final"; 
+$garbage[22]="$jobname.par";
+$garbage[23]="$jobname.log";
+$garbage[24]="mfout.25";
+$garbage[25]="mfout.34";
+$garbage[26]="mfmodel.25";
+$garbage[27]="mfmodel.34";
+
+foreach $file (@garbage)
+{
+	if (-e $file) {system("rm $file");}
+}
+
+%data=load_data;
+%mmod=();
+%tensor=();
+
+if ($optimize ne 'Yes')
+{	
+	%mmod=run_modelfree();
+	print "Output paramters saved as $jobname.par\n";
+	save_params("$jobname.par",\%mmod);
+	open (OUTPUT, ">> $jobname.log");
+	print OUTPUT "===================================================\n";
+	print OUTPUT "Iteration $i\n";
+	if ($tensor eq 'axial')
+	{
+		print OUTPUT "Tensor: tm $tm Dratio $Dratio Theta $Theta Phi $Phi\n\n";
+	}
+	else
+	{
+		print OUTPUT "Tensor: tm $tm\n\n";
+	}
+
+	for ($y=1; $y<6; $y++)
+	{
+		print OUTPUT "Model $y spins:\n";
+		foreach $x (sort resort keys %mmod)
+		{
+			if ($mmod{$x}{model} == $y) {print OUTPUT "$x ";}
+		}
+		print OUTPUT "\n";
+	}
+	print OUTPUT "Unassigned spins:\n";
+	foreach $x (sort resort keys %mmod)
+	{
+		if ($mmod{$x}{model} == 0) {print OUTPUT "$x ";}
+	}
+	print OUTPUT "\n";
+	close OUTPUT;
+}
+else
+{
+	$tensor{0}{tm}=$tm;
+	$tensor{0}{Dratio}=$Dratio;
+	$tensor{0}{Theta}=$Theta;
+	$tensor{0}{Phi}=$Phi;
+	for ($i=1; $i<=$maxloop; $i++)  
+	{
+		%mmod=run_modelfree();
+		save_params("$jobname.iter$i.par",\%mmod);
+		open (OUTPUT, ">> $jobname.log");
+		print OUTPUT "===================================================\n";
+		print OUTPUT "Iteration $i\n";
+		if ($tensor eq 'axial')
+		{
+			print OUTPUT "Tensor: tm $tm Dratio $Dratio Theta $Theta Phi $Phi\n\n";
+		}
+		else
+		{
+			print OUTPUT "Tensor: tm $tm\n\n";
+		}
+		for ($y=1; $y<6; $y++)
+		{
+			print OUTPUT "Model $y spins:\n";
+			foreach $x (sort resort keys %mmod)
+			{
+				if ($mmod{$x}{model} == $y) {print OUTPUT "$x ";}
+			}
+			print OUTPUT "\n";
+		}
+		print OUTPUT "Unassigned spins:\n";
+		foreach $x (sort resort keys %mmod)
+		{
+			if ($mmod{$x}{model} == 0) {print OUTPUT "$x ";}
+		}
+		print OUTPUT "\n";
+
+		%t2=get_tensor("mfout.final");
+		$tm = $t2{tm};
+		$Theta = $t2{theta};
+		$Phi = $t2{phi};
+		$Dratio = $t2{dratio};
+
+		$tensor{$i}{tm}=$tm;
+		$tensor{$i}{Dratio}=$Dratio;
+		$tensor{$i}{Theta}=$Theta;
+		$tensor{$i}{Phi}=$Phi;
+		
+		$convergedtm="NO";
+		$convergedDrat="NO";
+		$convergedTheta="NO";
+		$convergedPhi="NO";
+
+		$difftm=abs($tensor{$i}{tm}-$tensor{$i-1}{tm});
+		$diffDratio=abs($tensor{$i}{Dratio}-$tensor{$i-1}{Dratio});
+		$diffTheta=abs($tensor{$i}{Theta}-$tensor{$i-1}{Theta});
+		$diffPhi=abs($tensor{$i}{Phi}-$tensor{$i-1}{Phi});
+		
+		if ($difftm < $tmConv) {$convergedtm="YES";}
+		if ($diffDratio < $DratioConv) {$convergedDrat="YES";}
+		if ($diffTheta < $ThetaConv) {$convergedTheta="YES";}
+		if ($diffPhi < $PhiConv) {$convergedPhi="YES";}
+
+		printf OUTPUT "\nDelta tm: %.4f Converged? $convergedtm\n",$difftm;
+		if ($tensor eq 'axial')
+		{
+			printf OUTPUT "Delta Dratio: %.4f Converged? $convergedDrat\n",$diffDratio;
+			printf OUTPUT "Delta Theta: %.4f Converged? $convergedTheta\n",$diffTheta;
+			printf OUTPUT "Delta Phi: %.4f Converged? $convergedPhi\n",$diffPhi;
+			system("mv $mpdb.rotate $jobname.$i.pdb");
+		}
+		close OUTPUT;
+		
+		if ($tensor eq 'axial')
+		{
+			if (($difftm < $tmConv) && ($diffDratio < $DratioConv) && ($diffTheta < $ThetaConv) && ($diffPhi < $PhiConv))
+			{
+				exit();
+			}
+		}
+		else
+		{
+			if ($difftm < $tmConv)
+			{
+				exit();
+			}
+		}
+	}
+}
+
+

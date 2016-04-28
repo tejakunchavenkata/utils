@@ -1,0 +1,84 @@
+spin	2
+constants	2	N15	-2.710	1.02	-160
+vector N H
+
+spin	3
+constants	3	N15	-2.710	1.02	-160
+vector N H
+
+spin	4
+constants	4	N15	-2.710	1.02	-160
+vector N H
+
+spin	5
+constants	5	N15	-2.710	1.02	-160
+vector N H
+
+spin	
+constants		N15	-2.710	1.02	-160
+vector N H
+
+spin	#
+constants	#	N15	-2.710	1.02	-160
+vector N H
+
+spin	#!
+constants	#!	N15	-2.710	1.02	-160
+vector N H
+
+spin	#------------------------------------------------
+constants	#------------------------------------------------	N15	-2.710	1.02	-160
+vector N H
+
+spin	#button
+constants	#button	N15	-2.710	1.02	-160
+vector N H
+
+spin	#entry
+constants	#entry	N15	-2.710	1.02	-160
+vector N H
+
+spin	#exec
+constants	#exec	N15	-2.710	1.02	-160
+vector N H
+
+spin	#label
+constants	#label	N15	-2.710	1.02	-160
+vector N H
+
+spin	#pack
+constants	#pack	N15	-2.710	1.02	-160
+vector N H
+
+spin	button
+constants	button	N15	-2.710	1.02	-160
+vector N H
+
+spin	entry
+constants	entry	N15	-2.710	1.02	-160
+vector N H
+
+spin	label
+constants	label	N15	-2.710	1.02	-160
+vector N H
+
+spin	ls
+constants	ls	N15	-2.710	1.02	-160
+vector N H
+
+spin	pack
+constants	pack	N15	-2.710	1.02	-160
+vector N H
+
+spin	proc
+constants	proc	N15	-2.710	1.02	-160
+vector N H
+
+spin	puts
+constants	puts	N15	-2.710	1.02	-160
+vector N H
+
+spin	}
+constants	}	N15	-2.710	1.02	-160
+vector N H
+

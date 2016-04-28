@@ -1,0 +1,19 @@
+#! /bin/tcsh -f
+#------------------------------------------------
+# Author:    kvkrishna
+# Created:   Fri Jul 29 15:06:35 IST 2011
+# File Name: Line
+# USAGE: 
+# 
+# 
+# 
+#------------------------------------------------
+@ X = $1
+@ Y = $2
+@ Len = $3
+while ($Len > 0)
+        @ Len = $Len - 1
+        tput cup `expr $Len + $X` $Y
+        printf "|"
+end
+tput cup 50

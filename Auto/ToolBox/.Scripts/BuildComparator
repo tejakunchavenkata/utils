@@ -1,0 +1,14 @@
+#! /bin/tcsh -f
+#------------------------------------------------
+# Author:    kasula
+# Created:   Tue Jun 14 02:08:43 PDT 2011
+# File Name: BuildComparator
+# USAGE:
+#       $ BuildComparator $Location/*.in >! opfile.csv
+# 
+# 
+#------------------------------------------------
+echo -n 'Builds,' ; sed -e 's#//.*##g' -e '/^\s*$/d' -e 's/\s*`define\s*\|\s*$//g' -e 's/\s.*//g' $argv[1] | tr '\n' ',' | sed 's/,$//g' ; echo
+foreach n ($argv)
+        echo -n "$n:t," ; sed -e 's#//.*##g' -e '/^\s*$/d' -e 's/\s*`define\s*\|\s*$//g' -e 's/.*\s//g' $n | tr '\n' ',' | sed 's/,$//g' ; echo
+end

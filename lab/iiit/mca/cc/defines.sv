@@ -1,0 +1,13 @@
+`timescale 10ns/10ps
+
+`define TIME_PERIOD 10
+
+`define ADDR_BUS_WIDTH 32
+
+`define LOG2_LINE_SIZE 6
+`define LINE_SIZE (1 << `LOG2_LINE_SIZE)
+
+`define LOG2_NUM_LINES 6
+`define NUM_LINES (1 << `LOG2_NUM_LINES)
+
+`define TAG_WIDTH (`ADDR_BUS_WIDTH - `LOG2_NUM_LINES - `LOG2_LINE_SIZE)

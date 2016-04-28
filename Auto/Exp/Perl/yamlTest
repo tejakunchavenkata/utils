@@ -1,0 +1,23 @@
+#! /depot/perl-5.8.9/bin/perl -wl
+#------------------------------------------------
+# Author:    kasula
+# Created:   Wed Oct  2 21:58:59 PDT 2013
+# File Name: test
+# USAGE: 
+#       test 
+# 
+# 
+#------------------------------------------------
+use YAML;
+
+@data = <>;
+
+# Load a YAML stream of 3 YAML documents into Perl data structures.
+my ($hashref, $arrayref, $string) = Load (join "", @data);
+
+# Dump the Perl data structures back into YAML.
+print Dump($string, $arrayref, $hashref);
+
+# YAML::Dump is used the same way you'd use Data::Dumper::Dumper
+use Data::Dumper;
+print Dumper($string, $arrayref, $hashref)

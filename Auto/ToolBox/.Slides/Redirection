@@ -1,0 +1,23 @@
+                                             Redirection
+                                           ---------------
+
+
+$ command       >               file                            $ command       >&               file
+$ command       >>              file                            $ command       >>&              file
+                                                                
+$ set noclobber
+                                                                
+$ command       >!              file                            $ command       >&!              file
+$ command       >>!             file                            $ command       >>&!             file
+                                                                
+
+                               <<<  sh... Becarefull with Bang !!!  >>>
+
+
+                                $ command       | tee           file
+                                $ command       | tee -a        file
+
+
+$ command <  file       ...!!!
+
+$ command << word       ...???                --------           HERE DOCUMENTS

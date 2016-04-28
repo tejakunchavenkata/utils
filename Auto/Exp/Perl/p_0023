@@ -1,0 +1,23 @@
+#! /usr/bin/perl -w
+$string = "123456789" ;
+$value = substr($string, 5, 2);
+print "\n$value" ;
+$value = substr($string, 5);
+print "\n$value" ;
+$newstring = "a";
+substr($string, 5, 2) = $newstring;
+print "\n$string";
+$newtail = 12345678901234567890123;
+substr($string, 5) = $newtail;
+print "\n$string";
+#The unpack function gives only read access, but is faster when you have many substrings to extract.
+# get a 5-byte string, skip 3, then grab 2 8-byte strings, then the rest
+($leading, $s1, $s2, $trailing) = unpack("A5 x3 A8 A8 A*", $string);
+print "\n$leading" ;
+print "\n$s1" ;
+print "\n$s2" ;
+print "\n$trailing" ;
+## split at five byte boundaries
+#@fivers = unpack("A5" x (length($string)/5), $string);
+## chop string into individual characters
+#@chars = unpack("A1" x length($string), $string);

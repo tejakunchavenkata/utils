@@ -1,0 +1,18 @@
+#! /usr/bin/expect 
+#------------------------------------------------
+# Author:    kasula
+# Created:   Wed May  8 05:18:36 PDT 2013
+# File Name: test
+# USAGE: 
+#       test 
+# 
+# 
+#------------------------------------------------
+set host [lindex $argv 0]
+set pass [lindex $argv 1]
+spawn telnet -a $host
+expect "Password: "
+send "$pass\r"
+expect "0 $ "
+send "g++ -v\r"
+expect "0 $ "

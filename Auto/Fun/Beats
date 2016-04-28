@@ -1,0 +1,26 @@
+#! /usr/bin/perl -w
+#------------------------------------------------
+# Author:    kvkrishna
+# Created:   Thu Aug  4 14:28:47 IST 2011
+# File Name: Beats
+# USAGE: 
+# 
+# 
+# 
+#------------------------------------------------
+chomp ( $Lines  = `tput lines`) ;
+chomp ( $Cols   = `tput cols` ) ;
+$Cnt            = 100 ;
+$Char           = '~';
+$LeftMostCol    = int(($Cols-$Cnt)/2);
+$RightMostCol   = int(($Cols+$Cnt)/2);
+system "tput sc; tput civis";
+for ($i=$LeftMostCol; $i<$RightMostCol; $i++) { $X{$i}=$Lines; } 
+#------------------------------------------------
+$Duration      = $Cnt * 500 ;
+while ($Duration--) {
+        $SelCol = $LeftMostCol + int rand $Cnt ;
+        if (int rand 2) { if ($X{$SelCol} < $Lines - 01) { system "tput cup $X{$SelCol} $SelCol"; print ' ';     $X{$SelCol}++;      } }
+        else            { if ($X{$SelCol} > $Lines - 50) { $X{$SelCol}--; system "tput cup $X{$SelCol} $SelCol"; printf "%s", $Char; } }
+}
+system "tput rc; tput cnorm";

@@ -1,0 +1,17 @@
+#! /bin/tcsh 
+#------------------------------------------------
+# Author:    kasula
+# Created:   Tue Feb 12 21:24:00 PST 2013
+# File Name: tester
+# USAGE: 
+#       tester 
+# 
+# 
+#------------------------------------------------
+foreach n (2 3 4 5 6 7)
+  make clean
+  generator $n >! g$n.sv
+  unlink board.sv
+  ln -s g$n.sv board.sv
+  make TOP=test.sv
+end

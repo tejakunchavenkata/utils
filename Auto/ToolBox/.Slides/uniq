@@ -1,0 +1,16 @@
+UNIQ
+
+NAME
+       uniq - report or omit repeated lines
+
+SYNOPSIS
+       uniq [OPTION]... [INPUT [OUTPUT]]
+
+USEFULL Options
+       -c, --count
+
+       -d, --repeated
+
+       -i, --ignore-case
+
+       -u, --unique

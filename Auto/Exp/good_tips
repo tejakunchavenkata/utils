@@ -1,0 +1,32 @@
+       periodic
+               Runs every tperiod minutes.  This provides a convenient means for checking on common but infrequent changes such as new  mail.
+               For example, if one does
+
+                   > set tperiod = 30
+                   > alias periodic checknews
+
+               then  the  checknews(1)  program runs every 30 minutes.  If periodic is set but tperiod is unset or set to 0, periodic behaves
+               like precmd.
+
+       precmd  Runs just before each prompt is printed.  For example, if one does
+
+                   > alias precmd date
+
+               then date(1) runs just before the shell prompts for each command.  There are no limits on what precmd can be set  to  do,  but
+               discretion should be used.
+
+       postcmd Runs before each command gets executed.
+
+                   > alias postcmd  ’echo -n "^[]2\;\!#^G"’
+
+               then executing vi foo.c will put the command string in the xterm title bar.
+
+       color   If  set, it enables color display for the builtin ls-F and it passes --color=auto to ls.  Alternatively, it can be set to only
+               ls-F or only ls to enable color to only one command.  Setting it to nothing is equivalent to setting it to (ls-F ls).
+
+       colorcat
+               If set, it enables color escape sequence for NLS message files.  And display colorful NLS messages.
+
+       cdpath  A list of directories in which cd should search for subdirectories if they aren’t found in the current directory.
+
+

@@ -1,20 +1,22 @@
 sudo apt-get -yu update
 sudo apt-get -yu dist-upgrade
 
-sudo apt-get -yu install        \
-  tcsh                          \ # Shell
-  git                           \ # GIT
-  vim-gtk                       \ # GTK vim
-  g++                           \
-  exuberant-ctags               \
-  make                          \
-  gawk                          \
-  expect                        \
-  gnuplot-x11                   \
-  mutt                          \
-  classicmenu-indicator         \ # Classic menu for ubuntu
-  compizconfig-settings-manager \ # Disabling animations and other config changes
-  terminator                      # Terminal Emulator
+sudo apt-get -yu install         \
+  tcsh                           \ # Shell
+  sshfs                          \ # Mounts remote disks
+  git                            \ # GIT
+  vim-gtk                        \ # GTK vim
+  g++                            \
+  exuberant-ctags                \
+  make                           \
+  gawk                           \
+  expect                         \
+  gnuplot-x11                    \
+  mutt                           \
+  libgd2-xpm-dev build-essential \ # GD Library - for image manipulation
+  classicmenu-indicator          \ # Classic menu for ubuntu
+  compizconfig-settings-manager  \ # Disabling animations and other config changes
+  terminator                       # Terminal Emulator
 
 mkdir git
 cd git
@@ -64,3 +66,12 @@ git clone https://github.com/vim-perl/vim-perl.git
 # svn co https://gpac-ann.googlecode.com/svn/trunk                  gpac-ann
 # 
 # ln -sv $PWD/ps84529/Auto $PWD/vj84529/Library ~/
+
+# CPAN
+sudo cpan install CPAN
+sudo cpan install YAML
+sudo cpan install /SOAP-Lite-1.20/
+sudo cpan /Module-Build-0.4218/
+sydo cpan /Spreadsheet-ParseExcel-0.65/
+sudo cpan GD
+

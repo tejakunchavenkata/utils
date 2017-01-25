@@ -8,9 +8,11 @@ sudo apt-get -yu install         \
   vim-gtk                        \ # GTK vim
   g++                            \
   exuberant-ctags                \
+  task                           \
   make                           \
   gawk                           \
   expect                         \
+  ruby2.3-dev                    \
   gnuplot-x11                    \
   mutt                           \
   libgd2-xpm-dev build-essential \ # GD Library - for image manipulation
@@ -26,13 +28,11 @@ git clone git://github.com/godlygeek/tabular.git
 git clone https://github.com/vim-scripts/taglist.vim.git
 git clone https://github.com/altercation/vim-colors-solarized
 git clone https://github.com/vim-perl/vim-perl.git
+git clone https://git.tasktools.org/scm/ex/tasksh.git
 
-
-
-# Unused anymore
+# Not used anymore
 #
 # ppa:ubuntu-wine/ppa
-#
 #   subversion                \ # SVN
 #   wine
 #   gcc-multilib              \
@@ -62,16 +62,28 @@ git clone https://github.com/vim-perl/vim-perl.git
 # cd svn
 # svn co https://google-styleguide.googlecode.com/svn/trunk/cpplint cpplint
 # svn co https://personal-scripts-84529.googlecode.com/svn/trunk    ps84529
-# #svn co https://vj84529.googlecode.com/svn/trunk                   vj84529
+# svn co https://vj84529.googlecode.com/svn/trunk                   vj84529
 # svn co https://gpac-ann.googlecode.com/svn/trunk                  gpac-ann
-# 
 # ln -sv $PWD/ps84529/Auto $PWD/vj84529/Library ~/
 
 # CPAN
 sudo cpan install CPAN
+sudo cpan reload cpan
 sudo cpan install YAML
 sudo cpan install /SOAP-Lite-1.20/
-sudo cpan /Module-Build-0.4218/
-sydo cpan /Spreadsheet-ParseExcel-0.65/
+sudo cpan install /Module-Build-0.4218/
+sudo cpan install /Spreadsheet-ParseExcel-0.65/
+sudo cpan install /project-gantt/
 sudo cpan GD
+# To make HTML out of terminal outputs
+sudo cpan install install Pod::Markdown
 
+
+
+# Tasksh installation
+echo "Do tasksh installation manually and fine if there is a better way"
+# git clone https://git.tasktools.org/scm/ex/tasksh.git
+# cd tasksh
+# cmake .
+# make
+# sudo make install

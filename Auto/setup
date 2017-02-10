@@ -21,6 +21,8 @@ sudo apt-get -yu install         \
   classicmenu-indicator          \ # Classic menu for ubuntu
   compizconfig-settings-manager  \ # Disabling animations and other config changes
   python-matplotlib              \ # Python plotter
+  doxygen                        \
+  graphviz                       \
   terminator                       # Terminal Emulator
 
 mkdir git

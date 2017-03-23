@@ -8,6 +8,7 @@ sudo apt-get -yu install         \
   sshfs                          \ # Mounts remote disks
   git                            \ # GIT
   vim-gtk                        \ # GTK vim
+  htop                           \
   g++                            \
   exuberant-ctags                \
   task                           \

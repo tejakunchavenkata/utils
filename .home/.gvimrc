@@ -118,7 +118,8 @@ let g:html_no_progress = 1
 
 " Tagbar settings
 " Automatically open Tagbar for supported files
-autocmd VimEnter * nested :call tagbar#autoopen(1)
+" TODO Troubling on other machines, enable when fixed
+" autocmd VimEnter * nested :call tagbar#autoopen(1)
 
 " Map space to toggle fold
 nnoremap <space> za

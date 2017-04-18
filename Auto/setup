@@ -22,6 +22,7 @@ sudo apt-get -yu install         \
   classicmenu-indicator          \ # Classic menu for ubuntu
   compizconfig-settings-manager  \ # Disabling animations and other config changes
   python-matplotlib              \ # Python plotter
+  python-pip                     \ # Python pip for python module install
   doxygen                        \
   graphviz                       \
   terminator                       # Terminal Emulator
@@ -88,6 +89,8 @@ sudo cpan install install Pod::Markdown
 # It always asks this
 sudo cpan install Log::Log4perl
 
+# Python docutils for rst conversions
+sudo pip install docutils mkdocs
 
 # Tasksh installation
 echo "Do tasksh installation manually and fine if there is a better way"

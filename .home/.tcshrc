@@ -62,4 +62,5 @@ if ($term == "xterm" || $term == "vt100"  || $term == "vt102" || $term !~ "con*"
   bindkey     "\e[3~"   delete-char        # Delete
   bindkey     "\e[4~"   end-of-line        # End
   bindkey     "\e[8~"   end-of-line        # End rxvt
+  bindkey -c  "^[[15~"  "cls"
 endif

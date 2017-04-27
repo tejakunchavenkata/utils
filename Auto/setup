@@ -90,7 +90,9 @@ sudo cpan install install Pod::Markdown
 sudo cpan install Log::Log4perl
 
 # Python docutils for rst conversions
-sudo pip install docutils mkdocs
+sudo -H pip install docutils mkdocs Sphinx
+# Upgrading pip
+sudo -H pip install --upgrade pip
 
 # Tasksh installation
 echo "Do tasksh installation manually and fine if there is a better way"

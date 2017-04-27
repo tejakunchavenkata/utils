@@ -4,6 +4,7 @@
 set nu
 set hlsearch
 set incsearch
+set autoread
 set history=100
 set diffopt=iwhite
 " Tab expansion settings

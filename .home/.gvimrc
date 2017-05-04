@@ -124,3 +124,7 @@ let g:html_no_progress = 1
 
 " Map space to toggle fold
 nnoremap <space> za
+
+" Bullets.vim
+let g:bullets_enabled_file_types = ['markdown', 'text', 'gitcommit']
+let g:bullets_enable_in_empty_buffers = 1

@@ -9,6 +9,7 @@ sudo apt-get -yu install         \
   git                            \ # GIT
   vim-gtk                        \ # GTK vim
   htop                           \
+  w3m                            \ # Browser in terminal
   g++                            \
   exuberant-ctags                \
   task                           \

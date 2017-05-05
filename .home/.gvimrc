@@ -117,10 +117,50 @@ let g:html_number_lines = 0
 let g:html_dynamic_folds = 0
 let g:html_no_progress = 1
 
-" Tagbar settings
-" Automatically open Tagbar for supported files
-" TODO Troubling on other machines, enable when fixed
-" autocmd VimEnter * nested :call tagbar#autoopen(1)
+" Tagbar
+" let g:tagbar_width=45
+let g:tagbar_ctags_bin = "ctags-exuberant"
+let g:tagbar_autofocus = 0
+let g:tagbar_show_visibility = 1
+if !&diff
+  autocmd FileType * nested :call tagbar#autoopen(0)
+endif
+
+" Makefile tagbar settings
+let g:tagbar_type_make = {
+    \ 'kinds':[
+        \ 'm:macros',
+        \ 't:targets'
+    \ ]
+\}
+
+" SV tagbar
+let g:tagbar_type_systemverilog = {
+        \ 'ctagstype'   : 'SystemVerilog',
+        \ 'kinds'       : [
+            \ 'b:blocks:1:1',
+            \ 'c:constants:1:0',
+            \ 'i:constraints:1:0',
+            \ 'e:events:1:0',
+            \ 'f:functions:1:1',
+            \ 'm:modules:0:1',
+            \ 'n:nets:1:0',
+            \ 'p:ports:1:0',
+            \ 'r:registers:1:0',
+            \ 't:tasks:1:1',
+            \ 'A:assertions:1:1',
+            \ 'C:classes:0:1',
+            \ 'V:covergroups:0:1',
+            \ 'I:interfaces:0:1',
+            \ 'M:modport:0:1',
+            \ 'K:packages:0:1',
+            \ 'P:programs:0:1',
+            \ 'R:properties:0:1',
+            \ 'T:typedefs:0:1',
+            \ 'v:variables'
+        \ ]
+    \ }
+
 
 " Map space to toggle fold
 nnoremap <space> za

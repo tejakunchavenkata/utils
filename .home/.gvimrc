@@ -123,7 +123,7 @@ let g:tagbar_ctags_bin = "ctags-exuberant"
 let g:tagbar_autofocus = 0
 let g:tagbar_show_visibility = 1
 if !&diff
-  autocmd FileType * nested :call tagbar#autoopen(0)
+  autocmd FileType * if &ft!="perl" | :call tagbar#autoopen(0) | endif
 endif
 
 " Makefile tagbar settings

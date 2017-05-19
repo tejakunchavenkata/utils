@@ -89,6 +89,8 @@ sudo cpan install /project-gantt/
 sudo cpan install install Pod::Markdown
 # It always asks this
 sudo cpan install Log::Log4perl
+# Print every line being executed
+sudo cpan install Devel::Trace
 
 # Python docutils for rst conversions
 sudo -H pip install docutils mkdocs Sphinx

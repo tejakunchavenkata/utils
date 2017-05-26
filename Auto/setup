@@ -26,6 +26,7 @@ sudo apt-get -yu install         \
   python-pip                     \ # Python pip for python module install
   doxygen                        \
   graphviz                       \
+  gparted                        \ # For partition management
   terminator                       # Terminal Emulator
 
 mkdir git

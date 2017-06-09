@@ -27,6 +27,8 @@ sudo apt-get -yu install         \
   doxygen                        \
   graphviz                       \
   gparted                        \ # For partition management
+  ncdu                           \ # Terminal based file explorere by size
+  ncurses-dev                    \ # Terminal menus and for creating tmux
   terminator                       # Terminal Emulator
 
 mkdir git
@@ -54,7 +56,6 @@ sudo add-apt-repository ppa:jonathonf/vim
 #   flex                      \ # Lexical analyzer - Compiler
 #   bison                     \
 #   vlc                       \
-#   graphviz                  \ # For viewing CFG - image/gui - Compiler
 #   openvpn                   \
 #   youtube-dl                \
 #   evince-gtk                \

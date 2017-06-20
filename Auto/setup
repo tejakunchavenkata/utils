@@ -4,6 +4,7 @@ sudo apt update
 sudo apt upgrade
 
 # Guest additions for full resolution
+# Check the number of processor cores and RAM also
 sudo apt-get install virtualbox-guest-dkms
 
 sudo apt-get -yu install         \

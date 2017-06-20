@@ -3,6 +3,9 @@ sudo apt-get -yu dist-upgrade
 sudo apt update
 sudo apt upgrade
 
+# Guest additions for full resolution
+sudo apt-get install virtualbox-guest-dkms
+
 sudo apt-get -yu install         \
   tcsh                           \ # Shell
   sshfs                          \ # Mounts remote disks

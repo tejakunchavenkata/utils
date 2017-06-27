@@ -64,3 +64,6 @@ if ($term == "xterm" || $term == "vt100"  || $term == "vt102" || $term !~ "con*"
   bindkey     "\e[8~"   end-of-line        # End rxvt
   bindkey -c  "^[[15~"  "cls"
 endif
+
+alias taskOffice        'task project:Office'
+alias taskSelf          'task project:Self'

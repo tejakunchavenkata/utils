@@ -31,15 +31,31 @@ sudo apt-get -yu install         \
   gparted                        \
   ncdu                           \
   ncurses-dev                    \
+  curl
   terminator
-  
+
+
+# Specific version of g++ for VCS (needs 4.8.4)
+sudo apt-get install --reinstall gcc-4.7 gcc-4.8 gcc-4.9 gcc-5
+sudo apt-get install --reinstall g++-4.7 g++-4.8 g++-4.9 g++-5
+
+# Make specific version of g++ as default
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 4
+sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 4
+
+# To reset
+# sudo update-alternatives --remove-all gcc
+# sudo update-alternatives --remove-all g++
+
+
 #   libgd2-xpm-dev build-essential \
 #   classicmenu-indicator          \ # Classic menu for ubuntu
 #   compizconfig-settings-manager  \ # Disabling animations and other config changes
 
-mkdir git
+mkdir -p git/vim
 cd git
 git clone https://github.com/VijayaKrishnaKasula/utils.git
+cd vim
 git clone https://github.com/Yggdroot/indentLine
 git clone https://github.com/godlygeek/tabular.git
 git clone https://github.com/vim-scripts/taglist.vim.git
@@ -47,6 +63,7 @@ git clone https://github.com/altercation/vim-colors-solarized
 git clone https://github.com/vim-perl/vim-perl.git
 git clone https://github.com/majutsushi/tagbar
 git clone https://github.com/godlygeek/tabular
+git clone https://github.com/scrooloose/nerdtree
 
 # For VIM latest (V8.0), use std method
 # sudo add-apt-repository ppa:jonathonf/vim
@@ -92,7 +109,8 @@ sudo cpan reload cpan
 sudo cpan install YAML
 sudo cpan install /SOAP-Lite-1.20/
 sudo cpan install /Module-Build-0.4218/
-sudo cpan install /Spreadsheet-ParseExcel-0.65/
+sudo cpan install Spreadsheet::ParseExcel
+sudo cpan install Clone
 sudo cpan install /project-gantt/
 # To make HTML out of terminal outputs
 sudo cpan install install Pod::Markdown

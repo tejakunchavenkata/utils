@@ -1,0 +1,22 @@
+#! /usr/bin/perl -w
+#------------------------------------------------
+# Author:    kvkrishna
+# Created:   Wed Aug  3 13:52:41 IST 2011
+# File Name: Type
+# USAGE: 
+#       Type File
+# Prints file to terminal as if you its being typed
+# 
+#------------------------------------------------
+$| = 1;
+while (<>) {
+        chomp ;
+        printf "%5d ", $. ;
+        foreach (split //) {
+                print ;
+                system "usleep 40000" if (/\s/) ;
+                system "usleep 20000";
+        }
+        sleep 1;
+        print "\n";
+}

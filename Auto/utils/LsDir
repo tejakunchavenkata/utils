@@ -1,0 +1,11 @@
+#! /bin/csh -f
+set echo_style = both
+foreach n ( `ls --file-type -R $argv[1]` )
+        if ($n =~ "*/") then
+                echo -n "$n\t"
+        else if ($n =~ "*:") then
+                echo "\n\n$n"
+        else
+#                echo "Hi\t$n"
+        endif
+end

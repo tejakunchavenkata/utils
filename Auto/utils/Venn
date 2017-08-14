@@ -1,0 +1,57 @@
+#! /bin/csh -f
+set echo_style = both
+#       Create an empty file
+if (-e Venn.log) then
+        rm -f Venn.log
+endif
+touch Venn.log
+
+#       Print Argument list
+set i = 0
+foreach n ($argv)
+        if (-e $n) then
+                printf "%-2d => %-4s : %s\n" $i `wc -l $n`      >> Venn.log
+        else
+                echo "File:\t$n\nDoes not Exist"                >> Venn.log
+                exit 8
+        endif
+        @ i = $i + 1
+end
+echo "............................................................................................................." >> Venn.log
+
+#       Header
+echo >> Venn.log
+set i = 0
+foreach n ($argv)
+        @ i1 = $i % 10
+        printf "%-2s" "$i1" >> Venn.log
+        @ i = $i + 1
+end
+printf "%5s %50s" '' "Lines" >> Venn.log
+echo "\n" >> Venn.log
+
+#       Start Output
+cat -n $argv[1] >! .Venn_col_
+set cols
+@ i = 0
+foreach n ($argv)
+        grep -H -f $n $argv[1] | replace $argv[1] "Y" >! .Venn_col_$i
+        grep -Hv -f $n $argv[1] | replace $argv[1] "N" >> .Venn_col_$i
+        sort -t ':' -k 2 .Venn_col_$i >! .su_Venn_col_$i
+        cut -d : -f 1 .su_Venn_col_$i >! .Venn_col_$i
+        rm .su_Venn_col_$i
+        set cols = ($cols .Venn_col_$i)
+        @ i = $i + 1
+end
+replace -s N ' ' -- $cols
+set cols = ($cols .Venn_col_)
+paste -d ' ' $cols >> Venn.log
+rm -f $cols
+
+#
+#       First argument is assumed as universal set. (It must be sorted before...)
+#       Foreach line in file pointed by first argument, It specifies if the line is present in files specified by arguments.
+#       For formated output purpose, It considers the files as numbers listed in header of Venn.log file.
+#       
+#       
+#       If the log file exists, contents are overwritten

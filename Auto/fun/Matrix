@@ -1,0 +1,28 @@
+#! /usr/bin/perl -w
+#------------------------------------------------
+# Author:    kvkrishna
+# Created:   Fri Jul 29 12:45:12 IST 2011
+# File Name: Matrix
+# USAGE: 
+# 
+# 
+# 
+#------------------------------------------------
+$NoOfCol = 20;
+system "clear";
+system "tput civis";
+while (1) {
+        %YofX = ();
+        for ($i=1; $i<=$NoOfCol; $i++) { $YofX{int rand 150} = 1 + int rand 5; }
+        @Cols = keys %YofX;
+        for ($i=0; $i<$NoOfCol*5; $i++) {
+                for ($j=0; $j<$NoOfCol*2; $j++) {
+                        $Sel = $Cols[int rand @Cols];
+                        system "tput cup $YofX{$Sel} $Sel";
+                        #printf "%c", int rand 128;
+                        printf "%d", int rand 2;
+                }
+                #system "tput cud1";
+                $YofX{$Sel}++;
+        }
+}

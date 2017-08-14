@@ -1,0 +1,11 @@
+#! /usr/bin/env tcsh
+#------------------------------------------------
+# Author:    krishna
+# Created:   Sat Jun  3 14:34:24 IST 2017
+# File Name: isConnected
+# USAGE:
+#       isConnected <host name>
+# Description:
+#   Returns 0 in $status when the host is connected
+#------------------------------------------------
+ping -c 1 $argv[1] >& /dev/null

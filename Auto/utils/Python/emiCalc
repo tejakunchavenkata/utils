@@ -1,0 +1,87 @@
+#! /usr/bin/env python3
+#------------------------------------------------
+# Author:    krishna
+# Created:   Tue Aug  8 22:02:36 IST 2017
+# File Name: emiCalc
+# USAGE:
+#       emiCalc
+# Description:
+# 
+#------------------------------------------------
+import argparse
+
+def getOpts():
+    parser = argparse.ArgumentParser(description = "EMI Calculator")
+
+    parser.add_argument(
+      "-a", "--amount",
+      action="store",
+      type=float,
+      required=True,
+      help="Principle Amount"
+    )
+    parser.add_argument(
+      "-r", "--roi",
+      action="store",
+      type=float,
+      required=True,
+      help="Rate Of Interest per month (Yearly interest divided by 12)"
+    )
+
+    group = parser.add_mutually_exclusive_group(required=True)
+
+    group.add_argument(
+      "-e", "--emi",
+      action="store",
+      type=float,
+      help="EMI Per month"
+    )
+    group.add_argument(
+      "-t", "--tenure",
+      action="store",
+      type=int,
+      help="Duration in months"
+    )
+    parser.add_argument(
+      "-v", "--verbose", action="count", help="Increase Verbosity, can be specified multiple times"
+    )
+    return parser.parse_args()
+
+def main():
+    args = getOpts()
+
+    # Keep it divided by 100, all that is required for calculations
+    args.roi /= 100
+
+    total = {}
+    total = {'cycles': 0, 'principle': 0, 'interest': 0}
+
+    if (args.emi == None):
+        args.emi = (
+          (args.amount * args.roi * ((1 + args.roi) ** args.tenure)) /
+          (((1 + args.roi) ** args.tenure) - 1)
+        )
+        print ("> ", args.emi)
+
+    print ('{:<6s}{:>16s}{:>16s}{:>16s}{:>16s}'.format("Cycle", "Balance", "iComp", "pComp", "EMI"))
+    while (args.amount > 0):
+        total["cycles"] += 1
+
+        interest = args.amount * args.roi
+        principle = min(args.emi - interest, args.amount)
+        print (
+                "{:<6d}{:>16,.2f}{:>16,.2f}{:>16,.2f}{:>16,.2f}".format(
+            total["cycles"], args.amount, interest, principle, interest + principle
+          )
+        )
+        total['principle'] += principle
+        total['interest'] += interest
+        args.amount = args.amount + interest - args.emi
+
+        if (total['cycles'] > 1000):
+            print ("Passing on the legacy to next generation !?, Fool")
+            break
+
+    print('Principle: {:,.2f}\nInterest: {:,.2f}'.format(total['principle'], total['interest']))
+
+main()

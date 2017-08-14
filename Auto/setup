@@ -31,7 +31,8 @@ sudo apt-get -yu install         \
   gparted                        \
   ncdu                           \
   ncurses-dev                    \
-  curl
+  pandoc                         \
+  curl                           \
   terminator
 
 
@@ -107,6 +108,7 @@ git clone https://github.com/scrooloose/nerdtree
 sudo cpan install CPAN
 sudo cpan reload cpan
 sudo cpan install YAML
+sudo cpan install JSON
 sudo cpan install /SOAP-Lite-1.20/
 sudo cpan install /Module-Build-0.4218/
 sudo cpan install Spreadsheet::ParseExcel
@@ -120,7 +122,10 @@ sudo cpan install Log::Log4perl
 sudo cpan install Devel::Trace
 
 # Python docutils for rst conversions
-sudo -H pip install docutils mkdocs Sphinx
+sudo -H pip install docutils mkdocs Sphinx ansi2html
+
+# For data from quandl.com
+sudo pip install quandl
 # Upgrading pip
 sudo -H pip install --upgrade pip
 
@@ -131,3 +136,7 @@ echo "Do tasksh installation manually and fine if there is a better way"
 # cmake .
 # make
 # sudo make install
+
+# Always maximize and undecorate windows
+# Refer
+# https://ubuntuforums.org/showthread.php?t=2220939

@@ -66,4 +66,5 @@ if ($term == "xterm" || $term == "vt100"  || $term == "vt102" || $term !~ "con*"
 endif
 
 alias taskOffice        'task project:Office'
+alias taskUnltd         'task project:Unltd'
 alias taskSelf          'task project:Self'

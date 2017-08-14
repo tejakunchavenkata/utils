@@ -34,16 +34,9 @@ alias	  Report	        'tput cup \!:1 \!:2 ; echo \!:3-$'
 alias   Calc            'perl -le "print eval \!*"'
 alias   RandSTR         "head /dev/urandom | uuencode -m - | sed -n 2p | sed 's#[^a-zA-Z0-9_]##g' | cut -b 1-32"
 unalias cp mv rm
-##########################################################################################################
-if ($path[1] != "./") set path = (      ./                                                              \
-                                        $path                                                           \
-                                        ~/Auto/MyPerl                                                   \
-                                        ~/Auto/MyShell                                                  \
-                                        ~/Auto/Perl                                                     \
-                                        ~/Auto/Shell                                                    \
-                                        ~/Auto/Fun                                                      \
-                                )
-##########################################################################################################
+
+if ($path[1] != "./") set path = (./ $path ~/Auto/fun ~/Auto/utils)
+
 if ($?LS_COLORS) then
         setenv  LS_COLORS "$LS_COLORS""*.pdf=35\;01:""*.odp=34\;01:""*.doc=34\;01:""*.ods=34\;01:""*.docx=34\;01:""*.ppt=34\;01:""*.e=33:""*.sv=33:""*.v=33:"
 else

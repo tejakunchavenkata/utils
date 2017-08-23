@@ -28,6 +28,8 @@ sudo apt-get -yu install         \
   python-pip                     \
   doxygen                        \
   graphviz                       \
+  pkg-config                     \
+  libgraphviz-dev                \
   gparted                        \
   ncdu                           \
   ncurses-dev                    \
@@ -35,6 +37,8 @@ sudo apt-get -yu install         \
   curl                           \
   terminator
 
+# pkg-config        for finding paths of existing modules during pip installations
+# libgraphviz-dev   for using graphviz from programs
 
 # Specific version of g++ for VCS (needs 4.8.4)
 sudo apt-get install --reinstall gcc-4.7 gcc-4.8 gcc-4.9 gcc-5
@@ -121,8 +125,11 @@ sudo cpan install Log::Log4perl
 # Print every line being executed
 sudo cpan install Devel::Trace
 
+# Install pygraphviz in specific way, as it can't find paths otherwise
+sudo pip install pygraphviz --install-option="--include-path=/usr/include/graphviz" --install-option="--library-path=/usr/lib/graphviz/"
+
 # Python docutils for rst conversions
-sudo -H pip install docutils mkdocs Sphinx ansi2html
+sudo -H pip install docutils mkdocs Sphinx eralchemy ansi2html
 
 # For data from quandl.com
 sudo pip install quandl
@@ -140,3 +147,8 @@ echo "Do tasksh installation manually and fine if there is a better way"
 # Always maximize and undecorate windows
 # Refer
 # https://ubuntuforums.org/showthread.php?t=2220939
+
+# SQLITE Browser
+sudo add-apt-repository -y ppa:linuxgndu/sqlitebrowser
+sudo apt-get update
+sudo apt-get install sqlitebrowser

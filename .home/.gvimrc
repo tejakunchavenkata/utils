@@ -37,7 +37,7 @@ set guioptions -=r
 
 " Makes vim very slow
 " Highlight current column and line
-set cursorline
+" set cursorline
 " hi CursorLine guibg=#eeeeee
 " set cursorcolumn
 " hi CursorColumn guibg=#eeeeee

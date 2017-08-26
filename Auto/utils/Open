@@ -14,13 +14,13 @@ set     htm     = "firefox"
 #########################################################################################	Searches for matching files
 switch ($1)
 case "--ppt":
-	set result = `find -L . -iwholename "*$2*.odp" -print -o -iwholename "*$2*.pptx" -print -o -iwholename "*$2*.ppt" -print | replace ' ' '<>'`
+	set result = `find -L . -iwholename "*$2*.odp" -print -o -iwholename "*$2*.pptx" -print -o -iwholename "*$2*.ppt" -print | sed '# #<>#g'`
 	breaksw
 case "--xls":
-	set result = `find -L . -iwholename "*$2*.ods" -print -o -iwholename "*$2*.xlsx" -print -o -iwholename "*$2*.xls" -print | replace ' ' '<>'`
+	set result = `find -L . -iwholename "*$2*.ods" -print -o -iwholename "*$2*.xlsx" -print -o -iwholename "*$2*.xls" -print | sed '# #<>#g'`
 	breaksw
 case "--doc":
-	set result = `find -L . -iwholename "*$2*.doc" -print -o -iwholename "*$2*.docx" -print | replace ' ' '<>'`
+	set result = `find -L . -iwholename "*$2*.doc" -print -o -iwholename "*$2*.docx" -print | sed '# #<>#g'`
 	breaksw
 case "--cmd":
 	set result = `which $2`
@@ -30,10 +30,10 @@ case "--cmd":
         endif
 	breaksw
 case "--pdf"
-	set result = `find -L . -iwholename "*$2*.pdf"  | replace ' ' '<>'`
+	set result = `find -L . -iwholename "*$2*.pdf"  | sed '# #<>#g'`
 	breaksw
 case "--htm"
-	set result = `find -L . -iwholename "*$2*.htm*" | replace ' ' '<>'`
+	set result = `find -L . -iwholename "*$2*.htm*" | sed '# #<>#g'`
 	breaksw
 default:
 	echo "\tArg_1:"
@@ -62,7 +62,7 @@ else
 	set ch = $<
 endif
 #########################################################################################	Open the file
-set file = `echo $result[$ch] | replace '<>' ' '`
+set file = `echo $result[$ch] | sed '#<># #g'`
 switch ($1)
 case "--ppt":
 	$ppt "$file" &

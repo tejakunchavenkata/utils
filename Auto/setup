@@ -125,6 +125,9 @@ sudo cpan install Log::Log4perl
 # Print every line being executed
 sudo cpan install Devel::Trace
 
+# Pandas for python3
+sudo apt-get install python3-pandas
+
 # Install pygraphviz in specific way, as it can't find paths otherwise
 sudo pip install pygraphviz --install-option="--include-path=/usr/include/graphviz" --install-option="--library-path=/usr/lib/graphviz/"
 

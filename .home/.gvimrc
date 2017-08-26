@@ -28,22 +28,22 @@ set wildmode=list:longest,full
 
 " VIM font settings
 if has("gui_running")
-  set guifont=Consolas\ 9
+  set guifont=Consolas\ 8.5
 endif
 
 " Simplyfy VIM, by removing buttons/scrollbar
 set guioptions -=T
 set guioptions -=r
 
-" Always in fullscreen
-set lines=999 columns=999
-
 " Makes vim very slow
 " Highlight current column and line
-" set cursorline
+set cursorline
 " hi CursorLine guibg=#eeeeee
 " set cursorcolumn
 " hi CursorColumn guibg=#eeeeee
+
+" Mouse always active - even in VIM mode
+set mouse=a
 
 " Setings to control too many characters in a single line
 set nowrap
@@ -53,7 +53,7 @@ set textwidth=100
 set formatoptions+=t
 
 " Colors the given column
-highlight ColorColumn ctermbg=2 guibg=#eeeeee
+highlight ColorColumn ctermbg=Grey guibg=#eeeeee
 let &colorcolumn=join(range(101,999),",")
 
 " How do I read zip files in vim directly, without unzipping
@@ -77,10 +77,10 @@ execute pathogen#infect()
 call pathogen#helptags() " generate helptags for everything in ‘runtimepath’
 
 " Navigate splits with Shift Arrows
-nmap <silent> <S-Up> <C-W>k
-nmap <silent> <S-Down> <C-W>j
-nmap <silent> <S-Right> <C-W>l
-nmap <silent> <S-Left> <C-W>h
+nmap <silent> <M-Up> <C-W>k
+nmap <silent> <M-Down> <C-W>j
+nmap <silent> <M-Right> <C-W>l
+nmap <silent> <M-Left> <C-W>h
 
 "
 " NERDTree
@@ -100,17 +100,19 @@ map <C-n> :NERDTreeToggle<CR>
 "How can I close vim if the only window left open is a NERDTree?
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
-" ------------------------------------------------------------------
-" Solarized Colorscheme Config
-" ------------------------------------------------------------------
-let g:solarized_termcolors=256    "default value is 16
-let g:solarized_contrast="high"    "default value is normal
-let g:solarized_visibility="high"    "default value is normal
-let g:solarized_diffmode="high"    "default value is normal
-let g:solarized_hitrail=1    "default value is 0
-syntax enable
-set background=light
-colorscheme solarized
+if has("gui_running")
+  " ------------------------------------------------------------------
+  " Solarized Colorscheme Config
+  " ------------------------------------------------------------------
+  let g:solarized_termcolors=256    "default value is 16
+  let g:solarized_contrast="high"    "default value is normal
+  let g:solarized_visibility="high"    "default value is normal
+  let g:solarized_diffmode="high"    "default value is normal
+  let g:solarized_hitrail=1    "default value is 0
+  syntax enable
+  set background=light
+  colorscheme solarized
+endif
 
 " TOHtml settings
 let g:html_number_lines = 0

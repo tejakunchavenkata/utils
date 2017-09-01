@@ -77,10 +77,10 @@ execute pathogen#infect()
 call pathogen#helptags() " generate helptags for everything in ‘runtimepath’
 
 " Navigate splits with Shift Arrows
-nmap <silent> <M-Up> <C-W>k
-nmap <silent> <M-Down> <C-W>j
-nmap <silent> <M-Right> <C-W>l
-nmap <silent> <M-Left> <C-W>h
+nmap <silent> <S-Up> <C-W>k
+nmap <silent> <S-Down> <C-W>j
+nmap <silent> <S-Right> <C-W>l
+nmap <silent> <S-Left> <C-W>h
 
 "
 " NERDTree

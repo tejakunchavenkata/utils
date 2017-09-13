@@ -151,3 +151,12 @@ echo "Do tasksh installation manually and fine if there is a better way"
 sudo add-apt-repository -y ppa:linuxgndu/sqlitebrowser
 sudo apt-get update
 sudo apt-get install sqlitebrowser
+
+# Net speed indicator
+# sudo add-apt-repository ppa:fixnix/netspeed
+# KDE connect
+# sudo add-apt-repository ppa:vikoadi/ppa
+# sudo add-apt-repository ppa:varlesh-l/indicator-kdeconnect
+# sudo apt-get update
+# sudo apt-get install indicator-netspeed-unity
+# sudo apt-get install kdeconnect indicator-kdeconnect

@@ -26,6 +26,7 @@ sudo apt-get -yu install         \
   mutt                           \
   python-matplotlib              \
   python-pip                     \
+  python3-pip                    \
   doxygen                        \
   graphviz                       \
   pkg-config                     \
@@ -125,15 +126,16 @@ sudo cpan install Devel::Trace
 sudo apt-get install python3-pandas
 
 # Install pygraphviz in specific way, as it can't find paths otherwise
-sudo pip install pygraphviz --install-option="--include-path=/usr/include/graphviz" --install-option="--library-path=/usr/lib/graphviz/"
+sudo pip3 install pygraphviz --install-option="--include-path=/usr/include/graphviz" --install-option="--library-path=/usr/lib/graphviz/"
 
 # Python docutils for rst conversions
-sudo -H pip install docutils mkdocs Sphinx eralchemy ansi2html
+# pep8 for linting python code
+sudo -H pip3 install docutils mkdocs Sphinx eralchemy ansi2html pep8 pywhatsapp
 
 # For data from quandl.com
-sudo pip install quandl
+sudo pip3 install quandl
 # Upgrading pip
-sudo -H pip install --upgrade pip
+sudo -H pip3 install --upgrade pip3
 
 # Tasksh installation
 echo "Do tasksh installation manually and fine if there is a better way"

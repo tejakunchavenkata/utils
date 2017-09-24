@@ -11,7 +11,7 @@ set     complete        = igncase
 set     prompt          = "%B%{\e[37m%}%{\e[46m%}%? >%{\e[30m%}%b "
 # set     rprompt         = '%p'
 setenv  TZ              Asia/Calcutta
-setenv  EDITOR          gvim
+setenv  EDITOR          'gvim -f'
 #setenv  LC_ALL          c                                       # sort command control
 alias   ls              'ls -FhxX --color=tty '
 alias   ll              'ls -l '

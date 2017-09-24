@@ -10,7 +10,6 @@
 #------------------------------------------------
 foreach n ($argv)
   cd $n
-  git pull
-  git add .
+  git pull | & grep -v 'Already up-to-date.'
   cd -
 end

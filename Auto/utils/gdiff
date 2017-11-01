@@ -1,0 +1,23 @@
+#! /usr/bin/env perl
+#------------------------------------------------
+# Author:    krishna
+# Created:   Wed Nov  1 14:32:06 IST 2017
+# File Name: gdiff
+# USAGE:
+#       gdiff dir1 dir2
+# Description:
+#   diffs 2 dirs using gvim
+#------------------------------------------------
+use strict;
+use warnings;
+
+open CMD, "diff -rq $ARGV[0] $ARGV[1] |" or die "Opening diff failed due to $!";
+while (<CMD>) {
+  chomp;
+  if (/Files (.*?) and (.*?) differ/) {
+    system ("gvim -fd $1 $2");
+  } else {
+    printf "$_\n";
+  }
+}
+close CMD;

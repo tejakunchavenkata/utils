@@ -130,7 +130,7 @@ sudo pip3 install pygraphviz --install-option="--include-path=/usr/include/graph
 
 # Python docutils for rst conversions
 # pep8 for linting python code
-sudo -H pip3 install docutils mkdocs Sphinx eralchemy ansi2html pep8
+sudo -H pip3 install docutils mkdocs Sphinx eralchemy ansi2html pep8 kiteconnect
 
 # For data from quandl.com
 sudo pip3 install quandl

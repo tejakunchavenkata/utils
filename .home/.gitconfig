@@ -4,3 +4,5 @@
 [core]
 	editor = gvim -f
 	excludesfile = /home/krishna/.gitignore
+[credential]
+	helper = cache

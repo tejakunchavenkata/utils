@@ -1,5 +1,5 @@
-sudo apt-get -yu update
-sudo apt-get -yu dist-upgrade
+s2udo apt-get -yu update
+s2udo apt-get -yu dist-upgrade
 sudo apt update
 sudo apt upgrade
 
@@ -129,8 +129,10 @@ sudo apt-get install python3-pandas
 sudo pip3 install pygraphviz --install-option="--include-path=/usr/include/graphviz" --install-option="--library-path=/usr/lib/graphviz/"
 
 # Python docutils for rst conversions
-# pep8 for linting python code
-sudo -H pip3 install docutils mkdocs Sphinx eralchemy ansi2html pep8 kiteconnect
+# pep8 & pylint for linting python code
+# TLDR for simplified communinty driven man pages
+#   Edit `which tldr.py` for colors after installation, not very good
+sudo -H pip3 install docutils mkdocs Sphinx eralchemy ansi2html pep8 kiteconnect tldr pylint
 
 # For data from quandl.com
 sudo pip3 install quandl

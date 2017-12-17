@@ -1,0 +1,3 @@
++define+MAX_FRIENDS=50
++define+THRESHOLD=10
++define+POPULATION=1000

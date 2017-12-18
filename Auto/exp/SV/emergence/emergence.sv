@@ -95,8 +95,8 @@ program emergence;
       int idxes[$];
 
       std::randomize(delay) with {
-        delay >= 400;
-        delay <= 499;
+        delay >= 200;
+        delay <= 299;
       };
 
       #delay;

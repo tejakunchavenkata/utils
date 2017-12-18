@@ -39,6 +39,11 @@ sudo apt-get -yu install         \
   sqlite3 sqlite3-doc            \
   terminator
 
+# Below for probing multimedia files for summary
+sudo apt-get install mediainfo
+sudo apt-get install libav-tools    # For avprobe
+
+
 # pkg-config        for finding paths of existing modules during pip installations
 # libgraphviz-dev   for using graphviz from programs
 

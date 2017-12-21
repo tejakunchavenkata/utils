@@ -39,6 +39,9 @@ sudo apt-get -yu install         \
   sqlite3 sqlite3-doc            \
   terminator
 
+# For lightweight terminal multiplexing, to match SNPS setup
+sudo apt-get install xterm tmux
+
 # Below for probing multimedia files for summary
 sudo apt-get install mediainfo
 sudo apt-get install libav-tools    # For avprobe

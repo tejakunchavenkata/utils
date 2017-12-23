@@ -6,3 +6,5 @@
 	excludesfile = /home/krishna/.gitignore
 [credential]
 	helper = cache
+[difftool]
+	prompt = false

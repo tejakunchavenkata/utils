@@ -127,7 +127,7 @@ let g:html_no_progress = 1
 if has("unix")
   " Tagbar
   " let g:tagbar_width=45
-  let g:tagbar_ctags_bin = "ctags-exuberant"
+  let g:tagbar_ctags_bin = "ctags"
   let g:tagbar_autofocus = 0
   let g:tagbar_show_visibility = 1
   if !&diff

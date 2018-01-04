@@ -1,45 +1,71 @@
-#! /usr/bin/env tcsh 
-#------------------------------------------------
-# Author:    kvkrishna
-# Created:   Tue Jan 26 13:22:47 IST 2011
-# File Name: New
-# Usage:
-#       New interpr FileName
-# 
-# 
-#------------------------------------------------
-alias die 'echo "\!:2-$" ; exit \!:1'
-#------------------------------------------------
-if ($# < 2) then
-  die 8 "ERROR: Improper argument list" 
-endif
-which $1 >& /dev/null
-if ( $? ) then
-  die 1 "$1 : Command not found"
-endif
-#------------------------------------------------
-set Interpr = $1 ;              shift 
-set NewFile = $1 ;              shift 
-#------------------------------------------------
-if (-e $NewFile) then
-  die 8 "ERROR: File exists"
-else
-  touch $NewFile ; chmod +x $NewFile
-endif
-#------------------------------------------------
-echo "#! /usr/bin/env $Interpr"                                                         >> $NewFile
-echo "#------------------------------------------------"                                >> $NewFile
-echo "# Author:    $USER"                                                               >> $NewFile
-echo "# Created:   `date`"                                                              >> $NewFile
-echo "# File Name: $NewFile:t"                                                          >> $NewFile
-echo "# USAGE:"                                                                         >> $NewFile
-echo "#       $NewFile:t"                                                               >> $NewFile
-echo "# Description:"                                                                   >> $NewFile
-echo "# "                                                                               >> $NewFile
-echo "#------------------------------------------------"                                >> $NewFile
-echo ""                                                                                 >> $NewFile
-#------------------------------------------------
-if (! $?EDITOR ) then
-  setenv EDITOR gvim
-endif
-$EDITOR $NewFile
+#! /usr/bin/env python3
+'''
+Author:    kvkrishna
+Created:   Tue Jan 26 13:22:47 IST 2011
+File Name: New
+Usage:
+      New interpreter FileName
+Description:
+  Creates a new script file with header and few obvious lines of code
+'''
+import re, os, sys, shutil, os.path
+from datetime import datetime, timezone
+
+
+def getPythonFooter():
+    return "\n".join ([
+        "",
+        "",
+        "def main():",
+        "   '''"
+        "   In Main"
+        "   '''"
+        "",
+        "",
+        "if __name__ == '__main__':",
+        "   main()",
+        ""
+    ])
+
+
+def getCommentType(interpreter):
+    if re.match("python.*", interpreter, flags=re.I):
+        return ("", "'''", getPythonFooter())
+
+    return ("#", "------------------------------------------------", "")
+
+
+def main():
+    assert (len(sys.argv) == 3), "Improper arguments, expecting an interpreter and a FileName"
+
+    interpreter = sys.argv[1]
+    filename    = sys.argv[2]
+
+    assert (None != shutil.which(interpreter)), "Could not find interpreter %s" % interpreter
+    assert (False == os.path.lexists(filename)), "The path %s already exists" % filename
+
+    prefix, seperator, footer = getCommentType(interpreter)
+
+    with open (filename, "w") as f:
+        f.write (
+            ("\n%s" % prefix).join ([
+                "#! /usr/bin/env %s" % interpreter,
+                seperator,
+                "Author:    %s" % os.environ['USER'],
+                "Created:   %s" % datetime.now(timezone.utc).astimezone().strftime("%c %Z"),
+                "File Name: %s" % os.path.basename(filename),
+                "USAGE:",
+                "      %s" % os.path.basename(filename),
+                "Description:",
+                "",
+                seperator
+            ]) + "\n"
+        )
+
+        f.write(footer)
+
+    os.chmod(filename, 0o700)
+
+
+if __name__ == '__main__':
+    main()

@@ -1,0 +1,24 @@
+#! /usr/bin/env tcsh
+#------------------------------------------------
+# Author:    krishna
+# Created:   Sun Dec 31 13:18:19 IST 2017
+# File Name: judge
+# USAGE:
+#       judge <solution>
+#       Ex: judge f.py
+# Description:
+#   
+#------------------------------------------------
+set sol = $argv[1]
+set id = $sol:r
+
+foreach n ($id.in.*)
+  cat $n | $sol >&! output
+  diff -q output $n:r:r.out.$n:e
+  if ($?) then
+    echo 'Expected:'
+    cat $n:r:r.out.$n:e
+    echo 'Got:'
+    cat output
+  endif
+end

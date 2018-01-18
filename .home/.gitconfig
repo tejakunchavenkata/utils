@@ -8,3 +8,5 @@
 	helper = cache
 [difftool]
 	prompt = false
+[push]
+	default = simple

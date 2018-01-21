@@ -17,9 +17,9 @@ def getPythonFooter():
         "",
         "",
         "def main():",
-        "   '''"
-        "   In Main"
-        "   '''"
+        "    '''",
+        "    The Main",
+        "    '''",
         "",
         "",
         "if __name__ == '__main__':",
@@ -32,7 +32,7 @@ def getCommentType(interpreter):
     if re.match("python.*", interpreter, flags=re.I):
         return ("", "'''", getPythonFooter())
 
-    return ("#", "------------------------------------------------", "")
+    return ("# ", "------------------------------------------------", "")
 
 
 def main():

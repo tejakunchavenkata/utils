@@ -1,4 +1,70 @@
 "
+" Vundle settings
+"
+
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+
+Plugin 'jnurmine/Zenburn'
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'vim-scripts/indentpython.vim'
+Plugin 'Yggdroot/indentLine'
+Plugin 'scrooloose/nerdtree'
+Plugin 'tmhedberg/SimpylFold'
+Plugin 'godlygeek/tabular.git'
+Plugin 'majutsushi/tagbar'
+Plugin 'vim-scripts/taglist.vim.git'
+Plugin 'vhda/verilog_systemverilog.vim'
+Plugin 'vim-perl/vim-perl.git'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'kien/ctrlp.vim'
+
+
+" The following are examples of different formats supported.
+" Keep Plugin commands between vundle#begin/end.
+" plugin on GitHub repo
+Plugin 'tpope/vim-fugitive'
+
+" Git plugin not hosted on GitHub
+" Plugin 'git://git.wincent.com/command-t.git'
+
+" git repos on your local machine (i.e. when working on your own plugin)
+" Plugin 'file:///home/gmarik/path/to/plugin'
+
+" The sparkup vim script is in a subdirectory of this repo called vim.
+" Pass the path to set the runtimepath properly.
+" Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+
+" Install L9 and avoid a Naming conflict if you've already installed a
+" different version somewhere else.
+" Plugin 'ascenator/L9', {'name': 'newL9'}
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+
+" To ignore plugin indent changes, instead use:
+"filetype plugin on
+"
+" Brief help
+" :PluginList       - lists configured plugins
+" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+" :PluginSearch foo - searches for foo; append `!` to refresh local cache
+" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+"
+" see :h vundle for more details or wiki for FAQ
+" Put your non-Plugin stuff after this line
+"
+
+"
 " General settings
 "
 set nu
@@ -12,7 +78,6 @@ set et
 set shiftwidth=2
 set tabstop=2
 set backspace=indent,eol,start
-set nocompatible
 syn on
 filetype plugin indent on
 
@@ -77,10 +142,6 @@ augroup gzip
   autocmd FileAppendPost		*.gz !gzip <afile>:r
 augroup END
 
-" Pathogen (VIM Plugin manager)
-execute pathogen#infect()
-call pathogen#helptags() " generate helptags for everything in ‘runtimepath’
-
 " Navigate splits with Shift Arrows
 nmap <silent> <S-Up> <C-W>k
 nmap <silent> <S-Down> <C-W>j
@@ -98,12 +159,11 @@ nmap <silent> <S-Left> <C-W>h
 " autocmd StdinReadPre * let s:std_in=1
 " autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
-"How can I map a specific key or shortcut to open NERDTree?
-"Stick this in your vimrc to open NERDTree with Ctrl+n (you can set whatever key you want):
-map <C-n> :NERDTreeToggle<CR>
-
 "How can I close vim if the only window left open is a NERDTree?
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+
+" NERDTree and Python specific
+let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
 
 if has("gui_running")
   " ------------------------------------------------------------------
@@ -117,6 +177,8 @@ if has("gui_running")
   syntax enable
   set background=light
   colorscheme solarized
+else
+  colorscheme zenburn
 endif
 
 " TOHtml settings
@@ -176,3 +238,11 @@ nnoremap <space> za
 " Bullets.vim
 let g:bullets_enabled_file_types = ['markdown', 'text', 'gitcommit']
 let g:bullets_enable_in_empty_buffers = 1
+
+" Simply fold settings
+let g:SimpylFold_docstring_preview=1
+
+" Python settings
+" au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
+let python_highlight_all=1
+syntax on

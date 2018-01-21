@@ -14,11 +14,11 @@ set id = $sol:r
 
 foreach n ($id.in.*)
   cat $n | $sol >&! output
-  diff -q output $n:r:r.out.$n:e
+  diff -sq output $n:r:r.out.$n:e
   if ($?) then
-    echo 'Expected:'
-    cat $n:r:r.out.$n:e
-    echo 'Got:'
-    cat output
+    # echo 'Expected:'
+    # cat $n:r:r.out.$n:e
+    # echo 'Got:'
+    # cat output
   endif
 end

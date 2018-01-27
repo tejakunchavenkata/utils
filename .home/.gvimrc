@@ -27,6 +27,7 @@ Plugin 'vhda/verilog_systemverilog.vim'
 Plugin 'vim-perl/vim-perl.git'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'kien/ctrlp.vim'
+Plugin 'vim-python/python-syntax'
 
 
 " The following are examples of different formats supported.

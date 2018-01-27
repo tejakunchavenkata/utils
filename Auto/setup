@@ -51,12 +51,12 @@ sudo apt-get install libav-tools    # For avprobe
 # libgraphviz-dev   for using graphviz from programs
 
 # Specific version of g++ for VCS (needs 4.8.4)
-sudo apt-get install --reinstall gcc-4.7 gcc-4.8 gcc-4.9 gcc-5
-sudo apt-get install --reinstall g++-4.7 g++-4.8 g++-4.9 g++-5
+sudo apt-get install --reinstall gcc-4.7 gcc-4.8 gcc-5
+sudo apt-get install --reinstall g++-4.7 g++-4.8 g++-5
 
 # Make specific version of g++ as default
-sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 4
-sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 4
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 4
+sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 4
 
 # To reset
 # sudo update-alternatives --remove-all gcc
@@ -149,6 +149,13 @@ sudo -H pip3 install graphviz tabulate pdoc pygments
 sudo pip3 install quandl
 # Upgrading pip
 sudo -H pip3 install --upgrade pip3
+
+# For pyautogui
+sudo apt-get install scrot
+sudo apt-get install python3-tk
+sudo apt-get install python3-dev
+sudo pip3 install python3-xlib
+sudo pip3 install pyautogui
 
 # Tasksh installation
 echo "Do tasksh installation manually and fine if there is a better way"

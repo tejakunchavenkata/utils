@@ -17,7 +17,15 @@ alias   ls              'ls -FhxX --color=tty '
 alias   ll              'ls -l '
 alias   cls             'clear ; echo "Host: $HOST" ; echo "PWD: $PWD"; echo "Contents:" ; ls '
 alias   cwdcmd          'clear ; echo "Host: $HOST" ; echo "PWD: $PWD"; echo "Contents:" ; ls '
-alias   tree            'tree -CF'
+
+if (-f ~/.gitignore) then
+  set   pattern         = `cat ~/.gitignore | tr '\n' '|' | sed 's#|$##g'`
+else
+  set   pattern         = ''
+endif
+alias   tree            "tree -I '$pattern' -L 10 --filelimit 25 -lFC"
+unset   pattern
+
 alias   mkcd            'mkdir -p \!* ; cd \!*'
 alias   man             'man -a'
 alias   g               'gvim -o'
@@ -39,11 +47,8 @@ unalias cp mv rm
 
 if ($path[1] != "./") set path = (./ $path ~/Auto/fun ~/Auto/utils)
 
-if ($?LS_COLORS) then
-        setenv  LS_COLORS "$LS_COLORS""*.pdf=35\;01:""*.odp=34\;01:""*.doc=34\;01:""*.ods=34\;01:""*.docx=34\;01:""*.ppt=34\;01:""*.e=33:""*.sv=33:""*.v=33:"
-else
-        setenv  LS_COLORS "*.pdf=35\;01:""*.odp=34\;01:""*.doc=34\;01:""*.ods=34\;01:""*.docx=34\;01:""*.ppt=34\;01:""*.e=33:""*.sv=33:""*.v=33:"
-endif
+eval `dircolors`
+setenv  LS_COLORS "$LS_COLORS*.pdf=01;35:*.odp=01;34:*.doc=01;34:*.ods=01;34:*.docx=01;34:*.ppt=01;34:*.e=33:*.sv=33:*.v=33:"
 
 # Bindkeys for Arrow keys
 if ($?term == 0) setenv term xterm # Tweak

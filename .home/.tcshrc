@@ -47,7 +47,7 @@ unalias cp mv rm
 
 if ($path[1] != "./") set path = (./ $path ~/Auto/fun ~/Auto/utils)
 
-eval `dircolors`
+eval `dircolors -c`
 setenv  LS_COLORS "$LS_COLORS*.pdf=01;35:*.odp=01;34:*.doc=01;34:*.ods=01;34:*.docx=01;34:*.ppt=01;34:*.e=33:*.sv=33:*.v=33:"
 
 # Bindkeys for Arrow keys

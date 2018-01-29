@@ -143,7 +143,7 @@ sudo apt-get install python3-pandas
 # TLDR for simplified communinty driven man pages
 #   Edit `which tldr.py` for colors after installation, not very good
 sudo -H pip3 install docutils mkdocs Sphinx eralchemy ansi2html pep8 kiteconnect tldr pylint Jinja2
-sudo -H pip3 install graphviz tabulate pdoc pygments coverage pytest pytest-cov mock responses
+sudo -H pip3 install graphviz tabulate pdoc pygments coverage pytest pytest-cov mock responses flask
 
 # For data from quandl.com
 sudo pip3 install quandl

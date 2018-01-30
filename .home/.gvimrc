@@ -28,7 +28,10 @@ Plugin 'vim-perl/vim-perl.git'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'kien/ctrlp.vim'
 Plugin 'vim-python/python-syntax'
+Plugin 'cohama/lexima.vim'
 
+" To install from command line 
+" vim +PluginInstall +qall
 
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
@@ -247,3 +250,6 @@ let g:SimpylFold_docstring_preview=1
 " au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
 let python_highlight_all=1
 syntax on
+
+" More SV fle types
+au! BufNewFile,BufRead *.svhg,*.svg setfiletype verilog_systemverilog

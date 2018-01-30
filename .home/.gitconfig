@@ -1,6 +1,5 @@
 [user]
 	email = krishna.vijay4444@gmail.com
-	name = VijayaKrishnaKasula
 [core]
 	editor = gvim -f
 	excludesfile = /home/krishna/.gitignore

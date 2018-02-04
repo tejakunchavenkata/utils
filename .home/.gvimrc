@@ -253,3 +253,7 @@ syntax on
 
 " More SV fle types
 au! BufNewFile,BufRead *.svhg,*.svg setfiletype verilog_systemverilog
+
+" CtrlP settings
+let g:ctrlp_open_multiple_files = '1hj'
+let g:ctrlp_open_new_file = 'h'

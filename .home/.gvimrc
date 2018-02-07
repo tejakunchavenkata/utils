@@ -14,7 +14,6 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
-Plugin 'jnurmine/Zenburn'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'vim-scripts/indentpython.vim'
 Plugin 'Yggdroot/indentLine'
@@ -181,8 +180,6 @@ if has("gui_running")
   syntax enable
   set background=light
   colorscheme solarized
-else
-  colorscheme zenburn
 endif
 
 " TOHtml settings

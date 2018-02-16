@@ -1,0 +1,11 @@
+#! /usr/bin/env tcsh
+# ------------------------------------------------
+# Author:    krishna
+# Created:   Sat Feb 10 15:09:28 2018 IST
+# File Name: dbq
+# USAGE:
+#   ./dbq <SQLITE DB> <'QUERY in QUOTES'> | column -ts, > log
+# Description:
+# 
+# ------------------------------------------------
+sqlite3 -csv -header -cmd "PRAGMA foreign_keys = 1" $argv[1] "$argv[2]"

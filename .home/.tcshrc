@@ -42,7 +42,6 @@ alias   countDots       'echo \!* | grep -o . | wc -l'
 alias	  Report	        'tput cup \!:1 \!:2 ; echo \!:3-$'
 alias   Calc            'python -c "from math import *; print( \!* )"'
 alias   RandSTR         "head /dev/urandom | uuencode -m - | sed -n 2p | sed 's#[^a-zA-Z0-9_]##g' | cut -b 1-32"
-alias   dbq             "sqlite3 -csv -header -cmd 'PRAGMA foreign_keys = 1' \!:1 '\!:2-$ '"
 unalias cp mv rm
 
 if ($path[1] != "./") set path = (./ $path ~/Auto/fun ~/Auto/utils)

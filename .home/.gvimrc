@@ -28,6 +28,11 @@ Plugin 'Valloric/YouCompleteMe'
 Plugin 'kien/ctrlp.vim'
 Plugin 'vim-python/python-syntax'
 Plugin 'cohama/lexima.vim'
+" For commenting multiple lines quickly
+Plugin 'scrooloose/nerdcommenter'
+
+" Better matching of if-else, begin-end
+Plugin 'andymass/vim-matchup'
 
 " To install from command line 
 " vim +PluginInstall +qall
@@ -166,7 +171,7 @@ nmap <silent> <S-Left> <C-W>h
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
 " NERDTree and Python specific
-let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
+let NERDTreeIgnore=['\.pyc$', '\~$', '\.swo$', '\.swp$', '^__pycache__$'] "ignore files in NERDTree
 
 if has("gui_running")
   " ------------------------------------------------------------------
@@ -254,3 +259,28 @@ au! BufNewFile,BufRead *.svhg,*.svg setfiletype verilog_systemverilog
 " CtrlP settings
 let g:ctrlp_open_multiple_files = '1hj'
 let g:ctrlp_open_new_file = 'h'
+
+" 
+" Nerd commenter settings
+"
+
+" Add spaces after comment delimiters by default
+let g:NERDSpaceDelims = 1
+
+" Use compact syntax for prettified multi-line comments
+let g:NERDCompactSexyComs = 1
+
+" Align line-wise comment delimiters flush left instead of following code indentation
+let g:NERDDefaultAlign = 'left'
+
+"" Set a language to use its alternate delimiters by default
+"let g:NERDAltDelims_java = 1
+
+"" Add your own custom formats or override the defaults
+"let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
+
+" Allow commenting and inverting empty lines (useful when commenting a region)
+let g:NERDCommentEmptyLines = 1
+
+" Enable trimming of trailing whitespace when uncommenting
+let g:NERDTrimTrailingWhitespace = 1

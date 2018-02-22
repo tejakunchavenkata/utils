@@ -31,6 +31,12 @@ Plugin 'cohama/lexima.vim'
 " For commenting multiple lines quickly
 Plugin 'scrooloose/nerdcommenter'
 
+" Better diff in GVIM
+Plugin 'rickhowe/diffchar.vim'
+
+" Airline
+Plugin 'vim-airline/vim-airline'
+
 " Better matching of if-else, begin-end
 Plugin 'andymass/vim-matchup'
 
@@ -81,6 +87,21 @@ set incsearch
 set autoread
 set history=100
 set diffopt=iwhite
+
+" To ignore all white space
+set diffexpr=DiffW()
+function DiffW()
+  let opt = ""
+   if &diffopt =~ "icase"
+     let opt = opt . "-i "
+   endif
+   if &diffopt =~ "iwhite"
+     let opt = opt . "-w " " swapped vim's -b with -w
+   endif
+   silent execute "!diff -a --binary " . opt .
+     \ v:fname_in . " " . v:fname_new .  " > " . v:fname_out
+endfunction
+
 " Tab expansion settings
 set et
 set shiftwidth=2

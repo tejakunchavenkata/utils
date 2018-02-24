@@ -24,7 +24,12 @@ Plugin 'majutsushi/tagbar'
 Plugin 'vim-scripts/taglist.vim.git'
 Plugin 'vhda/verilog_systemverilog.vim'
 Plugin 'vim-perl/vim-perl.git'
-Plugin 'Valloric/YouCompleteMe'
+
+" Not on SNPS machines
+if $USER !=? 'kasula'
+  Plugin 'Valloric/YouCompleteMe'
+endif
+
 Plugin 'kien/ctrlp.vim'
 Plugin 'vim-python/python-syntax'
 Plugin 'cohama/lexima.vim'

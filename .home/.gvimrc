@@ -45,7 +45,7 @@ Plugin 'vim-airline/vim-airline'
 " Better matching of if-else, begin-end
 Plugin 'andymass/vim-matchup'
 
-" To install from command line 
+" To install from command line
 " vim +PluginInstall +qall
 
 " The following are examples of different formats supported.
@@ -286,7 +286,7 @@ au! BufNewFile,BufRead *.svhg,*.svg setfiletype verilog_systemverilog
 let g:ctrlp_open_multiple_files = '1hj'
 let g:ctrlp_open_new_file = 'h'
 
-" 
+"
 " Nerd commenter settings
 "
 
@@ -313,3 +313,6 @@ let g:NERDTrimTrailingWhitespace = 1
 
 " Jump to tag only on single match, else show
 nnoremap <C-]> g<C-]>
+
+highlight ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+$/

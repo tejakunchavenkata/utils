@@ -310,3 +310,6 @@ let g:NERDCommentEmptyLines = 1
 
 " Enable trimming of trailing whitespace when uncommenting
 let g:NERDTrimTrailingWhitespace = 1
+
+" Jump to tag only on single match, else show
+nnoremap <C-]> g<C-]>

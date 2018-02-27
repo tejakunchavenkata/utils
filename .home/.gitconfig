@@ -4,7 +4,7 @@
 	editor = gvim -f
 	excludesfile = /home/krishna/.gitignore
 [credential]
-  helper = cache
+	helper = cache
 [diff]
   tool = gvimdiff
 [difftool]

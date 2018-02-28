@@ -9,7 +9,7 @@ set     echo_style      = both
 set     correct         = cmd
 set     complete        = igncase
 set     prompt          = "%B%{\e[37m%}%{\e[46m%}%? >%{\e[30m%}%b "
-set     rprompt         = '%D/%W %p'
+set     rprompt         = '%D %w %p'
 setenv  TZ              Asia/Calcutta
 setenv  EDITOR          'gvim -f'
 #setenv  LC_ALL          c                                       # sort command control

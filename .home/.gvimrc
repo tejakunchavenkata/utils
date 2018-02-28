@@ -30,6 +30,8 @@ if $USER !=? 'kasula'
   Plugin 'Valloric/YouCompleteMe'
 endif
 
+" mini Excel in VIM
+Plugin 'chrisbra/csv.vim.git'
 Plugin 'kien/ctrlp.vim'
 Plugin 'vim-python/python-syntax'
 Plugin 'cohama/lexima.vim'
@@ -41,6 +43,7 @@ Plugin 'rickhowe/diffchar.vim'
 
 " Airline
 Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 
 " Better matching of if-else, begin-end
 Plugin 'andymass/vim-matchup'

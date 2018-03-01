@@ -134,7 +134,7 @@ if has("gui_running")
     set guifont=Consolas:h9
   endif
   if has("unix")
-    set guifont=Consolas\ 9
+    set guifont=Powerline\ Consolas\ 9
   endif
 endif
 
@@ -319,3 +319,10 @@ nnoremap <C-]> g<C-]>
 
 highlight ExtraWhitespace ctermbg=red guibg=red
 match ExtraWhitespace /\s\+$/
+
+" Use tags from homedir
+set tags+=~/.tags
+
+" Airline symbols
+let g:airline_powerline_fonts=1
+let g:Powerline_symbols='unicode'

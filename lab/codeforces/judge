@@ -7,7 +7,7 @@
 #       judge <solution>
 #       Ex: judge f.py
 # Description:
-#   
+#
 #------------------------------------------------
 set sol = $argv[1]
 set id = $sol:r

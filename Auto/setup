@@ -173,3 +173,16 @@ sudo apt-get install sqlitebrowser
 # sudo apt-get update
 # sudo apt-get install indicator-netspeed-unity
 # sudo apt-get install kdeconnect indicator-kdeconnect
+
+#
+# Install TA LIB Libraries
+#
+sudo wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz
+tar -xzf ta-lib-0.4.0-src.tar.gz
+cd ta-lib/
+sudo ./configure --prefix=/usr
+sudo make
+sudo make install
+
+# And python wrapper
+sudo -H pip3 install TA-Lib

@@ -100,14 +100,14 @@ set diffopt=iwhite
 set diffexpr=DiffW()
 function DiffW()
   let opt = ""
-   if &diffopt =~ "icase"
-     let opt = opt . "-i "
-   endif
-   if &diffopt =~ "iwhite"
-     let opt = opt . "-w " " swapped vim's -b with -w
-   endif
-   silent execute "!diff -a --binary " . opt .
-     \ v:fname_in . " " . v:fname_new .  " > " . v:fname_out
+  if &diffopt =~ "icase"
+    let opt = opt . "-i "
+  endif
+  if &diffopt =~ "iwhite"
+    let opt = opt . "-w " " swapped vim's -b with -w
+  endif
+  silent execute "!diff -a --binary " . opt .
+        \ v:fname_in . " " . v:fname_new .  " > " . v:fname_out
 endfunction
 
 " Tab expansion settings
@@ -320,9 +320,19 @@ nnoremap <C-]> g<C-]>
 highlight ExtraWhitespace ctermbg=red guibg=red
 match ExtraWhitespace /\s\+$/
 
+" https://vi.stackexchange.com/questions/454/whats-the-simplest-way-to-strip-trailing-whitespace-from-all-lines-in-a-file
+" Remove all trailing whitespace by pressing F5
+nnoremap <F5> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><CR>
+
+" Indent all file
+nnoremap <F6> gg=G
+
 " Use tags from homedir
 set tags+=~/.tags
 
 " Airline symbols
 let g:airline_powerline_fonts=1
 let g:Powerline_symbols='unicode'
+
+" Make headings in restructuredtext
+nnoremap <C-h> YpVr

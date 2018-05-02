@@ -56,6 +56,9 @@ Plugin 'andymass/vim-matchup'
 " plugin on GitHub repo
 Plugin 'tpope/vim-fugitive'
 
+" Surround with paranthesis
+Plugin 'tpope/vim-surround'
+
 " Git plugin not hosted on GitHub
 " Plugin 'git://git.wincent.com/command-t.git'
 
@@ -336,3 +339,6 @@ let g:Powerline_symbols='unicode'
 
 " Make headings in restructuredtext
 nnoremap <C-h> YpVr
+
+" Make SCons files look like python
+au BufReadPost SCons* set syntax=python

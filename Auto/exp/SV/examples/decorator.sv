@@ -1,41 +1,61 @@
 interface class Coffee;
-   pure virtual function int cost();
+  pure virtual function int cost();
+  // pure virtual function int show();
 endclass
- 
+
+
 class SimpleCoffee implements Coffee;
-   virtual function int cost();
-       return 1000;
-   endfunction
+  virtual function int cost();
+    return 10;
+  endfunction
 endclass
- 
+
+
 virtual class DecoratorBase implements Coffee;
-   pure virtual function int cost();
-   pure virtual function Coffee decorate(Coffee coffee);
+  protected Coffee coffee;
+
+  pure virtual function int cost();
+
+  function Coffee decorate(Coffee coffee);
+    this.coffee = coffee;
+    return this;
+  endfunction : decorate
 endclass
- 
+
 class Milk extends DecoratorBase;
-   Coffee coffee;
-   function Coffee decorate(Coffee coffee);
-      this.coffee=coffee;
-      return this;
-   endfunction
- 
-   function int cost();
-      return coffee.cost()+100;
-   endfunction
+  function int cost();
+    return coffee.cost()+3;
+  endfunction
+
+  // function string desc();
+  //   return '{coffee.desc(), " + Milk"};
+  // endfunction
 endclass
- 
+
+class Sugar extends DecoratorBase;
+  function int cost();
+    return coffee.cost()+2;
+  endfunction
+
+  // function string desc();
+  //   return '{coffee.desc(), " + Milk"};
+  // endfunction
+endclass
+
 module tb();
-   initial begin
-      Coffee c1;
-      SimpleCoffee sc;
-      Milk   d3;
- 
-      sc = new;
-      c1 = sc;
-      d3 = new();
-      c1=d3.decorate(c1);
- 
-      $display("## x1 cost is %d", c1.cost()); //  1000 (I expect to yield 1120; 1000+10+10+100)
-   end
+  initial begin
+    Coffee c;
+    SimpleCoffee sc = new();
+    Milk milkD = new();
+    Sugar sugarD = new();
+
+    c = sc;
+    $display("Cost is %d", c.cost());
+
+    c = milkD.decorate(c);
+    $display("Cost is %d", c.cost());
+
+    c = sugarD.decorate(c);
+    $display("Cost is %d", c.cost());
+  end
 endmodule // tb

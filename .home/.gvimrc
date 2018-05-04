@@ -342,3 +342,6 @@ nnoremap <C-h> YpVr
 
 " Make SCons files look like python
 au BufReadPost SCons* set syntax=python
+
+" Do not ask to load ycm config
+let g:ycm_confirm_extra_conf=0

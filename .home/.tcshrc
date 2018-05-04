@@ -44,6 +44,7 @@ alias   Calc            'python -c "from math import *; print( \!* )"'
 alias   RandSTR         "head /dev/urandom | uuencode -m - | sed -n 2p | sed 's#[^a-zA-Z0-9_]##g' | cut -b 1-32"
 unalias cp mv rm
 
+alias   runSv           "vcs -sverilog -full64 -R -q"
 if ($path[1] != "./") set path = (./ $path ~/Auto/fun ~/Auto/utils)
 
 eval `dircolors -c`

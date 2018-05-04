@@ -51,10 +51,10 @@ def main():
                 seperator,
                 "Author:    %s" % os.environ['USER'],
                 "Created:   %s" % datetime.now(timezone.utc).astimezone().strftime("%c %Z"),
-                "File Name: %s" % os.path.basename(filename),
                 "USAGE:",
                 "      %s" % os.path.basename(filename),
                 "Description:",
+                "",
                 "",
                 seperator
             ]) + "\n"

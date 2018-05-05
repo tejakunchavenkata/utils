@@ -52,6 +52,7 @@ sudo apt-get install libav-tools    # For avprobe
 # libgraphviz-dev   for using graphviz from programs
 
 # Specific version of g++ for VCS (needs 4.8.4)
+# Do this after installing guest additions. It needs latest GCC
 sudo apt-get install --reinstall gcc-4.7 gcc-4.8 gcc-5
 sudo apt-get install --reinstall g++-4.7 g++-4.8 g++-5
 

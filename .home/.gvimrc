@@ -203,7 +203,8 @@ nmap <silent> <S-Left> <C-W>h
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
 " NERDTree and Python specific
-let NERDTreeIgnore=['\.pyc$', '\~$', '\.swo$', '\.swp$', '^__pycache__$'] "ignore files in NERDTree
+" ignore files in NERDTree
+let NERDTreeIgnore=['\.pyc$', '\~$', '\.o$', '\.swo$', '\.swp$', '^__pycache__$']
 
 if has("gui_running")
   " ------------------------------------------------------------------
@@ -286,7 +287,7 @@ let python_highlight_all=1
 syntax on
 
 " More SV fle types
-au! BufNewFile,BufRead *.svhg,*.svg setfiletype verilog_systemverilog
+au! BufNewFile,BufRead *.vpp,*.svhg,*.svg setfiletype verilog_systemverilog
 
 " CtrlP settings
 let g:ctrlp_open_multiple_files = '1hj'
@@ -345,3 +346,6 @@ au BufReadPost SCons* set syntax=python
 
 " Do not ask to load ycm config
 let g:ycm_confirm_extra_conf=0
+
+" Enable spell check in RST
+autocmd FileType rst setlocal spell spelllang=en

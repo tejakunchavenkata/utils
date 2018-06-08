@@ -20,11 +20,11 @@ alias   cwdcmd          'clear ; echo "Host: $HOST" ; echo "PWD: $PWD"; echo "Co
 
 if (-f ~/.gitignore) then
   set   pattern         = `cat ~/.gitignore | tr '\n' '|' | sed 's#|$##g'`
-else
-  set   pattern         = ''
+  alias tree            "tree -I '$pattern' -L 10 --filelimit 25 -lFC"
+  unset   pattern
+
+  set   fignore         = (`cat ~/.gitignore | sed 's/\*//g' | tr '\n' ' '`)
 endif
-alias   tree            "tree -I '$pattern' -L 10 --filelimit 25 -lFC"
-unset   pattern
 
 alias   mkcd            'mkdir -p \!* ; cd \!*'
 alias   man             'man -a'

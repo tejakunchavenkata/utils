@@ -1,0 +1,3 @@
+[submodule "ext/terminator/terminator-editor-plugin"]
+	path = ext/terminator/terminator-editor-plugin
+	url = https://github.com/mchelem/terminator-editor-plugin

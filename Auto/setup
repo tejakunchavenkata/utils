@@ -38,6 +38,7 @@ sudo apt-get -yu install         \
   pandoc                         \
   curl                           \
   sqlite3 sqlite3-doc            \
+  feh                            \
   terminator
 
 # For lightweight terminal multiplexing, to match SNPS setup
@@ -53,8 +54,8 @@ sudo apt-get install libav-tools    # For avprobe
 
 # Specific version of g++ for VCS (needs 4.8.4)
 # Do this after installing guest additions. It needs latest GCC
-sudo apt-get install --reinstall gcc-4.7 gcc-4.8 gcc-5
-sudo apt-get install --reinstall g++-4.7 g++-4.8 g++-5
+sudo apt-get install --reinstall gcc-4.8 gcc-5
+sudo apt-get install --reinstall g++-4.8 g++-5
 
 # Make specific version of g++ as default
 sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 4
@@ -189,3 +190,23 @@ sudo make install
 
 # And python wrapper
 sudo -H pip3 install TA-Lib
+
+# This one is required, but should already be installed
+sudo apt-get install python-gobject
+
+# Installing this will install the
+# notify-send program. Check that out
+# for sending notifications in the shell
+sudo apt-get install libnotify-bin
+
+# The development headers if you
+# want to do any development in C/C++
+sudo apt-get install libnotify-dev
+
+# For extracting text from pdf, images mp3 etc...
+sudo apt-get -yu install python-dev libxml2-dev libxslt1-dev antiword unrtf poppler-utils pstotext tesseract-ocr flac ffmpeg lame libmad0 libsox-fmt-mp3 sox libjpeg-dev swig libpulse-dev
+sudo -H pip3 install textract
+
+# OLD Libraries for VERDI
+sudo wget -q -O /tmp/libpng12.deb http://mirrors.kernel.org/ubuntu/pool/main/libp/libpng/libpng12-0_1.2.54-1ubuntu1_amd64.deb && sudo dpkg -i /tmp/libpng12.deb && sudo rm /tmp/libpng12.deb
+

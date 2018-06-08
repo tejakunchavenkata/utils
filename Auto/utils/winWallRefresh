@@ -1,0 +1,12 @@
+#! /usr/bin/env tcsh
+# ------------------------------------------------
+# Author:    krishna
+# Created:   Fri May 18 10:20:59 2018 IST
+# USAGE:
+#       winWallRefresh <dest dir> <src dir> [<src dir> ...]
+# Description:
+#   All arguments are dirs
+#   Removes all *.jpg in first dir and copies the *.jpg files from remaining dirss to first dir
+# ------------------------------------------------
+rm -f $argv[1]/*.jpg
+find $argv[2-] -name "*.jpg" -exec cp {} $argv[1] \;

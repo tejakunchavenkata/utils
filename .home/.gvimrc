@@ -20,15 +20,14 @@ Plugin 'Yggdroot/indentLine'
 Plugin 'scrooloose/nerdtree'
 Plugin 'tmhedberg/SimpylFold'
 Plugin 'godlygeek/tabular.git'
-Plugin 'majutsushi/tagbar'
-Plugin 'vim-scripts/taglist.vim.git'
-Plugin 'vhda/verilog_systemverilog.vim'
-Plugin 'vim-perl/vim-perl.git'
-
 " Not on SNPS machines
 if $USER !=? 'kasula'
+  Plugin 'majutsushi/tagbar'
+  Plugin 'vim-scripts/taglist.vim.git'
   Plugin 'Valloric/YouCompleteMe'
 endif
+Plugin 'vhda/verilog_systemverilog.vim'
+Plugin 'vim-perl/vim-perl.git'
 
 " mini Excel in VIM
 Plugin 'chrisbra/csv.vim.git'
@@ -225,7 +224,7 @@ let g:html_number_lines = 0
 let g:html_dynamic_folds = 0
 let g:html_no_progress = 1
 
-if has("unix")
+if $USER !=? 'kasula' && has('unix')
   " Tagbar
   " let g:tagbar_width=45
   let g:tagbar_ctags_bin = "ctags"

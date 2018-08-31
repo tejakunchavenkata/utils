@@ -27,14 +27,6 @@ def getOpts():
       required=True,
       help="Rate Of Interest per month (Yearly interest divided by 12)"
     )
-    parser.add_argument(
-      "-i", "--investment",
-      action="store_true",
-      required=True,
-      help="""Treat the amount ad initial investment and EMIs as regular investment instead of
-        liability. ROI is now Rate of Return On Investment instead of Rate Of Interest. EMI will not
-        be auto calculated in this approach"""
-    )
 
     group = parser.add_mutually_exclusive_group(required=True)
 

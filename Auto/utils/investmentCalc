@@ -1,0 +1,75 @@
+#! /usr/bin/env python3
+#------------------------------------------------
+# Author:    krishna
+# Created:   Tue Aug  8 22:02:36 IST 2017
+# File Name: investmentCalc
+# USAGE:
+#       investmentCalc
+# Description:
+#
+#------------------------------------------------
+import argparse
+
+def getOpts():
+    parser = argparse.ArgumentParser(description = "Investment Calculator")
+
+    parser.add_argument(
+      "-a", "--amount",
+      action="store",
+      type=float,
+      default=0,
+      help="Initial Amount"
+    )
+    parser.add_argument(
+      "-r", "--roi",
+      action="store",
+      type=float,
+      required=True,
+      help="Expected Rate Of Return per month (Yearly return divided by 12)"
+    )
+
+    parser.add_argument(
+      "-e", "--emi",
+      action="store",
+      type=float,
+      default=0,
+      help="Additional Investment Per month"
+    )
+    parser.add_argument(
+      "-t", "--tenure",
+      action="store",
+      type=int,
+      required=True,
+      help="Duration in months"
+    )
+    return parser.parse_args()
+
+def main():
+    args = getOpts()
+
+    # Keep it divided by 100, all that is required for calculations
+    args.roi /= 100
+
+    cumulative = {}
+    cumulative = {'investment': args.amount, 'earnings': 0}
+
+    print ('{:<6s}{:>16s}{:>16s}{:>16s}'.format("Cycle", "Investment", "Earnings", "EMI"))
+    for t in range(args.tenure):
+
+        earnings = cumulative['investment'] * args.roi
+        print(
+            "{:<6d}{:>16,.2f}{:>16,.2f}{:>16,.2f}".format(
+                t, cumulative['investment'], earnings, args.emi
+            )
+        )
+        cumulative['investment'] += earnings + args.emi
+        cumulative['earnings'] += earnings
+
+    print(
+        'Total Investment: {:,.2f}\nTotal Earnings: {:,.2f}'.format(
+            args.amount + (args.tenure * args.emi),
+            cumulative['earnings']
+        )
+    )
+
+main()

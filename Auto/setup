@@ -18,6 +18,7 @@ sudo apt-get -yu install         \
   exuberant-ctags                \
   task                           \
   tree                           \
+  gcc-multilib                   \
   make                           \
   scons                          \
   gawk                           \
@@ -48,6 +49,8 @@ sudo apt-get install xterm tmux
 sudo apt-get install mediainfo
 sudo apt-get install libav-tools    # For avprobe
 
+# For avoiding warnings with gpicview
+sudo apt-get install libatk-adaptor libgail-common
 
 # pkg-config        for finding paths of existing modules during pip installations
 # libgraphviz-dev   for using graphviz from programs
@@ -210,3 +213,6 @@ sudo -H pip3 install textract
 # OLD Libraries for VERDI
 sudo wget -q -O /tmp/libpng12.deb http://mirrors.kernel.org/ubuntu/pool/main/libp/libpng/libpng12-0_1.2.54-1ubuntu1_amd64.deb && sudo dpkg -i /tmp/libpng12.deb && sudo rm /tmp/libpng12.deb
 
+# GDB and GDBGUI
+sudo apt-get install libc6-dbg gdb valgrind
+sudo -H pip3 install gdbgui --upgrade

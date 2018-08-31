@@ -39,7 +39,7 @@ Plugin 'cohama/lexima.vim'
 Plugin 'scrooloose/nerdcommenter'
 
 " Better diff in GVIM
-Plugin 'rickhowe/diffchar.vim'
+" Plugin 'rickhowe/diffchar.vim'
 
 " Airline
 Plugin 'vim-airline/vim-airline'
@@ -49,6 +49,7 @@ Plugin 'vim-airline/vim-airline-themes'
 Plugin 'andymass/vim-matchup'
 
 " To install from command line
+" Probably slowing down
 " vim +PluginInstall +qall
 
 " The following are examples of different formats supported.
@@ -100,6 +101,7 @@ set history=100
 set diffopt=iwhite
 
 " To ignore all white space
+" Probably slowing down
 set diffexpr=DiffW()
 function DiffW()
   let opt = ""
@@ -206,6 +208,10 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 " ignore files in NERDTree
 let NERDTreeIgnore=['\.pyc$', '\~$', '\.o$', '\.swo$', '\.swp$', '^__pycache__$']
 
+" Ignorable extentions
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.o,*.out,*/__pycache__/*
+
+
 if has("gui_running")
   " ------------------------------------------------------------------
   " Solarized Colorscheme Config
@@ -265,7 +271,7 @@ if has("unix")
         \ 'K:packages:0:1',
         \ 'P:programs:0:1',
         \ 'R:properties:0:1',
-        \ 'T:typedefs:0:1',
+        \ 'e:typedefs:0:1',
         \ 'v:variables'
         \ ]
         \ }

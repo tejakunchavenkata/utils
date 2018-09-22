@@ -11,6 +11,9 @@ set     complete        = igncase
 set     prompt          = "%B%{\e[37m%}%{\e[46m%}%? >%{\e[30m%}%b "
 # set     prompt          = "%B%{\e[37m%}%{\e[46m%}%? %P:%{\e[30m%}%b "
 set     rprompt         = "%B%{\e[37m%}%{\e[46m%}<<<%{\e[30m%}%b"
+
+set     globstar
+
 # set     rprompt         = '%D %w %p'
 setenv  TZ              Asia/Calcutta
 setenv  EDITOR          'gvim -f'

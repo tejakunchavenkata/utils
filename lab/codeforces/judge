@@ -13,7 +13,7 @@ set sol = $argv[1]
 set id = $sol:r
 
 foreach n ($id.in.*)
-  cat $n | $sol >&! output
+  \time --format="%E" cat $n | $sol >&! output
   diff -sq output $n:r:r.out.$n:e
   if ($?) then
     # echo 'Expected:'

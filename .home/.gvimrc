@@ -37,6 +37,9 @@ Plugin 'cohama/lexima.vim'
 " For commenting multiple lines quickly
 Plugin 'scrooloose/nerdcommenter'
 
+" Vimple for overlay spell suggestions
+Plugin 'https://github.com/dahu/vimple'
+
 " Better diff in GVIM
 " Plugin 'rickhowe/diffchar.vim'
 
@@ -336,8 +339,8 @@ nnoremap <F5> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><CR>
 " Indent all file
 nnoremap <F6> gg=G
 
-" Use tags from homedir
-set tags+=~/.tags
+" Use tags from homedir & cur dir
+set tags+=~/.tags,tags
 
 " Airline symbols
 let g:airline_powerline_fonts=1

@@ -37,8 +37,11 @@ Plugin 'cohama/lexima.vim'
 " For commenting multiple lines quickly
 Plugin 'scrooloose/nerdcommenter'
 
+" For replacing with case
+Plugin 'tpope/vim-abolish'
+
 " Vimple for overlay spell suggestions
-Plugin 'https://github.com/dahu/vimple'
+Plugin 'dahu/vimple'
 
 " Better diff in GVIM
 " Plugin 'rickhowe/diffchar.vim'

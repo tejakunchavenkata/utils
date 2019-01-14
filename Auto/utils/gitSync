@@ -6,7 +6,7 @@
 # USAGE:
 #       gitSync
 # Description:
-# 
+#
 #------------------------------------------------
 foreach n ($argv)
   cd $n

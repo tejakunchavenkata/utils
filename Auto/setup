@@ -24,6 +24,7 @@ sudo apt-get -yu install         \
   gawk                           \
   expect                         \
   ruby2.3-dev                    \
+  octave                         \
   gnuplot-x11                    \
   mutt                           \
   python-matplotlib              \

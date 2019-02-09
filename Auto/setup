@@ -46,6 +46,9 @@ sudo apt-get -yu install         \
 # For lightweight terminal multiplexing, to match SNPS setup
 sudo apt-get install xterm tmux
 
+# To sync time to internet
+sudo apt-get install chrony
+
 # Below for probing multimedia files for summary
 sudo apt-get install mediainfo
 sudo apt-get install libav-tools    # For avprobe

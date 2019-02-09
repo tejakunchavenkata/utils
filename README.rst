@@ -1,4 +1,4 @@
 Utils
 =====
 
-A personal collection of personal scripts and linux settings for protability
+A personal collection of personal scripts and Linux settings for portability

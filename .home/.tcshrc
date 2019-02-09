@@ -73,3 +73,6 @@ endif
 alias taskOffice        'task project:Office'
 alias taskUnltd         'task project:Unltd'
 alias taskSelf          'task project:Self'
+
+# Fix System clock when it is out of sync - Happens due to paused VM session
+alias  fixTime          'sudo chronyd -q'

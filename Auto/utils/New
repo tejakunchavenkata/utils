@@ -8,22 +8,38 @@ Usage:
 Description:
   Creates a new script file with header and few obvious lines of code
 '''
-import re, os, sys, shutil, os.path
+import re, os, sys, shutil, textwrap
 from datetime import datetime, timezone
 
 
 def getPythonFooter():
-    return "\n".join ([
-        "",
-        "",
-        "def main():",
-        "    '''The Main'''",
-        "",
-        "",
-        "if __name__ == '__main__':",
-        "    main()",
-        ""
-    ])
+    return textwrap.dedent(
+        """\
+        import argparse
+
+
+        def getOpts():
+            '''Process the options'''
+
+            parser = argparse.ArgumentParser(
+                description='''Add description here'''
+            )
+
+            # return validateOpts(parser.parse_args())
+            return parser.parse_args()
+
+
+        def main():
+            '''The Main'''
+
+            opts = getOpts()
+
+
+        if __name__ == '__main__':
+            main()
+
+        """
+    )
 
 
 def getCommentType(interpreter):

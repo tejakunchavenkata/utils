@@ -33,6 +33,10 @@ Plugin 'vim-perl/vim-perl.git'
 Plugin 'chrisbra/csv.vim.git'
 Plugin 'kien/ctrlp.vim'
 Plugin 'vim-python/python-syntax'
+
+" Following makes the saves slow
+" Plugin 'vim-syntastic/syntastic'
+
 Plugin 'cohama/lexima.vim'
 " For commenting multiple lines quickly
 Plugin 'scrooloose/nerdcommenter'
@@ -357,6 +361,20 @@ au BufReadPost SCons* set syntax=python
 
 " Do not ask to load ycm config
 let g:ycm_confirm_extra_conf=0
+
+let g:ycm_filetype_blacklist = {
+      \ 'tagbar': 1,
+      \ 'qf': 1,
+      \ 'notes': 1,
+      \ 'markdown': 1,
+      \ 'unite': 1,
+      \ 'rst': 1,
+      \ 'text': 1,
+      \ 'vimwiki': 1,
+      \ 'pandoc': 1,
+      \ 'infolog': 1,
+      \ 'mail': 1
+      \}
 
 " Enable spell check in RST
 autocmd FileType rst setlocal spell spelllang=en

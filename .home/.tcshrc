@@ -45,8 +45,14 @@ alias   Count           'unset CountVar ; set -f CountVar = (`echo \!*`) ; echo 
 alias   Countz          'unset CountVar ; set -f CountVar = (`echo \!*`) ; zenity --title "Count" --info --text "\!* -> `echo $#CountVar`"'
 alias   countDots       'echo \!* | grep -o . | wc -l'
 alias	  Report	        'tput cup \!:1 \!:2 ; echo \!:3-$'
-alias   Calc            'python -c "from math import *; print( \!* )"'
+alias   Calc            'python3 -c "from math import *; print(\!*)"'
+alias   Calch           'python3 -c "from math import *; print(hex(\!*))"'
+alias   Calcb           'python3 -c "from math import *; print(bin(\!*))"'
+alias   findPyLib       'python3 -c "import sys; print(__import__(sys.argv[1]).__file__)"'
 alias   RandSTR         "head /dev/urandom | uuencode -m - | sed -n 2p | sed 's#[^a-zA-Z0-9_]##g' | cut -b 1-32"
+
+alias   myPip           'sudo -H python3 -m pip'
+
 unalias cp mv rm
 
 alias   runSv           "vcs -sverilog -full64 -R -q"

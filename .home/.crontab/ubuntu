@@ -1,6 +1,6 @@
 @hourly crontab ~/.crontab/ubuntu
 @hourly ~/git/utils/Auto/utils/winWallRefresh /media/sf_C_DRIVE/Users/kasula/Downloads/Personal/wallpaper/variety ~/.config/variety/{Downloaded,Fetched,Favorite}
-@hourly ~/git/utils/Auto/utils/gitSync ~/git/unltd ~/git/utils
+@hourly ~/git/utils/Auto/utils/gitSync ~/git/unltd ~/git/utils ~/git/tasks ~/git/trader
 @hourly ~/git/tasks/update ~/git/tasks
 @hourly ~/snps/src/bin/publishReports
 @hourly ~/snps/src/bin/syncNsim

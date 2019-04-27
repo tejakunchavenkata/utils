@@ -135,7 +135,7 @@ sudo cpan install Spreadsheet/WriteExcel.pm SOAP/Lite.pm
 
 
 # Pandas for python3
-sudo apt-get install python3-pandas
+sudo apt-get install python3-pandas python3-sphinx
 
 # Install pygraphviz in specific way, as it can't find paths otherwise
  myPip install pygraphviz --install-option="--include-path=/usr/include/graphviz" --install-option="--library-path=/usr/lib/graphviz/"
@@ -230,3 +230,6 @@ sudo add-apt-repository ppa:webupd8team/java
 sudo apt-get install oracle-java8-installer
 sudo apt-get install libxrender1:i386 libxtst6:i386 libxi6:i386
 
+# MySQL
+sudo apt-get update
+sudo apt-get install mysql-server

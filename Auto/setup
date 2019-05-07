@@ -233,3 +233,12 @@ sudo apt-get install libxrender1:i386 libxtst6:i386 libxi6:i386
 # MySQL
 sudo apt-get update
 sudo apt-get install mysql-server
+
+# Python SQL
+myPip install mysql-connector
+
+# For ts (timestamp each line) and others
+sudo apt-get install moreutils
+
+# Well for typescript
+sudo npm install -g typescript

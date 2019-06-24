@@ -55,7 +55,7 @@ Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 
 " Better matching of if-else, begin-end
-Plugin 'andymass/vim-matchup'
+" Plugin 'andymass/vim-matchup'
 
 " To install from command line
 " Probably slowing down
@@ -64,7 +64,7 @@ Plugin 'andymass/vim-matchup'
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
 " plugin on GitHub repo
-Plugin 'tpope/vim-fugitive'
+" Plugin 'tpope/vim-fugitive'
 
 " Surround with paranthesis
 Plugin 'tpope/vim-surround'

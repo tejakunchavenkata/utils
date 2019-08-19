@@ -6,7 +6,7 @@
 # USAGE:
 #       addKeyToRemoteHost <Remote Host Name>
 # Description:
-# 
+#
 #------------------------------------------------
 if (! -f ~/.ssh/id_rsa.pub) ssh-keygen -t rsa
 cat ~/.ssh/id_rsa.pub | ssh $argv[1] 'cat >> .ssh/authorized_keys'

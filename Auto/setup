@@ -74,7 +74,7 @@ sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 4
 
 mkdir -p git/vim
 cd git
-git clone https://github.com/VijayaKrishnaKasula/utils.git
+git clone https://github.com/KrishnaKasula/utils.git
 
 # For VIM latest (V8.0), use std method
 # sudo add-apt-repository ppa:jonathonf/vim
@@ -242,3 +242,37 @@ sudo apt-get install moreutils
 
 # Well for typescript
 sudo npm install -g typescript
+
+# For ninja
+sudo apt-get install ninja-build clang
+
+# For lexing and parsing with Python
+myPip install ply rply
+
+# For VS CODE extensions
+sudo npm install -g yo generator-code
+
+# Open ssh server for VSCODE
+sudo apt-get install openssh-server
+
+# Pygls for python lang servers
+myPip install pygls
+
+# To deploy pip modules
+myPip install --upgrade setuptools wheel twine
+
+# BNFC ::= BNF Converter
+sudo apt-get install haskell-platform
+cabal update
+cabal install bnfc
+
+# Flex and Bison
+sudo apt-get flex bison
+
+# Latex to pdf
+sudo apt-get install texlive
+myPip install comment_parser
+myPip install stringcase
+myPip install python-language-server
+sudo apt-get install dos2unix
+sudo apt-get install colortest

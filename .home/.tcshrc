@@ -17,11 +17,15 @@ set     globstar
 # set     rprompt         = '%D %w %p'
 setenv  TZ              Asia/Calcutta
 setenv  EDITOR          'gvim -f'
+
+# Colourfull less
+setenv  LESSOPEN        '|pygmentize %s'
+
 #setenv  LC_ALL          c                                       # sort command control
 alias   ls              'ls -FhxX --color=tty '
 alias   ll              'ls -l '
-alias   cls             'clear ; echo "Host: $HOST" ; echo "PWD: $PWD"; echo "Contents:" ; ls '
-alias   cwdcmd          'clear ; echo "Host: $HOST" ; echo "PWD: $PWD"; echo "Contents:" ; ls '
+alias   cls             'clear ; echo "${USER}@${HOST}:${PWD}"; ls'
+alias   cwdcmd          'clear ; echo "${USER}@${HOST}:${PWD}"; ls'
 
 if (-f ~/.gitignore) then
   set   pattern         = `cat ~/.gitignore | tr '\n' '|' | sed 's#|$##g'`
@@ -56,7 +60,7 @@ alias   myPip           'sudo -H python3 -m pip'
 unalias cp mv rm
 
 alias   runSv           "vcs -sverilog -full64 -R -q"
-if ($path[1] != "./") set path = (./ $path ~/Auto/fun ~/Auto/utils)
+if ($path[1] != "./") set path = (./ $path ~/Auto/fun ~/Auto/utils ~/.cabal/bin)
 
 eval `dircolors -c`
 setenv  LS_COLORS "$LS_COLORS*.pdf=01;35:*.odp=01;34:*.doc=01;34:*.ods=01;34:*.docx=01;34:*.ppt=01;34:*.e=33:*.sv=33:*.v=33:"

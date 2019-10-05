@@ -8,10 +8,12 @@ export ZSH=~/.oh-my-zsh
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="robbyrussell"
+# ZSH_THEME="robbyrussell"
+ZSH_THEME=powerlevel10k/powerlevel10k
 # ZSH_THEME="powerlevel9k/powerlevel9k"
 # POWERLEVEL9K_MODE="nerdfont-complete"
 
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=251" 
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -98,7 +100,7 @@ alias zshconfig="code ~/.zshrc"
 alias ohmyzsh="code ~/.oh-my-zsh"
 
 # The refresh button :p
-alias cls='clear ; echo "${USER}@${HOST}:${PWD}"; ls '
+alias cls='clear'
 
 alias ls='ls -FhxX --color=tty '
 alias ll='ls -l '

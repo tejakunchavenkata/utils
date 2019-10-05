@@ -43,10 +43,16 @@ def getPythonFooter():
 
 
 def getCommentType(interpreter):
-    if re.match("python.*", interpreter, flags=re.I):
-        return ("", "'''", getPythonFooter())
+    '''Return the prefix for comments and seperator to seperator header'''
 
-    return ("# ", "------------------------------------------------", "")
+    # Even for Python, use normal comments in header to allow adhoc indentations
+
+    # For Python, Add footer
+    footer = ""
+    if re.match("python.*", interpreter, flags=re.I):
+        footer = getPythonFooter()
+
+    return ("# ", "------------------------------------------------", footer)
 
 
 def main():
@@ -66,7 +72,7 @@ def main():
                 "#! /usr/bin/env %s" % interpreter,
                 seperator,
                 "Author:    %s" % os.environ['USER'],
-                "Created:   %s" % datetime.now(timezone.utc).astimezone().strftime("%c %Z"),
+                # "Created:   %s" % datetime.now(timezone.utc).astimezone().strftime("%c %Z"),
                 "USAGE:",
                 "      %s" % os.path.basename(filename),
                 "Description:",

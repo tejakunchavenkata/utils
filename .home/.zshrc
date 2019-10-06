@@ -113,15 +113,18 @@ function mkcd {
     cd $@
 }
 
-function Calc {
-    python3 -c "from math import *; print($@)"
+function calc {
+    python3 -c "from math import *; print($*)"
 }
-function Calch {
-    python3 -c "from math import *; print(hex($@))"
+function calch {
+    python3 -c "from math import *; print(hex($*))"
 }
-function Calcb {
-    python3 -c "from math import *; print(bin($@))"
+function calcb {
+    python3 -c "from math import *; print(bin($*))"
 }
+alias calc='noglob calc'
+alias calch='noglob calch'
+alias calcb='noglob calcb'
 
 # Custom PROMPT
 # PROMPT='${ret_status}%{$fg[cyan]%}%{$reset_color%} $(git_prompt_info)'

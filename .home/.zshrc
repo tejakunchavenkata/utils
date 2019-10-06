@@ -108,6 +108,20 @@ alias taskOffice='task project:Office'
 alias taskUnltd='task project:Unltd'
 alias taskSelf='task project:Self'
 
+function mkcd {
+    mkdir $@
+    cd $@
+}
+
+function Calc {
+    python3 -c "from math import *; print($@)"
+}
+function Calch {
+    python3 -c "from math import *; print(hex($@))"
+}
+function Calcb {
+    python3 -c "from math import *; print(bin($@))"
+}
 
 # Custom PROMPT
 # PROMPT='${ret_status}%{$fg[cyan]%}%{$reset_color%} $(git_prompt_info)'

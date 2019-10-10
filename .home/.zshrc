@@ -132,6 +132,7 @@ alias calcb='noglob calcb'
 # Do not check for mails
 MAILCHECK=0
 
+# Do not auto correct perforce commands, zsh knows nothing about it at all
 alias p4='nocorrect p4'
 
 # Always use extended globs

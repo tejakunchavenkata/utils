@@ -109,7 +109,7 @@ alias taskUnltd='task project:Unltd'
 alias taskSelf='task project:Self'
 
 function mkcd {
-    mkdir $@
+    mkdir -p $@
     cd $@
 }
 
